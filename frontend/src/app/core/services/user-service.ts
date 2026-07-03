@@ -8,31 +8,30 @@ import { IPage } from '../../shared/interfaces/pageable.interface';
 
 @Service()
 export class UserService {
-    private http = inject(HttpClient);
-    private baseUrl = ENVIRONMENT.apiUrl;
+  private http = inject(HttpClient);
+  private baseUrl = ENVIRONMENT.apiUrl;
 
-    getAllUsers() : Observable<IApiResponse<IPage<IUser[]>>> {
-        return this.http.get<IApiResponse<IPage<IUser[]>>>(`${this.baseUrl}/users`);
-    }
+  getAllUsers(): Observable<IApiResponse<IPage<IUser[]>>> {
+    return this.http.get<IApiResponse<IPage<IUser[]>>>(`${this.baseUrl}/users`);
+  }
 
-    getUser(){
+  getUser(publicId: string): Observable<IApiResponse<IUser>> {
+    return this.http.get<IApiResponse<IUser>>(`${this.baseUrl}/user/${publicId}`);
+  }
 
-    }
+  getUserByEmail(email : string) : Observable<IApiResponse<IUser>> {
+    return this.http.get<IApiResponse<IUser>>(`${this.baseUrl}/user/email?=${email}`);
+  }
 
-    getUserByEmail(){
+  updateUser(publicId : string, user : IUser) : Observable<IApiResponse<void>> {
+    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/user/${publicId}`, user);
+  }
 
-    }
+  createUser(user : IUser) : Observable<IApiResponse<IUser>> {
+    return this.http.post<IApiResponse<IUser>>(`${this.baseUrl}/user`, user);
+  }
 
-    updateUser(){
-
-    }
-
-    createUser(){
-
-    }
-
-    deleteUser(){
-
-    }
-
+  deleteUser(publicId : string) : Observable<IApiResponse<void>> {
+    return this.http.delete<IApiResponse<void>>(`${this.baseUrl}/user/${publicId}`);
+  }
 }

@@ -56,7 +56,20 @@ CREATE TABLE user_profile (
     phone         VARCHAR(20),
     created_at    TIMESTAMP NOT NULL DEFAULT now(),
     updated_at    TIMESTAMP NOT NULL DEFAULT now(),
-    id_user       INT NOT NULL UNIQUE REFERENCES users(id_user) ON DELETE CASCADE
+    id_user       INT NOT NULL UNIQUE REFERENCES users(id_user) ON DELETE CASCADE,
+    id_job        INT REFERENCES job(id_job)
+);
+
+-- ============================================================
+-- Table job (référentiel des métiers/postes)
+-- ============================================================
+
+CREATE TABLE job (
+    id_job        SERIAL PRIMARY KEY,
+    title         VARCHAR(150) NOT NULL,
+    department    VARCHAR(150),
+    created_at    TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at    TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE auth_token (
@@ -168,3 +181,5 @@ CREATE INDEX idx_news_user ON news(id_user);
 
 CREATE INDEX idx_notification_user ON notification(id_user);
 CREATE INDEX idx_notification_type ON notification(id_type);
+
+CREATE INDEX idx_user_profile_job ON user_profile(id_job);

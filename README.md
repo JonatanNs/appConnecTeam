@@ -70,7 +70,7 @@ L'objectif est de fournir un véritable espace de travail numérique permettant 
 | ----------------- | --------------------- | --------------------- |
 | Angular 21        | Spring Boot 3         | PostgreSQL / MySQL    |
 | TypeScript        | Java 21               | JPA / Hibernate       |
-| SCSS / RxJS       | Maven                 | Docker                |
+| css / RxJS       | Maven                 | Docker                |
 | WebSocket (STOMP) | Spring Security / JWT | REST API              |
 
 ---

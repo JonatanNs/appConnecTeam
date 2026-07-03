@@ -59,6 +59,12 @@ class UserProfile {
   +updatedAt : Date
 }
 
+class Job {
+  +id : Long
+  +title : String
+  +department : String
+}
+
 class AuthToken {
   +id : Long
   +token : String
@@ -148,6 +154,7 @@ User "*" -- "*" Role : has
 
 User "1" -- "1" Address : has
 User "1" -- "1" UserProfile : profile
+Job"1" -- "1" UserProfile : profile
 User "1" -- "*" AuthToken : tokens
 
 User "1" -- "*" Task : assigns

@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './paginate.html',
   styleUrl: './paginate.css',
 })
-export class Paginate {}
+export class Paginate {
+
+}

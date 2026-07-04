@@ -1,4 +1,4 @@
-import { Component, effect, inject, Signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UserService } from '../../../../core/services/user-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ListUser } from '../../components/list-user/list-user';
@@ -12,7 +12,7 @@ import { ListUser } from '../../components/list-user/list-user';
 export class Directory {
   private userService = inject(UserService);
 
-  users  = toSignal(this.userService.getAllUsers());
+  users = toSignal(this.userService.getAllUsers(), { initialValue: null });
 
 }
 

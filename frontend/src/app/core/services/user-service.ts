@@ -11,8 +11,8 @@ export class UserService {
   private http = inject(HttpClient);
   private baseUrl = ENVIRONMENT.apiUrl;
 
-  getAllUsers(): Observable<IApiResponse<IPage<IUser[]>>> {
-    return this.http.get<IApiResponse<IPage<IUser[]>>>(`${this.baseUrl}/users`);
+  getAllUsers(): Observable<IApiResponse<IPage<IUser>>> {
+    return this.http.get<IApiResponse<IPage<IUser>>>(`${this.baseUrl}/users`);
   }
 
   getUser(publicId: string): Observable<IApiResponse<IUser>> {

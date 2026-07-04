@@ -1,2 +1,4 @@
-<app-list-user [users]="users()" />
+@if (users(); as response ) {
+  <app-list-user [users]="response" />
+}
 

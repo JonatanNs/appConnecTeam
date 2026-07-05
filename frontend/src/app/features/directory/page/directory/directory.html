@@ -1,4 +1,27 @@
-@if (users(); as response ) {
-  <app-list-user [users]="response" />
-}
+<section class="min-h-screen bg-nxt-white p-8">
+  <h1 class="text-2xl font-bold mb-10 text-color-black">Annuaire des employés</h1>
+  @if (users(); as response) {
+    <app-paginate
+      [totalPages]="response.data.totalPages"
+      [number]="response.data.number"
+      [first]="response.data.first"
+      [last]="response.data.last"
+      [pageSize]="pageSize()"
+      (pageChange)="goToPage($event)"
+      (pageSizeChange)="changePageSize($event)">
+    </app-paginate>
+
+    <app-list-user [users]="response"></app-list-user>
+
+    <app-paginate
+      [totalPages]="response.data.totalPages"
+      [number]="response.data.number"
+      [first]="response.data.first"
+      [last]="response.data.last"
+      [pageSize]="pageSize()"
+      (pageChange)="goToPage($event)"
+      (pageSizeChange)="changePageSize($event)">
+    </app-paginate>
+  }
+</section>
 

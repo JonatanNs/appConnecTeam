@@ -1,15 +1,58 @@
-<div class="flex justify-center mt-8">
-  <div class="join">
-    <button class="join-item btn">«</button>
-    <button class="join-item btn">‹</button>
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-nxt-white border border-nxt-gray rounded-xl shadow-sm p-4 my-6">
 
-    <button class="join-item btn">1</button>
-    <button class="join-item btn">2</button>
-    <button class="join-item btn btn-active">3</button>
-    <button class="join-item btn">4</button>
-    <button class="join-item btn">5</button>
-
-    <button class="join-item btn">›</button>
-    <button class="join-item btn">»</button>
+  <div class="flex items-center gap-2">
+    <span class="text-sm text-nxt-black">Afficher</span>
+    <select
+      class="select-nxt"
+      [value]="pageSize()"
+      (change)="onPageSizeChange($event)">
+      <option value="12">12</option>
+      <option value="24">24</option>
+      <option value="36">36</option>
+      <option value="48">48</option>
+    </select>
+    <span class="text-sm text-nxt-black">par page</span>
   </div>
+
+  <div class="flex items-center gap-1">
+    <button
+      class="btn-nxt-page"
+      [disabled]="first()"
+      (click)="goToPage(0)"
+      aria-label="Première page">
+      «
+    </button>
+    <button
+      class="btn-nxt-page"
+      [disabled]="first()"
+      (click)="goToPage(number() - 1)"
+      aria-label="Page précédente">
+      ‹
+    </button>
+
+    @for (page of pagesArray(); track page) {
+      <button
+        class="btn-nxt-page"
+        [class.btn-nxt-page-active]="page === number()"
+        (click)="goToPage(page)">
+        {{ page + 1 }}
+      </button>
+    }
+
+    <button
+      class="btn-nxt-page"
+      [disabled]="last()"
+      (click)="goToPage(number() + 1)"
+      aria-label="Page suivante">
+      ›
+    </button>
+    <button
+      class="btn-nxt-page"
+      [disabled]="last()"
+      (click)="goToPage(totalPages() - 1)"
+      aria-label="Dernière page">
+      »
+    </button>
+  </div>
+
 </div>

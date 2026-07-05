@@ -1,0 +1,36 @@
+/* ============================================
+   PAGINATION
+   ============================================ */
+
+.btn-nxt-page {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--radius-mid);
+  background-color: transparent;
+  color: var(--nxt-blue);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.btn-nxt-page:hover:not(:disabled) {
+  background-color: rgba(0, 62, 255, 0.08);
+}
+
+.btn-nxt-page:disabled {
+  color: var(--nxt-black);
+  cursor: not-allowed;
+}
+
+.btn-nxt-page-active {
+  background-color: var(--nxt-blue);
+  color: var(--nxt-white);
+}
+
+.btn-nxt-page-active:hover {
+  background-color: var(--nxt-blue) !important;
+}

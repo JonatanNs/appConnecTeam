@@ -1,30 +1,36 @@
 <nav class="flex flex-1 items-center justify-between">
-    <ul class="menu menu-horizontal gap-1">
-        <li>
-            <a routerLink="">Accueil</a>
-        </li>
-        <li>
-            <a>Messages</a>
-        </li>
-        <li>
-            <a routerLink="annuaires">Annuaires</a>
-        </li>
-        <li>
-            <a>RH</a>
-        </li>
-    </ul>
-    <ul class="menu menu-horizontal gap-1">
-        <li>
-            <input type="text" placeholder="Recherche" />
-        </li>
-        <li>
-            <a>Notification</a>
-        </li>
-        <li>
-            <a>Paramètres</a>
-        </li>
-        <li>
-            <a>Profil</a>
-        </li>
-    </ul>
+  <ul class="menu menu-horizontal gap-1">
+    <li>
+      <a routerLink="">Accueil</a>
+    </li>
+    <li>
+      <a>Messageries</a>
+    </li>
+    <li>
+      <a routerLink="annuaires">Annuaires</a>
+    </li>
+    <li>
+      <a>RH</a>
+    </li>
+  </ul>
+  <ul class="menu menu-horizontal gap-1">
+    <li>
+      <input type="text" placeholder="Recherche"/>
+    </li>
+    <li>
+      <a aria-label="Notifications">
+        <fa-icon [icon]="faBell"></fa-icon>
+      </a>
+    </li>
+    <li>
+      <a aria-label="Paramètres">
+        <fa-icon [icon]="faGear"></fa-icon>
+      </a>
+    </li>
+    <li>
+      <a aria-label="Profil">
+        <fa-icon [icon]="faUser"></fa-icon>
+      </a>
+    </li>
+  </ul>
 </nav>

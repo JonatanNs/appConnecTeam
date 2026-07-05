@@ -1,4 +1,4 @@
 export const ENVIRONMENT = {
     production: false,
-    apiUrl: 'https://monapi.com/'
+    apiUrl: 'https://nexteam.com/'
 };

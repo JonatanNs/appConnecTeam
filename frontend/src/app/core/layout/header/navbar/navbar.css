@@ -1,0 +1,29 @@
+.nav-link-nxt {
+  padding: 8px 14px;
+  border-radius: var(--radius-mid);
+  color: var(--nxt-black);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  text-decoration: none;
+}
+
+.nav-link-nxt:hover {
+  background-color: var(--nxt-gray);
+}
+
+.dropdown-item-nxt {
+  display: block;
+  padding: 8px 12px;
+  border-radius: var(--radius-mid);
+  color: var(--nxt-black);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  text-decoration: none;
+}
+
+.dropdown-item-nxt:hover {
+  background-color: var(--nxt-gray);
+}

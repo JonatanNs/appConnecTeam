@@ -1,29 +1,32 @@
 @if (users(); as response) {
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-15 mt-20">
     @for (user of response.data.content; track user.publicId) {
-      <div class="w-full bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 relative">
+      <div class="w-full bg-nxt-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 relative">
 
         <!-- Profile Image -->
         <div class="flex justify-center -mt-16 mb-4">
           <img
-            class="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md hover:scale-105 transform transition-transform duration-300"
-            src="https://avatars.githubusercontent.com/u/124576166?v=4" alt="Photo de profil">
+            ngSrc="https://avatars.githubusercontent.com/u/124576166?v=4"
+            alt="Photo de profil de {{ user.firstname }} {{ user.lastname }}"
+            width="128"
+            height="128"
+            class="w-32 h-32 object-cover rounded-full border-4 border-nxt-white shadow-md hover:scale-105 transform transition-transform duration-300">
         </div>
 
         <!-- Name and Title -->
         <article class="text-center mb-4">
-          <h2 class="text-2xl font-semibold text-gray-800">{{ user.firstname }} {{ user.lastname }}</h2>
-          <p class="text-gray-500">Creative Designer</p>
+          <h2 class="text-2xl font-semibold text-nxt-black">{{ user.firstname }} {{ user.lastname }}</h2>
+          <p class="text-nxt-black">Creative Designer</p>
         </article>
 
         <!-- Description -->
-        <p class="text-center text-gray-600 mb-6 px-4">Bio de la personne</p>
+        <p class="text-center text-nxt-black mb-6 px-4">Bio de la personne</p>
 
-        <div class="card-actions w-full">
-          <button class="btn btn-primary btn-sm flex-1">
+        <div class="flex gap-2 w-full">
+          <button class="btn-nxt-blue flex-1">
             Message
           </button>
-          <button class="btn btn-outline btn-primary btn-sm flex-1">
+          <button class="btn-nxt-outline-blue flex-1">
             Appeler
           </button>
         </div>
@@ -32,5 +35,5 @@
   </div>
 
 } @else {
-  <p class="text-center">Chargement...</p>
+  <p class="text-center text-nxt-gray">Chargement...</p>
 }

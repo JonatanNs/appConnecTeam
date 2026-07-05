@@ -17,7 +17,7 @@ export class Directory {
   private userService = inject(UserService);
 
   currentPage = signal(0);
-  pageSize = signal(10);
+  pageSize = signal(12);
 
   users = toSignal(
     combineLatest([

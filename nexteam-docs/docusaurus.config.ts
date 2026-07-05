@@ -23,11 +23,12 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
 
-  
+
   i18n: {
     defaultLocale: 'fr',
     locales: ['fr'],
   },
+  plugins: ['docusaurus-plugin-image-zoom'],
 
   presets: [
     [
@@ -55,6 +56,20 @@ const config: Config = {
 
   themeConfig: {
     image: 'img/logo_nexteam.png',
+
+    zoom: {
+    selector: '.markdown img',
+    background: {
+      light: 'rgb(255, 255, 255)',
+      dark: 'rgba(9, 10, 17, 0.9)',
+    },
+    config: {
+      margin: 24,
+      scrollOffset: 0,
+      // autres options medium-zoom : https://github.com/francoischalifour/medium-zoom#usage
+    },
+  },
+
     colorMode: {
       respectPrefersColorScheme: true,
     },
@@ -75,7 +90,7 @@ const config: Config = {
           label: 'Cahier des charges',
           to: '/docs/cahierDesCharges',
         },
-        
+
         {
           href: 'https://github.com/JonatanNs/appNexTeam',
           label: 'GitHub',
@@ -97,8 +112,8 @@ const config: Config = {
               label: 'Cahier des charges',
               to: '/docs/cahierDesCharges',
             },
-            
-            
+
+
           ],
         },
         {

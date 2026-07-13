@@ -1,3 +1,19 @@
 <app-header />
-<router-outlet />
-<app-footer/>
+
+<div class="flex h-[calc(100vh-64px)] overflow-hidden bg-nxt-gray">
+
+  <aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-72 bg-nxt-white border-r border-gray-200">
+    <app-sidebar></app-sidebar>
+  </aside>
+
+  <div class="ml-72 flex flex-1 flex-col overflow-hidden">
+
+    <main class="flex-1 overflow-y-auto bg-nxt-white p-8">
+      <router-outlet />
+    </main>
+
+    <app-footer />
+
+  </div>
+
+</div>

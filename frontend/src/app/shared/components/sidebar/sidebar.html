@@ -1,0 +1,67 @@
+<div class="flex h-full flex-col">
+
+  <nav class="flex-1 overflow-y-auto p-4">
+    <ul class="space-y-2">
+
+      <li>
+        <a
+          routerLink="/calendrier"
+          routerLinkActive="sidebar-link-nxt-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="sidebar-link-nxt">
+          <fa-icon [icon]="faCalendarDays" class="w-5 text-center"></fa-icon>
+          <span>Calendrier</span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="/contacts"
+          routerLinkActive="sidebar-link-nxt-active"
+          class="sidebar-link-nxt">
+          <fa-icon [icon]="faUsers" class="w-5 text-center"></fa-icon>
+          <span>Contacts</span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="/documents"
+          routerLinkActive="sidebar-link-nxt-active"
+          class="sidebar-link-nxt">
+          <fa-icon [icon]="faFolderOpen" class="w-5 text-center"></fa-icon>
+          <span>Documents</span>
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="/taches"
+          routerLinkActive="sidebar-link-nxt-active"
+          class="sidebar-link-nxt">
+          <fa-icon [icon]="faListCheck" class="w-5 text-center"></fa-icon>
+          <span>Tâches</span>
+        </a>
+      </li>
+
+    </ul>
+  </nav>
+
+  <div class="border-t border-gray-200 p-5">
+    <div class="rounded-xl bg-nxt-gray p-4">
+      <div class="flex items-center gap-3">
+        <fa-icon [icon]="faCircleQuestion" class="text-lg text-nxt-primary"></fa-icon>
+
+        <div>
+          <p class="font-semibold text-gray-800">
+            Besoin d'aide ?
+          </p>
+          <p class="text-sm text-gray-500">
+            Consultez la documentation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

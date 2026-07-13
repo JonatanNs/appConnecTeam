@@ -1,0 +1,61 @@
+<h1 class="text-2xl font-bold mb-10 text-nxt-black">Administration</h1>
+
+<div class="grid gap-8 md:grid-cols-2 lg:gap-12 p-6 md:p-10 mt-12">
+
+  <a routerLink="/admin/users" class="admin-card-nxt">
+    <div class="admin-icon-nxt">
+      <fa-icon [icon]="faUsers" class="text-2xl"></fa-icon>
+    </div>
+    <div class="flex-1">
+      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Gestion des utilisateurs</h5>
+      <p class="mb-6 text-base text-nxt-gray">Créer, modifier ou désactiver des comptes employés</p>
+      <span class="admin-link-nxt">
+        Accéder à l'annuaire
+        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
+      </span>
+    </div>
+  </a>
+
+  <a routerLink="/admin/jobs" class="admin-card-nxt">
+    <div class="admin-icon-nxt">
+      <fa-icon [icon]="faBriefcase" class="text-2xl"></fa-icon>
+    </div>
+    <div class="flex-1">
+      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Gestion des métiers</h5>
+      <p class="mb-6 text-base text-nxt-gray">Ajouter ou modifier les postes et départements</p>
+      <span class="admin-link-nxt">
+        Gérer les métiers
+        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
+      </span>
+    </div>
+  </a>
+
+  <a routerLink="/admin/roles" class="admin-card-nxt">
+    <div class="admin-icon-nxt">
+      <fa-icon [icon]="faShieldHalved" class="text-2xl"></fa-icon>
+    </div>
+    <div class="flex-1">
+      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Rôles et permissions</h5>
+      <p class="mb-6 text-base text-nxt-gray">Définir les accès et niveaux d'autorisation</p>
+      <span class="admin-link-nxt">
+        Configurer les rôles
+        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
+      </span>
+    </div>
+  </a>
+
+  <a routerLink="/admin/news" class="admin-card-nxt">
+    <div class="admin-icon-nxt">
+      <fa-icon [icon]="faNewspaper" class="text-2xl"></fa-icon>
+    </div>
+    <div class="flex-1">
+      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Actualités</h5>
+      <p class="mb-6 text-base text-nxt-gray">Publier ou modifier les actualités de l'entreprise</p>
+      <span class="admin-link-nxt">
+        Gérer les actualités
+        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
+      </span>
+    </div>
+  </a>
+
+</div>

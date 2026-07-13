@@ -1,24 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/*@plugin "daisyui/theme" {*/
-/*  name: "nexteam";*/
-/*  default: false;*/
-/*  color-scheme: light;*/
-
-/*  --nxt-blue: #003eff;*/
-/*  --nxt-white: #ffffff;*/
-/*  --nxt-blue-sky: #6f9ff8;*/
-/*  --nxt-gray: #d0d0d0;*/
-/*  --nxt-black: #1a1a1a;*/
-/*  --nxt-error: #ba1a1a;*/
-/*  --nxt-success: #33ad5e;*/
-
-/*  --radius-mid: 0.5rem;*/
-/*  --radius-lg: 1rem;*/
-/*  --border: 1px;*/
-/*}*/
-
 :root {
   font-family: 'Nunito', sans-serif;
   --nxt-blue: #003eff;
@@ -36,7 +18,7 @@
 
 /* ============================================
    BOUTONS
-   ============================================ */
+============================================ */
 
 .btn-nxt-blue {
   background-color: var(--nxt-blue);
@@ -136,7 +118,7 @@
 
 /* ============================================
    FONDS (bg)
-   ============================================ */
+============================================ */
 
 .bg-nxt-gray {
   background-color: var(--nxt-gray);
@@ -165,7 +147,7 @@
 
 /* ============================================
    TEXTE (text)
-   ============================================ */
+============================================ */
 
 .text-nxt-blue {
   color: var(--nxt-blue);
@@ -190,3 +172,4 @@
 .text-nxt-success {
   color: var(--nxt-success);
 }
+

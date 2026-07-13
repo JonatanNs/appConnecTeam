@@ -1,0 +1,42 @@
+.sidebar-link-nxt {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-mid);
+
+  color: var(--nxt-black);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+
+  transition:
+    background-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.sidebar-link-nxt fa-icon {
+  width: 20px;
+  color: var(--nxt-black);
+  transition: color .2s ease;
+}
+
+.sidebar-link-nxt:hover {
+  background: var(--nxt-gray);
+  transform: translateX(2px);
+}
+
+.sidebar-link-nxt:hover fa-icon {
+  color: var(--nxt-blue);
+}
+
+.sidebar-link-nxt-active {
+  background-color: var(--nxt-black);
+  color: var(--nxt-blue);
+}
+
+.sidebar-link-nxt-active fa-icon {
+  color: var(--nxt-blue);
+}

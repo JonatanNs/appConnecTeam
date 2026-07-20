@@ -1,8 +1,8 @@
 import { Component, input } from '@angular/core';
-import { IApiResponse } from '../../../../shared/interfaces/api-response.interface';
-import { IUser } from '../../../../shared/interfaces/user.interface';
-import { IPage } from '../../../../shared/interfaces/pages/page.interface';
 import {NgOptimizedImage} from '@angular/common';
+import {IApiResponse} from '../../interfaces/api-response.interface';
+import {IPage} from '../../interfaces/pages/page.interface';
+import {IUser} from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-list-user',

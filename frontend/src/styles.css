@@ -173,3 +173,50 @@
   color: var(--nxt-success);
 }
 
+/* ============================================
+   LIENS
+   ============================================ */
+
+.link-nxt {
+  color: var(--nxt-blue);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out, text-decoration-color 0.15s ease-in-out;
+}
+
+.link-nxt:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--nxt-blue);
+}
+
+.link-nxt-muted {
+  color: var(--nxt-black);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out;
+}
+
+.link-nxt-muted:hover {
+  color: var(--nxt-blue);
+}
+
+.link-nxt-error {
+  color: var(--nxt-error);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.link-nxt-error:hover {
+  opacity: 0.7;
+}
+
+.page-title-nxt {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  color: var(--nxt-black);
+}

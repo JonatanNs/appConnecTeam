@@ -1,0 +1,116 @@
+<div class="mb-5 link-nxt">
+  <a routerLink="/admin">Retour</a>
+</div>
+
+@if (users(); as response) {
+
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="page-title-nxt mb-0">Gestion des utilisateurs</h1>
+    <a routerLink="ajouter-utilisateur" class="btn-nxt-blue">
+      <fa-icon [icon]="faPlus" class="mr-2"></fa-icon>
+      Ajouter un utilisateur
+    </a>
+  </div>
+
+  <div class="flex flex-col sm:flex-row gap-3 mb-6">
+    <input
+      type="text"
+      placeholder="Rechercher un nom, un email..."
+      class="input-nxt flex-1"/>
+
+    <select class="select-nxt">
+      <option value="all">Tous les statuts</option>
+      <option value="active">Actif</option>
+      <option value="inactive">Désactivé</option>
+    </select>
+
+    <select class="select-nxt">
+      <option value="all">Tous les départements</option>
+      <option value="active">IT</option>
+      <option value="inactive">RH</option>
+      <option value="inactive">Finance</option>
+      <option value="inactive">Commercial</option>
+    </select>
+  </div>
+
+  @if (response.data.totalPages > 0) {
+    <app-paginate
+      [totalPages]="response.data.totalPages"
+      [number]="response.data.number"
+      [first]="response.data.first"
+      [last]="response.data.last"
+      [pageSize]="pageSize()"
+      (pageChange)="goToPage($event)"
+      (pageSizeChange)="changePageSize($event)">
+    </app-paginate>
+  }
+
+  <div class="bg-nxt-white border border-nxt-gray rounded-xl overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-nxt-gray/30 border-b border-nxt-gray">
+      <tr>
+        <th class="table-head-nxt">Nom</th>
+        <th class="table-head-nxt">Départements</th>
+        <th class="table-head-nxt">Métier</th>
+        <th class="table-head-nxt">Statut</th>
+        <th class="table-head-nxt">Email</th>
+        <th class="table-head-nxt text-right"></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (user of response.data.content; track user.publicId) {
+          <tr class="border-b border-nxt-gray last:border-0">
+            <td class="table-cell-nxt">
+              <div class="flex items-center gap-3">
+                <img
+                  ngSrc="https://i.pravatar.cc/150?u={{ user.publicId }}"
+                  alt="Photo de {{ user.firstname }} {{ user.lastname }}"
+                  width="40"
+                  height="40"
+                  class="rounded-full" />
+                <span class="font-medium text-nxt-black">{{ user.firstname }} {{ user.lastname }}</span>
+              </div>
+            </td>
+            <td class="table-cell-nxt text-nxt-gray">Sport</td>
+            <td class="table-cell-nxt text-nxt-gray">Footballeur</td>
+            <td class="table-cell-nxt">
+              @if (user.active) {
+                <span class="badge-nxt badge-nxt-success">Actif</span>
+              } @else {
+                <span class="badge-nxt badge-nxt-error">Désactivé</span>
+              }
+            </td>
+            <td class="table-cell-nxt text-nxt-gray">{{ user.email }}</td>
+            <td class="table-cell-nxt text-right">
+              <button class="action-link-nxt">Modifier</button>
+              @if (user.active) {
+                <button class="action-link-nxt action-link-nxt-error">Désactiver</button>
+              } @else {
+                <button class="action-link-nxt action-link-nxt-success">Activer</button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="table-cell-nxt text-center text-nxt-gray py-10">
+              Aucun utilisateur trouvé.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (response.data.totalPages > 0) {
+    <app-paginate
+      [totalPages]="response.data.totalPages"
+      [number]="response.data.number"
+      [first]="response.data.first"
+      [last]="response.data.last"
+      [pageSize]="pageSize()"
+      (pageChange)="goToPage($event)"
+      (pageSizeChange)="changePageSize($event)">
+    </app-paginate>
+  }
+
+}

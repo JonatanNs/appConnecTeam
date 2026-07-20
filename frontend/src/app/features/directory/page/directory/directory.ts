@@ -1,14 +1,14 @@
 import {Component, inject, signal} from '@angular/core';
 import { UserService } from '../../../../core/services/user-service';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
-import { ListUser } from '../../components/list-user/list-user';
 import {combineLatest, switchMap} from 'rxjs';
 import {Paginate} from '../../../../shared/components/paginate/paginate';
+import {ListUser} from '../../../../shared/components/list-user/list-user';
 
 
 @Component({
   selector: 'app-directory',
-  imports: [ListUser, Paginate],
+  imports: [ListUser, Paginate, ListUser],
   templateUrl: './directory.html',
   styleUrl: './directory.css',
 })

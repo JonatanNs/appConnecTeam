@@ -1,5 +1,5 @@
 import {Component, inject, signal} from '@angular/core';
-import { UserService } from '../../../../core/services/user-service';
+import { UserService } from '../../../../core/services/user/user-service';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {combineLatest, switchMap} from 'rxjs';
 import {Paginate} from '../../../../shared/components/paginate/paginate';

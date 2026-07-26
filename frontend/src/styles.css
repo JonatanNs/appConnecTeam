@@ -145,6 +145,16 @@
   color: var(--nxt-white);
 }
 
+.bg-nxt-success {
+  background-color: var(--nxt-success);
+  color: var(--nxt-black);
+}
+
+.bg-nxt-error {
+  background-color: var(--nxt-error);
+  color: var(--nxt-white);
+}
+
 /* ============================================
    TEXTE (text)
 ============================================ */

@@ -75,18 +75,22 @@
             <td class="table-cell-nxt text-nxt-gray">Footballeur</td>
             <td class="table-cell-nxt">
               @if (user.active) {
-                <span class="badge-nxt badge-nxt-success">Actif</span>
+                  <span type="submit" class="badge-nxt badge-nxt-success">Actif</span>
               } @else {
-                <span class="badge-nxt badge-nxt-error">Désactivé</span>
+                  <span type="submit" class="badge-nxt badge-nxt-error">Désactivé</span>
               }
             </td>
             <td class="table-cell-nxt text-nxt-gray">{{ user.email }}</td>
             <td class="table-cell-nxt text-right">
               <button class="action-link-nxt">Modifier</button>
-              @if (user.active) {
-                <button class="action-link-nxt action-link-nxt-error">Désactiver</button>
+              @if (!user.active) {
+                <form (ngSubmit)="activateUser(user.publicId)" >
+                  <button type="submit" class="btn-nxt-success">Actif</button>
+                </form>
               } @else {
-                <button class="action-link-nxt action-link-nxt-success">Activer</button>
+                <form (ngSubmit)="deactivateUser(user.publicId)" >
+                  <button type="submit" class="btn-nxt-error">Désactivé</button>
+                </form>
               }
             </td>
           </tr>

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IUser } from '../../shared/interfaces/user.interface';
-import { ENVIRONMENT } from '../../environments/environement';
-import { IApiResponse } from '../../shared/interfaces/api-response.interface';
-import { IPage } from '../../shared/interfaces/pages/page.interface';
-import {IPageable} from '../../shared/interfaces/pages/pageable.interface';
+import { IUser } from '../../../shared/interfaces/user.interface';
+import { ENVIRONMENT } from '../../../environments/environement';
+import { IApiResponse } from '../../../shared/interfaces/api-response.interface';
+import { IPage } from '../../../shared/interfaces/pages/page.interface';
+import {IPageable} from '../../../shared/interfaces/pages/pageable.interface';
 
 @Service()
 export class UserService {
@@ -33,6 +33,14 @@ export class UserService {
   }
 
   deleteUser(publicId : string) : Observable<IApiResponse<void>> {
-    return this.http.delete<IApiResponse<void>>(`${this.baseUrl}/user/${publicId}`);
+    return this.http.delete<IApiResponse<void>>(`${this.baseUrl}/user/supprimer/${publicId}`);
+  }
+
+  deactivateUser(publicId : string) : Observable<IApiResponse<void>> {
+    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/user/desactiver/${publicId}`, {});
+  }
+
+  activateUser(publicId : string) : Observable<IApiResponse<void>> {
+    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/user/active/${publicId}`, {});
   }
 }

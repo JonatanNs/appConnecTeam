@@ -1,4 +1,4 @@
-package com.nexteam.common;
+package com.nexteam.features.common;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

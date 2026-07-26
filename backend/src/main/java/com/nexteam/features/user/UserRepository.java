@@ -1,6 +1,5 @@
-package com.nexteam.user.repository;
+package com.nexteam.features.user;
 
-import com.nexteam.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

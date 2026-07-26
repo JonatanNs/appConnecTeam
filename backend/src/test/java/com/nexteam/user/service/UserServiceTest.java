@@ -2,8 +2,9 @@ package com.nexteam.user.service;
 
 import com.nexteam.exception.AlreadyExistException;
 import com.nexteam.exception.NotFoundException;
-import com.nexteam.user.User;
-import com.nexteam.user.repository.UserRepository;
+import com.nexteam.features.user.User;
+import com.nexteam.features.user.UserRepository;
+import com.nexteam.features.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceImplTest {
+public class UserServiceTest {
 
     @InjectMocks
-    private UserServiceImpl service;
+    private UserService service;
 
     @Mock
     private UserRepository repository;

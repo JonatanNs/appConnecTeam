@@ -1,15 +1,14 @@
-package com.nexteam.user.service;
+package com.nexteam.features.user;
 
 import com.nexteam.exception.AlreadyExistException;
 import com.nexteam.exception.NotFoundException;
-import com.nexteam.user.User;
-import com.nexteam.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.UUID;
 
 /**
@@ -20,9 +19,11 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserService {
 
     private final UserRepository repository;
+    private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%";
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     /**
      *
@@ -31,7 +32,7 @@ public class UserServiceImpl implements IUserService {
      * @param pageable
      * @return une page d'utilisateurs
      */
-    @Override
+
     public Page<User> getUsers(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -42,7 +43,7 @@ public class UserServiceImpl implements IUserService {
      * @param publicId
      * @return l'utilisateur trouvé
      */
-    @Override
+
     public User getUser(UUID publicId) {
         return repository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
     }
@@ -53,7 +54,7 @@ public class UserServiceImpl implements IUserService {
      * @param email
      * @return l'utilisateur trouvé
      */
-    @Override
+
     public User getUserByEmail(String email) {
         return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
     }
@@ -66,7 +67,7 @@ public class UserServiceImpl implements IUserService {
      * @param user
      * @return l'utilisateur mis à jour
      */
-    @Override
+
     public User updateUser(UUID publicId, User user) {
         User existingUser = repository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
 
@@ -79,6 +80,14 @@ public class UserServiceImpl implements IUserService {
         return repository.save(user);
     }
 
+    private String generateRandomPassword() {
+        StringBuilder sb = new StringBuilder(12);
+        for (int i = 0; i < 12; i++) {
+            sb.append(CHARS.charAt(RANDOM.nextInt(CHARS.length())));
+        }
+        return sb.toString();
+    }
+
     /**
      * Crée un nouvel utilisateur.
      * Vérifie si l'email est déjà associé à un compte existant.
@@ -86,13 +95,19 @@ public class UserServiceImpl implements IUserService {
      * @param user
      * @return l'utilisateur créé
      */
-    @Override
     public User createUser(User user) {
         repository.findByEmail(user.getEmail()).ifPresent(existingUser -> {
             throw new AlreadyExistException("L'email est déjà associé à un compte.");
         });
+
+        String rawPassword = generateRandomPassword();
+        // TODO: hasher avec BCrypt une fois Spring Security en place
+        user.setPassword(rawPassword);
+        user.setEmail(user.getFirstname().toLowerCase() + "." + user.getLastname().toLowerCase() + "@nexteam.com");
+
         return repository.save(user);
     }
+
 
     /**
      * Supprime un utilisateur par son identifiant unique.
@@ -100,9 +115,23 @@ public class UserServiceImpl implements IUserService {
      * @param publicId
      */
     @Transactional
-    @Override
+
     public void deleteUser(UUID publicId) {
         repository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
         repository.deleteByPublicId(publicId);
+    }
+
+    @Transactional
+    public void activateUser(UUID publicId) {
+        User user = repository.findByPublicId(publicId)
+                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+        user.setActive(true);
+    }
+
+    @Transactional
+    public void deactivateUser(UUID publicId) {
+        User user = repository.findByPublicId(publicId)
+                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+        user.setActive(false);
     }
 }

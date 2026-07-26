@@ -1,6 +1,6 @@
-package com.nexteam.address;
+package com.nexteam.features.address;
 
-import com.nexteam.common.AuditableEntity;
+import com.nexteam.features.common.AuditableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;

@@ -1,12 +1,12 @@
-package com.nexteam.user;
+package com.nexteam.features.user;
 
-import com.nexteam.role.Role;
-import com.nexteam.address.Address;
-import com.nexteam.common.AuditableEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nexteam.features.Role.Role;
+import com.nexteam.features.address.Address;
+import com.nexteam.features.common.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.HashSet;
@@ -27,6 +27,7 @@ import java.util.Set;
 @Builder
 
 @Entity
+@Table(name = "persons")
 public class User extends AuditableEntity {
 
     @Column(nullable = false, length = 100)
@@ -39,15 +40,13 @@ public class User extends AuditableEntity {
 
     @Email
     @Column(unique = true, nullable = false, length = 150)
-    @NotBlank(message = "Le champ email ne peut pas être vide.")
     private String email;
 
+    //    @Pattern(
+//            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$",
+//            message = "Le mot de passe doit contenir majuscule, minuscule et chiffre."
+    // )
     @Column(nullable = false)
-    @NotBlank(message = "Ce champ ne peut pas être vide.")
-    @Pattern(
-            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$",
-            message = "Le mot de passe doit contenir majuscule, minuscule et chiffre."
-    )
     // TODO : mettre un mot de passe fort
     private String password;
 
@@ -59,6 +58,7 @@ public class User extends AuditableEntity {
      * Un utilisateur peut avoir plusieurs rôles et un rôle peut être attribué à plusieurs utilisateurs
      */
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
         name = "user_roles",
         joinColumns = @JoinColumn(name = "user_id"),

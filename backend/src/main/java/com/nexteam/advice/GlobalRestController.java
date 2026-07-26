@@ -1,8 +1,8 @@
 package com.nexteam.advice;
 
-import com.nexteam.common.ApiResponse;
 import com.nexteam.exception.AlreadyExistException;
 import com.nexteam.exception.NotFoundException;
+import com.nexteam.features.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

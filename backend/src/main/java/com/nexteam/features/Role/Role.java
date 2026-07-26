@@ -1,6 +1,6 @@
-package com.nexteam.role;
+package com.nexteam.features.Role;
 
-import com.nexteam.common.BaseEntity;
+import com.nexteam.features.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;

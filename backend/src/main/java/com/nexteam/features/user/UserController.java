@@ -1,11 +1,12 @@
 package com.nexteam.features.user;
 
 import com.nexteam.features.common.ApiResponse;
+import com.nexteam.features.common.dto.PageResponseDTO;
+import com.nexteam.features.common.dto.mapper.PageMapper;
 import com.nexteam.features.user.dtos.UserRequestDTO;
 import com.nexteam.features.user.dtos.UserResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final PageMapper pageMapper;
 
     /**
      * Récupère tous les utilisateurs avec pagination.
@@ -33,12 +35,12 @@ public class UserController {
      * @return une réponse contenant une page d'utilisateurs
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<UserResponseDTO>>> getUsers(Pageable pageable) {
+    public ResponseEntity<ApiResponse<PageResponseDTO<UserResponseDTO>>> getUsers(Pageable pageable) {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Éléments récupérés avec succes.",
-                        userService.getUsers(pageable)
+                        pageMapper.toPageResponse(userService.getUsers(pageable))
                 )
         );
     }
@@ -97,7 +99,7 @@ public class UserController {
      * Met à jour un utilisateur existant.
      *
      * @param publicId l'UUID de l'utilisateur à mettre à jour
-     * @param user l'objet utilisateur avec les données mises à jour (validé)
+     * @param user     l'objet utilisateur avec les données mises à jour (validé)
      * @return une réponse contenant l'utilisateur modifié
      */
     @PutMapping("/{publicId}")

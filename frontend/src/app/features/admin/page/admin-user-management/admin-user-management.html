@@ -39,7 +39,7 @@
       [number]="response.data.number"
       [first]="response.data.first"
       [last]="response.data.last"
-      [pageSize]="pageSize()"
+      [pageSize]="response.data.size"
       (pageChange)="goToPage($event)"
       (pageSizeChange)="changePageSize($event)">
     </app-paginate>
@@ -82,15 +82,21 @@
             </td>
             <td class="table-cell-nxt text-nxt-gray">{{ user.email }}</td>
             <td class="table-cell-nxt text-right">
-              <button class="action-link-nxt">Modifier</button>
+              <a class="action-link-nxt" [routerLink]="['/admin/gestion-utilisateurs/', user.publicId, 'modifier']">
+                Modifier
+              </a>
               @if (!user.active) {
-                <form (ngSubmit)="activateUser(user.publicId)" >
-                  <button type="submit" class="btn-nxt-success">Actif</button>
-                </form>
+                <button
+                  class="btn-nxt-success"
+                  (click)="openUserModal(user)">
+                  Activer
+                </button>
               } @else {
-                <form (ngSubmit)="deactivateUser(user.publicId)" >
-                  <button type="submit" class="btn-nxt-error">Désactivé</button>
-                </form>
+                <button
+                  class="btn-nxt-error"
+                  (click)="openUserModal(user)">
+                  Désactiver
+                </button>
               }
             </td>
           </tr>
@@ -111,10 +117,57 @@
       [number]="response.data.number"
       [first]="response.data.first"
       [last]="response.data.last"
-      [pageSize]="pageSize()"
+      [pageSize]="response.data.size"
       (pageChange)="goToPage($event)"
       (pageSizeChange)="changePageSize($event)">
     </app-paginate>
   }
 
 }
+<dialog #userModal class="modal">
+  <div class="modal-nxt">
+
+    @if (selectedUser) {
+
+      <h3 class="modal-title-nxt">
+        @if (selectedUser.active) {
+          Désactiver l'utilisateur ?
+        } @else {
+          Activer l'utilisateur ?
+        }
+      </h3>
+
+      <p class="py-4">
+        Voulez-vous vraiment
+        @if (selectedUser.active) {
+          désactiver
+        } @else {
+          activer
+        }
+        <strong>{{ selectedUser.firstname }} {{ selectedUser.lastname }}</strong> ?
+      </p>
+
+      <div class="modal-action">
+
+        <button class="btn-nxt-blue" (click)="closeUserModal()">
+          Annuler
+        </button>
+
+        <button
+          (click)="confirmAction()"
+          [ngClass]="selectedUser.active ? 'btn-nxt-error' : 'btn-nxt-success'">
+
+          @if (selectedUser.active) {
+            Désactiver
+          } @else {
+            Activer
+          }
+
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+</dialog>

@@ -230,3 +230,21 @@
   margin-bottom: 2.5rem;
   color: var(--nxt-black);
 }
+
+.modal-nxt {
+  border: var(--border) solid var(--nxt-gray);
+  border-radius: var(--radius-lg);
+  background-color: var(--nxt-white);
+  color: var(--nxt-black);
+  padding: 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+.modal-title-nxt {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--nxt-black);
+  margin-bottom: 1rem;
+}

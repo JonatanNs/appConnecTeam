@@ -1,9 +1,15 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, computed, effect, inject, signal} from '@angular/core';
 import { UserService } from '../../../../core/services/user/user-service';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {combineLatest, switchMap} from 'rxjs';
 import {Paginate} from '../../../../shared/components/paginate/paginate';
-import {ListUser} from '../../../../shared/components/list-user/list-user';
+import {ListUser} from '../../components/list-user/list-user';
+import {httpResource} from '@angular/common/http';
+import {IApiResponse} from '../../../../shared/interfaces/api-response.interface';
+import {IPage} from '../../../../shared/interfaces/pageable/page.interface';
+import {IUser} from '../../../../shared/interfaces/user.interface';
+import {FlashMessageService} from '../../../../core/services/flashMessage/flash-message-service';
+import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interface';
 
 
 @Component({
@@ -15,26 +21,25 @@ import {ListUser} from '../../../../shared/components/list-user/list-user';
 export class Directory {
 
   private userService = inject(UserService);
+  private flashMessage = inject(FlashMessageService);
 
-  currentPage = signal(0);
-  pageSize = signal(12);
+  readonly pageable = signal<IPageable>({ page: 0, size: 12 });
 
   users = toSignal(
     combineLatest([
-      toObservable(this.currentPage),
-      toObservable(this.pageSize)
+      toObservable(this.pageable),
     ]).pipe(
-      switchMap(([page, size]) => this.userService.getAllUsers({ page, size }))
+      switchMap(([pageable]) => this.userService.getAllUsers(pageable))
     )
   );
 
+
   goToPage(page: number): void {
-    this.currentPage.set(page);
+    this.pageable.update(p => ({ ...p, page }));
   }
 
   changePageSize(size: number): void {
-    this.pageSize.set(size);
-    this.currentPage.set(0);
+    this.pageable.set({ page: 0, size });
   }
 }
 

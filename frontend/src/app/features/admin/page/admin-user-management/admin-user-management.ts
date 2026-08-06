@@ -1,14 +1,19 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, computed, effect, ElementRef, inject, signal, ViewChild} from '@angular/core';
 import {FlashMessageService} from '../../../../core/services/flashMessage/flash-message-service';
 import {UserService} from '../../../../core/services/user/user-service';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {catchError, combineLatest, of, switchMap} from 'rxjs';
 import {FaIconComponent, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {Paginate} from '../../../../shared/components/paginate/paginate';
-import {NgOptimizedImage} from '@angular/common';
+import {NgClass, NgOptimizedImage} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {IUser} from '../../../../shared/interfaces/user.interface';
+import {httpResource} from '@angular/common/http';
+import {IApiResponse} from '../../../../shared/interfaces/api-response.interface';
+import {IPage} from '../../../../shared/interfaces/pageable/page.interface';
+import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interface';
 
 @Component({
   selector: 'app-admin-user-management',
@@ -17,7 +22,8 @@ import {faPlus} from '@fortawesome/free-solid-svg-icons';
     Paginate,
     NgOptimizedImage,
     RouterLink,
-    FormsModule
+    FormsModule,
+    NgClass
   ],
   templateUrl: './admin-user-management.html',
   styleUrl: './admin-user-management.css',
@@ -25,22 +31,25 @@ import {faPlus} from '@fortawesome/free-solid-svg-icons';
 export class AdminUserManagement {
 
   private userService = inject(UserService);
-  private flashService = inject(FlashMessageService);
-
-  currentPage = signal(0);
-  pageSize = signal(12);
+  private flashMessage = inject(FlashMessageService);
   private refreshTrigger = signal(0);
+
+  private refreshUsers(): void {
+    this.refreshTrigger.update(v => v + 1);
+  }
+
+  protected readonly faPlus = faPlus;
+  readonly pageable = signal<IPageable>({ page: 0, size: 12 });
 
   users = toSignal(
     combineLatest([
-      toObservable(this.currentPage),
-      toObservable(this.pageSize),
+      toObservable(this.pageable),
       toObservable(this.refreshTrigger)
     ]).pipe(
-      switchMap(([page, size]) =>
-        this.userService.getAllUsers({page, size}).pipe(
+      switchMap(([pageable]) =>
+        this.userService.getAllUsers(pageable).pipe(
           catchError(() => {
-            this.flashService.error('Erreur lors du chargement des utilisateurs.');
+            this.flashMessage.error('Erreur lors du chargement des utilisateurs.');
             return of(undefined);
           })
         )
@@ -49,26 +58,48 @@ export class AdminUserManagement {
   );
 
   goToPage(page: number): void {
-    this.currentPage.set(page);
+    this.pageable.update(p => ({ ...p, page }));
   }
 
   changePageSize(size: number): void {
-    this.pageSize.set(size);
-    this.currentPage.set(0);
+    this.pageable.set({ page: 0, size });
   }
 
-  private refresh(): void {
-    this.refreshTrigger.update(v => v + 1);
+  @ViewChild('userModal')
+  userModal!: ElementRef<HTMLDialogElement>;
+  selectedUser: IUser | null = null;
+
+  openUserModal(user: IUser) {
+    this.selectedUser = user;
+    this.userModal.nativeElement.showModal();
+  }
+
+  closeUserModal() {
+    this.userModal.nativeElement.close();
+  }
+
+  confirmAction() {
+    if (!this.selectedUser) {
+      return;
+    }
+
+    if (this.selectedUser.active) {
+      this.deactivateUser(this.selectedUser.publicId);
+    } else {
+      this.activateUser(this.selectedUser.publicId);
+    }
+
+    this.closeUserModal();
   }
 
   deactivateUser(publicId: string): void {
     this.userService.deactivateUser(publicId).subscribe({
       next: (res) => {
-        this.flashService.success(res.message);
-        this.refresh();
+        this.flashMessage.success(res.message);
+        this.refreshUsers();
       },
       error: (err) => {
-        this.flashService.error(err.error.message);
+        this.flashMessage.error(err.error.message);
       }
     });
   }
@@ -76,14 +107,12 @@ export class AdminUserManagement {
   activateUser(publicId: string): void {
     this.userService.activateUser(publicId).subscribe({
       next: (res) => {
-        this.flashService.success(res.message);
-        this.refresh();
+        this.flashMessage.success(res.message);
+        this.refreshUsers();
       },
       error: (err) => {
-        this.flashService.error(err.error.message);
+        this.flashMessage.error(err.error.message);
       }
     });
   }
-
-  protected readonly faPlus = faPlus;
 }

@@ -46,10 +46,12 @@ export class FormAdduser {
 
     this.userService.createUser(this.userForm.value as IUser).subscribe({
       next: (res) => {
+        console.log(res);
         this.flashService.success(res.message)
         this.router.navigate(['/admin/gestion-utilisateurs']);
       },
       error: (error) => {
+        console.error(error);
         this.errorSig.set(error.error.message);
       }
     });

@@ -1,32 +1,30 @@
-  <h1 class="page-title-nxt">Annuaire des employés</h1>
-  @if (users(); as response) {
-    @if (response.data.totalPages > 0){
-      <app-paginate
-        [totalPages]="response.data.totalPages"
-        [number]="response.data.number"
-        [first]="response.data.first"
-        [last]="response.data.last"
-        [pageSize]="pageSize()"
-        (pageChange)="goToPage($event)"
-        (pageSizeChange)="changePageSize($event)">
-      </app-paginate>
-    }
-
-    <app-list-user [users]="response"></app-list-user>
-
-    @if (response.data.totalPages > 0){
-      <app-paginate
-        [totalPages]="response.data.totalPages"
-        [number]="response.data.number"
-        [first]="response.data.first"
-        [last]="response.data.last"
-        [pageSize]="pageSize()"
-        (pageChange)="goToPage($event)"
-        (pageSizeChange)="changePageSize($event)">
-      </app-paginate>
-    } @else {
-      <p class="text-center text-nxt-gray">Aucun utilisateur trouvé.</p>
-    }
+<h1 class="page-title-nxt">Annuaire des employés</h1>
+@if (users(); as response) {
+  @if (response.data.totalPages > 0){
+    <app-paginate
+      [totalPages]="response.data.totalPages"
+      [number]="response.data.number"
+      [first]="response.data.first"
+      [last]="response.data.last"
+      [pageSize]="pageable().size"
+      (pageChange)="goToPage($event)"
+      (pageSizeChange)="changePageSize($event)">
+    </app-paginate>
   }
 
+  <app-list-user [users]="response"></app-list-user>
 
+  @if (response.data.totalPages > 0){
+    <app-paginate
+      [totalPages]="response.data.totalPages"
+      [number]="response.data.number"
+      [first]="response.data.first"
+      [last]="response.data.last"
+      [pageSize]="pageable().size"
+      (pageChange)="goToPage($event)"
+      (pageSizeChange)="changePageSize($event)">
+    </app-paginate>
+  } @else {
+    <p class="text-center text-nxt-gray">Aucun utilisateur trouvé.</p>
+  }
+}

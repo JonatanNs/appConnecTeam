@@ -1,8 +1,8 @@
-package com.nexteam.features.user;
+package com.nexteam.features.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nexteam.features.Address.Address;
 import com.nexteam.features.Role.Role;
-import com.nexteam.features.address.Address;
 import com.nexteam.features.common.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

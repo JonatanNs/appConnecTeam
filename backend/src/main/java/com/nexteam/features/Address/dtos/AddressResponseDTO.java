@@ -1,4 +1,4 @@
-package com.nexteam.features.address.dtos;
+package com.nexteam.features.Address.dtos;
 
 
 import lombok.*;

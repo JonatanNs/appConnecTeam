@@ -1,4 +1,4 @@
-package com.nexteam.features.user;
+package com.nexteam.features.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

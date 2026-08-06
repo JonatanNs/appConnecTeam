@@ -1,7 +1,7 @@
-package com.nexteam.features.user.dtos;
+package com.nexteam.features.User.dtos;
 
+import com.nexteam.features.Address.Address;
 import com.nexteam.features.Role.Role;
-import com.nexteam.features.address.Address;
 import lombok.*;
 
 import java.time.Instant;

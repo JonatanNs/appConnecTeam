@@ -1,4 +1,4 @@
-package com.nexteam.features.address;
+package com.nexteam.features.Address;
 
 import com.nexteam.features.common.AuditableEntity;
 import jakarta.persistence.Column;

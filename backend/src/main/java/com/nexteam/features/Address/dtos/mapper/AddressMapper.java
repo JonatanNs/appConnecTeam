@@ -1,8 +1,8 @@
-package com.nexteam.features.address.dtos.mapper;
+package com.nexteam.features.Address.dtos.mapper;
 
-import com.nexteam.features.address.Address;
-import com.nexteam.features.address.dtos.AddressRequestDTO;
-import com.nexteam.features.address.dtos.AddressResponseDTO;
+import com.nexteam.features.Address.Address;
+import com.nexteam.features.Address.dtos.AddressRequestDTO;
+import com.nexteam.features.Address.dtos.AddressResponseDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

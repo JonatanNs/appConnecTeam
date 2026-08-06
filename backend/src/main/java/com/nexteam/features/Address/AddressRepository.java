@@ -1,4 +1,4 @@
-package com.nexteam.features.address;
+package com.nexteam.features.Address;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

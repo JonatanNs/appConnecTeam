@@ -1,15 +1,14 @@
-package com.nexteam.features.user;
+package com.nexteam.features.User;
 
-import com.nexteam.exception.AlreadyExistException;
-import com.nexteam.exception.NotFoundException;
-import com.nexteam.features.address.Address;
-import com.nexteam.features.address.AddressService;
-import com.nexteam.features.address.dtos.AddressRequestDTO;
-import com.nexteam.features.address.dtos.AddressResponseDTO;
-import com.nexteam.features.address.dtos.mapper.AddressMapper;
-import com.nexteam.features.user.dtos.UserRequestDTO;
-import com.nexteam.features.user.dtos.UserResponseDTO;
-import com.nexteam.features.user.dtos.mapper.UserMapper;
+import com.nexteam.exceptions.AlreadyExistException;
+import com.nexteam.exceptions.NotFoundException;
+import com.nexteam.features.Address.Address;
+import com.nexteam.features.Address.AddressService;
+import com.nexteam.features.Address.dtos.AddressRequestDTO;
+import com.nexteam.features.Address.dtos.mapper.AddressMapper;
+import com.nexteam.features.User.dtos.UserRequestDTO;
+import com.nexteam.features.User.dtos.UserResponseDTO;
+import com.nexteam.features.User.dtos.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -123,19 +122,25 @@ public class UserService {
      * @return l'utilisateur créé
      */
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        repository.findByEmail(userRequestDTO.getEmail()).ifPresent(existingUser -> {
+
+        String email = userRequestDTO.getFirstname().toLowerCase()
+                + "."
+                + userRequestDTO.getLastname().toLowerCase()
+                + "@nexteam.com";
+
+        repository.findByEmail(email).ifPresent(existingUser -> {
             throw new AlreadyExistException("L'email est déjà associé à un compte.");
         });
 
-        userRequestDTO.setEmail(
-                userRequestDTO.getFirstname()
-                        .toLowerCase() + "." + userRequestDTO.getLastname().toLowerCase() + "@nexteam.com");
+        userRequestDTO.setEmail(email);
 
         User user = userMapper.requestDTOToUser(userRequestDTO);
 
+        user.setActive(true);
+
         String rawPassword = generateRandomPassword();
-        // TODO: hasher avec BCrypt une fois Spring Security en place
         user.setPassword(rawPassword);
+        //user.setPassword(passwordEncoder.encode(rawPassword));
 
         return userMapper.userToResponseDTO(repository.save(user));
     }
@@ -183,7 +188,7 @@ public class UserService {
         return userMapper.userToResponseDTO(repository.save(user));
     }
 
-    public UserResponseDTO deleteAddress(UUID userPublicId) {
+    public void deleteAddress(UUID userPublicId) {
 
         User user = repository.findByPublicId(userPublicId)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable"));
@@ -197,7 +202,7 @@ public class UserService {
             addressService.deleteAddress(address.getPublicId());
         }
 
-        return userMapper.userToResponseDTO(user);
+//        userMapper.userToResponseDTO(user);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.nexteam.exception;
+package com.nexteam.exceptions;
 
 /**
  * Classe 'NotFoundException' en charge de la gestion des exceptions pour les éléments non trouvés.

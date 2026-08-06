@@ -1,12 +1,10 @@
-package com.nexteam.features.address;
+package com.nexteam.features.Address;
 
-import com.nexteam.exception.NotFoundException;
-import com.nexteam.features.address.dtos.AddressRequestDTO;
-import com.nexteam.features.address.dtos.AddressResponseDTO;
-import com.nexteam.features.address.dtos.mapper.AddressMapper;
+import com.nexteam.exceptions.NotFoundException;
+import com.nexteam.features.Address.dtos.AddressRequestDTO;
+import com.nexteam.features.Address.dtos.AddressResponseDTO;
+import com.nexteam.features.Address.dtos.mapper.AddressMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

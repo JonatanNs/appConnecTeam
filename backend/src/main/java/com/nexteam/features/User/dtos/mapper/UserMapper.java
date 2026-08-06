@@ -1,8 +1,8 @@
-package com.nexteam.features.user.dtos.mapper;
+package com.nexteam.features.User.dtos.mapper;
 
-import com.nexteam.features.user.User;
-import com.nexteam.features.user.dtos.UserRequestDTO;
-import com.nexteam.features.user.dtos.UserResponseDTO;
+import com.nexteam.features.User.User;
+import com.nexteam.features.User.dtos.UserRequestDTO;
+import com.nexteam.features.User.dtos.UserResponseDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

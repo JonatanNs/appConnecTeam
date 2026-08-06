@@ -1,12 +1,12 @@
-package com.nexteam.features.user;
+package com.nexteam.features.User;
 
-import com.nexteam.features.address.AddressService;
-import com.nexteam.features.address.dtos.AddressRequestDTO;
+import com.nexteam.features.Address.AddressService;
+import com.nexteam.features.Address.dtos.AddressRequestDTO;
+import com.nexteam.features.User.dtos.UserRequestDTO;
+import com.nexteam.features.User.dtos.UserResponseDTO;
 import com.nexteam.features.common.ApiResponse;
 import com.nexteam.features.common.dto.PageResponseDTO;
 import com.nexteam.features.common.dto.mapper.PageMapper;
-import com.nexteam.features.user.dtos.UserRequestDTO;
-import com.nexteam.features.user.dtos.UserResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +27,7 @@ import java.util.UUID;
 @RequestMapping("api/v1/users")
 @RestController
 public class UserController {
-    private final UserService userService;
+    private final com.nexteam.features.User.UserService userService;
     private final AddressService addressService;
     private final PageMapper pageMapper;
 
@@ -76,7 +76,7 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
-                        "OK",
+                        "Élément récupéré avec succes.",
                         userService.getUserByEmail(email))
         );
     }
@@ -102,7 +102,7 @@ public class UserController {
      * Met à jour un utilisateur existant.
      *
      * @param publicId l'UUID de l'utilisateur à mettre à jour
-     * @param user     l'objet utilisateur avec les données mises à jour (validé)
+     * @param user l'objet utilisateur avec les données mises à jour (validé)
      * @return une réponse contenant l'utilisateur modifié
      */
     @PutMapping("/{publicId}")
@@ -138,7 +138,7 @@ public class UserController {
     }
 
     @PutMapping("/deactivate/{publicId}")
-    public ResponseEntity<ApiResponse<Void>> desactivateUser(@PathVariable UUID publicId) {
+    public ResponseEntity<ApiResponse<Void>> deactivateUser(@PathVariable UUID publicId) {
         userService.deactivateUser(publicId);
         return ResponseEntity.ok().body(
                 ApiResponse.of(

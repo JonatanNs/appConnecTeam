@@ -1,5 +1,7 @@
 package com.nexteam.features.user;
 
+import com.nexteam.features.address.AddressService;
+import com.nexteam.features.address.dtos.AddressRequestDTO;
 import com.nexteam.features.common.ApiResponse;
 import com.nexteam.features.common.dto.PageResponseDTO;
 import com.nexteam.features.common.dto.mapper.PageMapper;
@@ -26,6 +28,7 @@ import java.util.UUID;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final AddressService addressService;
     private final PageMapper pageMapper;
 
     /**
@@ -103,7 +106,10 @@ public class UserController {
      * @return une réponse contenant l'utilisateur modifié
      */
     @PutMapping("/{publicId}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(@PathVariable UUID publicId, @Valid @RequestBody UserRequestDTO user) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(
+            @PathVariable UUID publicId,
+            @Valid @RequestBody UserRequestDTO user) {
+
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
@@ -154,5 +160,45 @@ public class UserController {
                 )
         );
     }
-}
 
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponseDTO<UserResponseDTO>>> searchUsers(
+            @RequestParam(required = false) String firstname,
+            @RequestParam(required = false) String lastname,
+            Pageable pageable
+    ) {
+        PageResponseDTO<UserResponseDTO> users = pageMapper.toPageResponse(userService.searchUsers(firstname, lastname, pageable));
+
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK.value(),
+                        "Utilisateurs trouvés.",
+                        users
+                )
+        );
+    }
+
+    @DeleteMapping("/{userPublicId}/me/addresses")
+    public ResponseEntity<ApiResponse<Void>> deleteAddress(@PathVariable UUID userPublicId) {
+        userService.deleteAddress(userPublicId);
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK.value(),
+                        "Adresse supprimée avec succès.",
+                        null
+                )
+        );
+    }
+
+    @PostMapping("/{userPublicId}/me/addresses")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> addAddress(@PathVariable UUID userPublicId, @Valid @RequestBody AddressRequestDTO addressRequestDTO) {
+        UserResponseDTO userResponseDTO = userService.addAddress(userPublicId, addressRequestDTO);
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK.value(),
+                        "Adresse ajoutée avec succès.",
+                        userResponseDTO
+                )
+        );
+    }
+}

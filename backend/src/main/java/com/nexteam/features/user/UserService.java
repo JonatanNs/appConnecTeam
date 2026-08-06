@@ -2,6 +2,11 @@ package com.nexteam.features.user;
 
 import com.nexteam.exception.AlreadyExistException;
 import com.nexteam.exception.NotFoundException;
+import com.nexteam.features.address.Address;
+import com.nexteam.features.address.AddressService;
+import com.nexteam.features.address.dtos.AddressRequestDTO;
+import com.nexteam.features.address.dtos.AddressResponseDTO;
+import com.nexteam.features.address.dtos.mapper.AddressMapper;
 import com.nexteam.features.user.dtos.UserRequestDTO;
 import com.nexteam.features.user.dtos.UserResponseDTO;
 import com.nexteam.features.user.dtos.mapper.UserMapper;
@@ -25,9 +30,12 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository repository;
+
     private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%";
     private static final SecureRandom RANDOM = new SecureRandom();
     private final UserMapper userMapper;
+    private final AddressMapper addressMapper;
+    private final AddressService addressService;
 
     /**
      *
@@ -157,4 +165,39 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
         user.setActive(false);
     }
+
+    public Page<UserResponseDTO> searchUsers(String firstname, String lastname, Pageable pageable) {
+        Page<User> users = repository.search(firstname, lastname, pageable);
+        return users.map(userMapper::userToResponseDTO);
+    }
+
+    public UserResponseDTO addAddress(UUID userPublicId, AddressRequestDTO addressRequestDTO) {
+
+        User user = repository.findByPublicId(userPublicId)
+                .orElseThrow(() -> new NotFoundException("Utilisateur introuvable"));
+
+        Address address = addressService.createAddress(addressRequestDTO);
+
+        user.setAddress(address);
+
+        return userMapper.userToResponseDTO(repository.save(user));
+    }
+
+    public UserResponseDTO deleteAddress(UUID userPublicId) {
+
+        User user = repository.findByPublicId(userPublicId)
+                .orElseThrow(() -> new NotFoundException("Utilisateur introuvable"));
+
+        Address address = user.getAddress();
+
+        if (address != null) {
+            user.setAddress(null);
+            repository.save(user);
+
+            addressService.deleteAddress(address.getPublicId());
+        }
+
+        return userMapper.userToResponseDTO(user);
+    }
+
 }

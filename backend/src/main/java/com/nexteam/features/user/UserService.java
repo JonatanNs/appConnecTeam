@@ -2,6 +2,9 @@ package com.nexteam.features.user;
 
 import com.nexteam.exception.AlreadyExistException;
 import com.nexteam.exception.NotFoundException;
+import com.nexteam.features.user.dtos.UserRequestDTO;
+import com.nexteam.features.user.dtos.UserResponseDTO;
+import com.nexteam.features.user.dtos.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +27,7 @@ public class UserService {
     private final UserRepository repository;
     private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%";
     private static final SecureRandom RANDOM = new SecureRandom();
+    private final UserMapper userMapper;
 
     /**
      *
@@ -33,8 +37,9 @@ public class UserService {
      * @return une page d'utilisateurs
      */
 
-    public Page<User> getUsers(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<UserResponseDTO> getUsers(Pageable pageable) {
+        Page<User> users = repository.findAll(pageable);
+        return users.map(userMapper::userToResponseDTO);
     }
 
     /**
@@ -44,8 +49,12 @@ public class UserService {
      * @return l'utilisateur trouvé
      */
 
-    public User getUser(UUID publicId) {
-        return repository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+    public UserResponseDTO getUser(UUID publicId) {
+
+        User user = repository.findByPublicId(publicId)
+                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+
+        return userMapper.userToResponseDTO(user);
     }
 
     /**
@@ -55,8 +64,11 @@ public class UserService {
      * @return l'utilisateur trouvé
      */
 
-    public User getUserByEmail(String email) {
-        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+    public UserResponseDTO getUserByEmail(String email) {
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+
+        return userMapper.userToResponseDTO(user);
     }
 
     /**
@@ -64,20 +76,27 @@ public class UserService {
      * Vérifie si l'utilisateur existe avant de procéder à la mise à jour.
      *
      * @param publicId
-     * @param user
+     * @param userRequestDTO
      * @return l'utilisateur mis à jour
      */
+    public UserResponseDTO updateUser(UUID publicId, UserRequestDTO userRequestDTO) {
 
-    public User updateUser(UUID publicId, User user) {
-        User existingUser = repository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+        User existingUser = repository.findByPublicId(publicId)
+                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
 
-        repository.findByEmail(user.getEmail()).ifPresent(u -> {
-            throw new AlreadyExistException("L'email est déjà associé à un compte.");
-        });
+        repository.findByEmail(userRequestDTO.getEmail())
+                .filter(user -> !user.getPublicId().equals(publicId))
+                .ifPresent(user -> {
+                    throw new AlreadyExistException(
+                            "L'email est déjà associé à un compte."
+                    );
+                });
 
-        user.setId(existingUser.getId());
-        user.setVersion(existingUser.getVersion());
-        return repository.save(user);
+        existingUser.setFirstname(userRequestDTO.getFirstname());
+        existingUser.setLastname(userRequestDTO.getLastname());
+        existingUser.setEmail(userRequestDTO.getEmail());
+
+        return userMapper.userToResponseDTO(repository.save(existingUser));
     }
 
     private String generateRandomPassword() {
@@ -92,22 +111,26 @@ public class UserService {
      * Crée un nouvel utilisateur.
      * Vérifie si l'email est déjà associé à un compte existant.
      *
-     * @param user
+     * @param userRequestDTO
      * @return l'utilisateur créé
      */
-    public User createUser(User user) {
-        repository.findByEmail(user.getEmail()).ifPresent(existingUser -> {
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+        repository.findByEmail(userRequestDTO.getEmail()).ifPresent(existingUser -> {
             throw new AlreadyExistException("L'email est déjà associé à un compte.");
         });
+
+        userRequestDTO.setEmail(
+                userRequestDTO.getFirstname()
+                        .toLowerCase() + "." + userRequestDTO.getLastname().toLowerCase() + "@nexteam.com");
+
+        User user = userMapper.requestDTOToUser(userRequestDTO);
 
         String rawPassword = generateRandomPassword();
         // TODO: hasher avec BCrypt une fois Spring Security en place
         user.setPassword(rawPassword);
-        user.setEmail(user.getFirstname().toLowerCase() + "." + user.getLastname().toLowerCase() + "@nexteam.com");
 
-        return repository.save(user);
+        return userMapper.userToResponseDTO(repository.save(user));
     }
-
 
     /**
      * Supprime un utilisateur par son identifiant unique.

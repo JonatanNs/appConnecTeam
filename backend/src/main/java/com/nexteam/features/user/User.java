@@ -73,6 +73,10 @@ public class User extends AuditableEntity {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    String getFullName(){
+        return this.firstname + " " +  this.lastname;
+    }
 }
 
 

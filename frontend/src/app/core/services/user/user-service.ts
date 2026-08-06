@@ -17,30 +17,30 @@ export class UserService {
   }
 
   getUser(publicId: string): Observable<IApiResponse<IUser>> {
-    return this.http.get<IApiResponse<IUser>>(`${this.baseUrl}/user/${publicId}`);
+    return this.http.get<IApiResponse<IUser>>(`${this.baseUrl}/users/${publicId}`);
   }
 
   getUserByEmail(email : string) : Observable<IApiResponse<IUser>> {
-    return this.http.get<IApiResponse<IUser>>(`${this.baseUrl}/user/email?=${email}`);
+    return this.http.get<IApiResponse<IUser>>(`${this.baseUrl}/users/email?=${email}`);
   }
 
   updateUser(publicId : string, user : IUser) : Observable<IApiResponse<void>> {
-    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/user/${publicId}`, user);
+    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/users/${publicId}`, user);
   }
 
   createUser(user : IUser) : Observable<IApiResponse<IUser>> {
-    return this.http.post<IApiResponse<IUser>>(`${this.baseUrl}/user`, user);
+    return this.http.post<IApiResponse<IUser>>(`${this.baseUrl}/users`, user);
   }
 
   deleteUser(publicId : string) : Observable<IApiResponse<void>> {
-    return this.http.delete<IApiResponse<void>>(`${this.baseUrl}/user/supprimer/${publicId}`);
+    return this.http.delete<IApiResponse<void>>(`${this.baseUrl}/users/${publicId}`);
   }
 
   deactivateUser(publicId : string) : Observable<IApiResponse<void>> {
-    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/user/desactiver/${publicId}`, {});
+    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/users/deactivate/${publicId}`, {});
   }
 
   activateUser(publicId : string) : Observable<IApiResponse<void>> {
-    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/user/active/${publicId}`, {});
+    return this.http.put<IApiResponse<void>>(`${this.baseUrl}/users/activate/${publicId}`, {});
   }
 }

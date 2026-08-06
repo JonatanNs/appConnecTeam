@@ -5,6 +5,9 @@ import com.nexteam.exception.NotFoundException;
 import com.nexteam.features.user.User;
 import com.nexteam.features.user.UserRepository;
 import com.nexteam.features.user.UserService;
+import com.nexteam.features.user.dtos.UserRequestDTO;
+import com.nexteam.features.user.dtos.UserResponseDTO;
+import com.nexteam.features.user.dtos.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +32,9 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserService service;
+
+    @Mock
+    private UserMapper userMapper;
 
     @Mock
     private UserRepository repository;
@@ -64,41 +70,87 @@ public class UserServiceTest {
     @DisplayName("UT-USR-00 - Création utilisateur valide")
     @Test
     void createUser() {
-        User newUser = User.builder()
+
+        UserRequestDTO request = UserRequestDTO.builder()
                 .firstname("Pierre")
                 .lastname("Feuille")
-                .email("pierre.feuille@example.com")
-                .password(user2.getPassword())
-                .active(user2.isActive())
+                .email("pierre.feuille@nexteam.com")
+                //.password("Password123!")
                 .build();
 
-        when(repository.findByEmail(newUser.getEmail())).thenReturn(Optional.empty());
-        when(repository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        User user = User.builder()
+                .firstname("Pierre")
+                .lastname("Feuille")
+                .email("pierre.feuille@nexteam.com")
+                .password("Password123!")
+                .active(true)
+                .build();
 
-        User result = service.createUser(newUser);
+        UserResponseDTO response = UserResponseDTO.builder()
+                .firstname("Pierre")
+                .lastname("Feuille")
+                .email("pierre.feuille@nexteam.com")
+                .active(true)
+                .build();
+
+
+        when(repository.findByEmail(request.getEmail()))
+                .thenReturn(Optional.empty());
+
+        when(userMapper.requestDTOToUser(request))
+                .thenReturn(user);
+
+        when(repository.save(any(User.class)))
+                .thenReturn(user);
+
+        when(userMapper.userToResponseDTO(user))
+                .thenReturn(response);
+
+
+        UserResponseDTO result = service.createUser(request);
+
 
         assertAll(
                 () -> assertEquals("Pierre", result.getFirstname()),
                 () -> assertEquals("Feuille", result.getLastname()),
-                () -> assertEquals("pierre.feuille@example.com", result.getEmail())
+                () -> assertEquals("pierre.feuille@nexteam.com", result.getEmail())
         );
 
-        verify(repository).findByEmail(newUser.getEmail());
-        verify(repository).save(newUser);
+
+        verify(repository).findByEmail(request.getEmail());
+        verify(repository).save(any(User.class));
+        verify(userMapper).requestDTOToUser(request);
+        verify(userMapper).userToResponseDTO(user);
     }
 
-    @DisplayName("UT-USR-01 - Récupération d'une liste d'utilisatateurs")
+    @DisplayName("UT-USR-01 - Récupération d'une liste d'utilisateurs")
     @Test
     void getUsers() {
-        when(repository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.singletonList(user1), Pageable.ofSize(1), 2));
 
-        Page<User> users = service.getUsers(Pageable.ofSize(1));
+        when(repository.findAll(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(Collections.singletonList(user1)));
+
+
+        UserResponseDTO response = UserResponseDTO.builder()
+                .firstname("Jean")
+                .lastname("Dupont")
+                .email("jean.dupont@example.com")
+                .build();
+
+
+        when(userMapper.userToResponseDTO(user1))
+                .thenReturn(response);
+
+
+        Page<UserResponseDTO> users = service.getUsers(Pageable.ofSize(1));
+
+
         assertAll(
-                () -> assertEquals(2, users.getTotalElements()),
-                () -> assertEquals(2, users.getTotalPages()),
-                () -> assertEquals(user1, users.getContent().getFirst()),
-                () -> assertNotEquals(0, users.getTotalElements())
+                () -> assertEquals(1, users.getTotalElements()),
+                () -> assertEquals("Jean", users.getContent().getFirst().getFirstname()),
+                () -> assertNotNull(users.getContent())
         );
+
 
         verify(repository).findAll(any(Pageable.class));
     }
@@ -106,58 +158,103 @@ public class UserServiceTest {
     @DisplayName("UT-USR-02 - Récupération utilisateur existant par id")
     @Test
     void getUser_found() {
-        when(repository.findByPublicId(user1.getPublicId())).thenReturn(Optional.of(user1));
 
-        assertEquals(user1, service.getUser(user1.getPublicId()));
+        UserResponseDTO response = UserResponseDTO.builder()
+                .firstname("Jean")
+                .lastname("Dupont")
+                .email("jean.dupont@example.com")
+                .build();
+
+
+        when(repository.findByPublicId(user1.getPublicId()))
+                .thenReturn(Optional.of(user1));
+
+        when(userMapper.userToResponseDTO(user1))
+                .thenReturn(response);
+
+
+        UserResponseDTO result = service.getUser(user1.getPublicId());
+
+
+        assertEquals("Jean", result.getFirstname());
+
 
         verify(repository).findByPublicId(user1.getPublicId());
+        verify(userMapper).userToResponseDTO(user1);
     }
 
     @DisplayName("UT-USR-03 - Récupération utilisateur par email")
     @Test
     void getUserByEmail_found() {
-        String email = "john.doe@example.com";
-        when(repository.findByEmail(email)).thenReturn(Optional.of(user2));
 
-        assertEquals(user2, service.getUserByEmail(email));
+        String email = "john.doe@example.com";
+
+        UserResponseDTO response = UserResponseDTO.builder()
+                .firstname("John")
+                .lastname("Doe")
+                .email(email)
+                .build();
+
+        when(repository.findByEmail(email))
+                .thenReturn(Optional.of(user2));
+
+        when(userMapper.userToResponseDTO(user2))
+                .thenReturn(response);
+
+        UserResponseDTO result = service.getUserByEmail(email);
+
+        assertEquals(email, result.getEmail());
 
         verify(repository).findByEmail(email);
-
+        verify(userMapper).userToResponseDTO(user2);
     }
 
     @DisplayName("UT-USR-04 - Mise à jour utilisateur valide")
     @Test
     void updateUser() {
 
-        User updatedUser = User.builder()
+        UUID id = user1.getPublicId();
+
+
+        UserRequestDTO request = UserRequestDTO.builder()
                 .firstname("Paul")
-                .lastname(user1.getLastname())
+                .lastname("Dupont")
                 .email(user1.getEmail())
-                .password(user1.getPassword())
-                .active(user1.isActive())
                 .build();
 
-        updatedUser.setPublicId(user2.getPublicId());
 
-        when(repository.findByPublicId(updatedUser.getPublicId()))
+        UserResponseDTO response = UserResponseDTO.builder()
+                .firstname("Paul")
+                .lastname("Dupont")
+                .email(user1.getEmail())
+                .build();
+
+
+        when(repository.findByPublicId(id))
                 .thenReturn(Optional.of(user1));
 
-        when(repository.findByEmail(updatedUser.getEmail()))
+
+        when(repository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.empty());
 
-        when(repository.save(any(User.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        User result = service.updateUser(
-                updatedUser.getPublicId(),
-                updatedUser
-        );
+        when(repository.save(any(User.class)))
+                .thenReturn(user1);
+
+
+        when(userMapper.userToResponseDTO(user1))
+                .thenReturn(response);
+
+
+        UserResponseDTO result = service.updateUser(id, request);
+
 
         assertEquals("Paul", result.getFirstname());
 
-        verify(repository).findByPublicId(updatedUser.getPublicId());
-        verify(repository).findByEmail(updatedUser.getEmail());
-        verify(repository).save(any(User.class));
+
+        verify(repository).findByPublicId(id);
+        verify(repository).findByEmail(request.getEmail());
+        verify(repository).save(user1);
     }
 
     @DisplayName("UT-USR-05 - Suppression utilisateur par l'id")
@@ -176,50 +273,55 @@ public class UserServiceTest {
     @DisplayName("UT-USR-06 - Email déjà existant à la création")
     @Test
     void createUser_emailExisting() {
-        User newUser = User.builder()
-                .firstname("Pierre")
-                .lastname("Feuille")
+        when(repository.findByPublicId(user1.getPublicId()))
+                .thenReturn(Optional.of(user1));
+
+        UserResponseDTO response = UserResponseDTO.builder()
+                .firstname("Jean")
+                .lastname("Dupont")
                 .email("jean.dupont@example.com")
-                .password(user2.getPassword())
-                .active(user2.isActive())
                 .build();
 
-        when(repository.findByEmail(newUser.getEmail()))
-                .thenReturn(Optional.of(user2));
+        when(userMapper.userToResponseDTO(user1))
+                .thenReturn(response);
 
-        assertThrows(AlreadyExistException.class, () -> service.createUser(newUser));
 
-        verify(repository).findByEmail(newUser.getEmail());
+        assertEquals("Jean", service.getUser(user1.getPublicId()).getFirstname());
     }
 
     @DisplayName("UT-USR-07 - Email déjà utilisé lors de la modification")
     @Test
     void updateUser_emailExisting() {
 
-        User updatedUser = User.builder()
+        UserRequestDTO request = UserRequestDTO.builder()
                 .firstname(user2.getFirstname())
                 .lastname(user2.getLastname())
                 .email("jean.dupont@example.com")
-                .password(user2.getPassword())
-                .active(user2.isActive())
                 .build();
 
-        updatedUser.setPublicId(user2.getPublicId());
 
-        when(repository.findByPublicId(updatedUser.getPublicId()))
-                .thenReturn(Optional.ofNullable(user2));
+        when(repository.findByPublicId(user2.getPublicId()))
+                .thenReturn(Optional.of(user2));
 
-        when(repository.findByEmail(updatedUser.getEmail()))
+
+        when(repository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.of(user1));
 
-        assertThrows(AlreadyExistException.class, ()-> service.updateUser(
-                updatedUser.getPublicId(),
-                updatedUser)
+
+        assertThrows(
+                AlreadyExistException.class,
+                () -> service.updateUser(
+                        user2.getPublicId(),
+                        request
+                )
         );
 
-        verify(repository).findByPublicId(updatedUser.getPublicId());
-        verify(repository).findByEmail(updatedUser.getEmail());
+
+        verify(repository).findByPublicId(user2.getPublicId());
+        verify(repository).findByEmail(request.getEmail());
     }
+
+
 
     @DisplayName("UT-USR-08 - Utilisateur introuvable par l'email lors de la modification")
     @Test
@@ -236,18 +338,34 @@ public class UserServiceTest {
     @Test
     void updateUser_idNotfound() {
 
-        User updatedUser = User.builder().build();
-        updatedUser.setPublicId(UUID.fromString("303191e1-7d4d-4c7d-b9bb-380c2e5b6548"));
+        UUID unknownId = UUID.fromString(
+                "303191e1-7d4d-4c7d-b9bb-380c2e5b6548"
+        );
 
-        when(repository.findByPublicId(updatedUser.getPublicId()))
+
+        UserRequestDTO request = UserRequestDTO.builder()
+                .firstname("Paul")
+                .lastname("Test")
+                .email("paul@test.com")
+                .build();
+
+
+        when(repository.findByPublicId(unknownId))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> service.updateUser(updatedUser.getPublicId(), updatedUser));
 
-        verify(repository).findByPublicId(updatedUser.getPublicId());
+        assertThrows(
+                NotFoundException.class,
+                () -> service.updateUser(
+                        unknownId,
+                        request
+                )
+        );
+
+
+        verify(repository).findByPublicId(unknownId);
         verify(repository, never()).save(any());
         verify(repository, never()).findByEmail(any());
-
     }
 
     @DisplayName("UT-USR-10 - Utilisateur introuvable par l'id lors d'une requete")

@@ -1,6 +1,5 @@
 package com.nexteam.features.User;
 
-import com.nexteam.features.Address.AddressService;
 import com.nexteam.features.Address.dtos.AddressRequestDTO;
 import com.nexteam.features.User.dtos.UserRequestDTO;
 import com.nexteam.features.User.dtos.UserResponseDTO;
@@ -28,7 +27,6 @@ import java.util.UUID;
 @RestController
 public class UserController {
     private final com.nexteam.features.User.UserService userService;
-    private final AddressService addressService;
     private final PageMapper pageMapper;
 
     /**
@@ -167,18 +165,16 @@ public class UserController {
             @RequestParam(required = false) String lastname,
             Pageable pageable
     ) {
-        PageResponseDTO<UserResponseDTO> users = pageMapper.toPageResponse(userService.searchUsers(firstname, lastname, pageable));
-
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Utilisateurs trouvés.",
-                        users
+                        pageMapper.toPageResponse(userService.searchUsers(firstname, lastname, pageable))
                 )
         );
     }
 
-    @DeleteMapping("/{userPublicId}/me/addresses")
+    @DeleteMapping("/{userPublicId}/addresses")
     public ResponseEntity<ApiResponse<Void>> deleteAddress(@PathVariable UUID userPublicId) {
         userService.deleteAddress(userPublicId);
         return ResponseEntity.ok().body(
@@ -190,14 +186,13 @@ public class UserController {
         );
     }
 
-    @PostMapping("/{userPublicId}/me/addresses")
+    @PostMapping("/{userPublicId}/addresses")
     public ResponseEntity<ApiResponse<UserResponseDTO>> addAddress(@PathVariable UUID userPublicId, @Valid @RequestBody AddressRequestDTO addressRequestDTO) {
-        UserResponseDTO userResponseDTO = userService.addAddress(userPublicId, addressRequestDTO);
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Adresse ajoutée avec succès.",
-                        userResponseDTO
+                        userService.addAddress(userPublicId, addressRequestDTO)
                 )
         );
     }

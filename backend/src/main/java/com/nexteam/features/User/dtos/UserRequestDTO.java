@@ -1,6 +1,6 @@
 package com.nexteam.features.User.dtos;
 
-import com.nexteam.features.Address.Address;
+import com.nexteam.features.Address.dtos.AddressRequestDTO;
 import com.nexteam.features.Role.Role;
 import lombok.*;
 
@@ -22,5 +22,5 @@ public class UserRequestDTO {
     private String lastname;
     private String email;
     private Set<Role> roles;
-    private Address address;
+    private AddressRequestDTO address;
 }

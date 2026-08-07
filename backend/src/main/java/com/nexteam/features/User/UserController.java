@@ -1,6 +1,8 @@
 package com.nexteam.features.User;
 
 import com.nexteam.features.Address.dtos.AddressRequestDTO;
+import com.nexteam.features.Role.dtos.RoleRequestDTO;
+import com.nexteam.features.Role.dtos.mapper.RoleMapper;
 import com.nexteam.features.User.dtos.UserRequestDTO;
 import com.nexteam.features.User.dtos.UserResponseDTO;
 import com.nexteam.features.common.ApiResponse;
@@ -28,6 +30,7 @@ import java.util.UUID;
 public class UserController {
     private final com.nexteam.features.User.UserService userService;
     private final PageMapper pageMapper;
+    private final RoleMapper roleMapper;
 
     /**
      * Récupère tous les utilisateurs avec pagination.
@@ -40,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
-                        "Éléments récupérés avec succes.",
+                        "Utilisateurs récupérés avec succes.",
                         pageMapper.toPageResponse(userService.getUsers(pageable))
                 )
         );
@@ -57,7 +60,7 @@ public class UserController {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
-                        "Élément récupéré avec succes.",
+                        "Utilisateur récupéré avec succes.",
                         userService.getUser(id)
                 )
         );
@@ -74,7 +77,7 @@ public class UserController {
         return ResponseEntity.ok(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
-                        "Élément récupéré avec succes.",
+                        "Utilisateur récupéré avec succes.",
                         userService.getUserByEmail(email))
         );
     }
@@ -196,4 +199,33 @@ public class UserController {
                 )
         );
     }
+
+    // Pour admin
+    @GetMapping("/role")
+    public ResponseEntity<ApiResponse<PageResponseDTO<UserResponseDTO>>> getUsersByRole(
+            @RequestParam String name,
+            Pageable pageable) {
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK.value(),
+                        "Utilisateurs récupérés avec succès.",
+                        pageMapper.toPageResponse(userService.getUsersByRoles(name, pageable))
+                )
+        );
+    }
+
+    @PostMapping("/{userPublicId}/role")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> addRoleUser(
+           @PathVariable UUID userPublicId,
+           @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
+
+        return ResponseEntity.ok().body(
+                ApiResponse.of(
+                        HttpStatus.OK.value(),
+                        "Role " + roleRequestDTO.getName() + " ajouté avec succès.",
+                        userService.addRole(userPublicId, roleRequestDTO)
+                )
+        );
+    }
+
 }

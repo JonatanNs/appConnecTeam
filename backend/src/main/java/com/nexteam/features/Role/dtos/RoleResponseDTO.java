@@ -1,23 +1,18 @@
-package com.nexteam.features.Address.dtos;
-
+package com.nexteam.features.Role.dtos;
 
 import lombok.*;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Builder
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressResponseDTO {
+public class RoleResponseDTO {
     private UUID publicId;
-    private String street;
-    private String city;
-    private String country;
-    private String zipcode;
+    private String name;
     private Instant createdAt;
     private Instant updatedAt;
 }
-

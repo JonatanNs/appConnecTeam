@@ -2,7 +2,6 @@ package com.nexteam.features.Address;
 
 import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.Address.dtos.AddressRequestDTO;
-import com.nexteam.features.Address.dtos.AddressResponseDTO;
 import com.nexteam.features.Address.dtos.mapper.AddressMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,10 +25,9 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public AddressResponseDTO deleteAddress(UUID publicId) {
+    public void deleteAddress(UUID publicId) {
         Address address = addressRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Address non trouvé."));
         addressRepository.deleteByPublicId(publicId);
-        return addressMapper.addressToResponseDTO(address);
     }
 }

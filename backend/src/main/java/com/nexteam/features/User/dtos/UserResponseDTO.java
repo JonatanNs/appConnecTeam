@@ -1,7 +1,7 @@
 package com.nexteam.features.User.dtos;
 
 import com.nexteam.features.Address.dtos.AddressResponseDTO;
-import com.nexteam.features.Role.Role;
+import com.nexteam.features.Role.dtos.RoleResponseDTO;
 import lombok.*;
 
 import java.time.Instant;
@@ -25,7 +25,7 @@ public class UserResponseDTO {
     private String lastname;
     private String email;
     private boolean active;
-    private Set<Role> roles;
+    private Set<RoleResponseDTO> roles;
     private AddressResponseDTO address;
     private Instant createdAt;
     private Instant updatedAt;

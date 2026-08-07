@@ -5,7 +5,10 @@ import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.Address.Address;
 import com.nexteam.features.Address.AddressService;
 import com.nexteam.features.Address.dtos.AddressRequestDTO;
-import com.nexteam.features.Address.dtos.mapper.AddressMapper;
+import com.nexteam.features.Role.Role;
+import com.nexteam.features.Role.RoleService;
+import com.nexteam.features.Role.dtos.RoleRequestDTO;
+import com.nexteam.features.Role.dtos.mapper.RoleMapper;
 import com.nexteam.features.User.dtos.UserRequestDTO;
 import com.nexteam.features.User.dtos.UserResponseDTO;
 import com.nexteam.features.User.dtos.mapper.UserMapper;
@@ -28,13 +31,14 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%";
     private static final SecureRandom RANDOM = new SecureRandom();
     private final UserMapper userMapper;
-    private final AddressMapper addressMapper;
     private final AddressService addressService;
+    private final RoleService roleService;
+    private final RoleMapper roleMapper;
 
     /**
      *
@@ -45,7 +49,7 @@ public class UserService {
      */
 
     public Page<UserResponseDTO> getUsers(Pageable pageable) {
-        Page<User> users = repository.findAll(pageable);
+        Page<User> users = userRepository.findAll(pageable);
         return users.map(userMapper::userToResponseDTO);
     }
 
@@ -58,7 +62,7 @@ public class UserService {
 
     public UserResponseDTO getUser(UUID publicId) {
 
-        User user = repository.findByPublicId(publicId)
+        User user = userRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
 
         return userMapper.userToResponseDTO(user);
@@ -72,7 +76,7 @@ public class UserService {
      */
 
     public UserResponseDTO getUserByEmail(String email) {
-        User user = repository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
 
         return userMapper.userToResponseDTO(user);
@@ -88,10 +92,10 @@ public class UserService {
      */
     public UserResponseDTO updateUser(UUID publicId, UserRequestDTO userRequestDTO) {
 
-        User existingUser = repository.findByPublicId(publicId)
+        User existingUser = userRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
 
-        repository.findByEmail(userRequestDTO.getEmail())
+        userRepository.findByEmail(userRequestDTO.getEmail())
                 .filter(user -> !user.getPublicId().equals(publicId))
                 .ifPresent(user -> {
                     throw new AlreadyExistException(
@@ -103,7 +107,7 @@ public class UserService {
         existingUser.setLastname(userRequestDTO.getLastname());
         existingUser.setEmail(userRequestDTO.getEmail());
 
-        return userMapper.userToResponseDTO(repository.save(existingUser));
+        return userMapper.userToResponseDTO(userRepository.save(existingUser));
     }
 
     private String generateRandomPassword() {
@@ -128,7 +132,7 @@ public class UserService {
                 + userRequestDTO.getLastname().toLowerCase()
                 + "@nexteam.com";
 
-        repository.findByEmail(email).ifPresent(existingUser -> {
+        userRepository.findByEmail(email).ifPresent(existingUser -> {
             throw new AlreadyExistException("L'email est déjà associé à un compte.");
         });
 
@@ -142,7 +146,7 @@ public class UserService {
         user.setPassword(rawPassword);
         //user.setPassword(passwordEncoder.encode(rawPassword));
 
-        return userMapper.userToResponseDTO(repository.save(user));
+        return userMapper.userToResponseDTO(userRepository.save(user));
     }
 
     /**
@@ -153,56 +157,74 @@ public class UserService {
     @Transactional
 
     public void deleteUser(UUID publicId) {
-        repository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
-        repository.deleteByPublicId(publicId);
+        userRepository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+        userRepository.deleteByPublicId(publicId);
     }
 
     @Transactional
     public void activateUser(UUID publicId) {
-        User user = repository.findByPublicId(publicId)
+        User user = userRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
         user.setActive(true);
     }
 
     @Transactional
     public void deactivateUser(UUID publicId) {
-        User user = repository.findByPublicId(publicId)
+        User user = userRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
         user.setActive(false);
     }
 
     public Page<UserResponseDTO> searchUsers(String firstname, String lastname, Pageable pageable) {
-        Page<User> users = repository.search(firstname, lastname, pageable);
+        Page<User> users = userRepository.search(firstname, lastname, pageable);
         return users.map(userMapper::userToResponseDTO);
     }
 
     public UserResponseDTO addAddress(UUID userPublicId, AddressRequestDTO addressRequestDTO) {
 
-        User user = repository.findByPublicId(userPublicId)
+        User user = userRepository.findByPublicId(userPublicId)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable"));
 
         Address address = addressService.createAddress(addressRequestDTO);
 
         user.setAddress(address);
 
-        return userMapper.userToResponseDTO(repository.save(user));
+        return userMapper.userToResponseDTO(userRepository.save(user));
     }
 
+    @Transactional
     public void deleteAddress(UUID userPublicId) {
 
-        User user = repository.findByPublicId(userPublicId)
+        User user = userRepository.findByPublicId(userPublicId)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable"));
 
         Address address = user.getAddress();
 
         if (address != null) {
             user.setAddress(null);
-            repository.save(user);
-
             addressService.deleteAddress(address.getPublicId());
+            userRepository.save(user);
+        } else{
+            throw new NotFoundException("Aucune address répertorié.");
         }
+    }
 
-//        userMapper.userToResponseDTO(user);
+    public Page<UserResponseDTO> getUsersByRoles(String nameRole, Pageable pageable){
+        roleService.getRoleByName(nameRole);
+
+        return userRepository.findByRoles_NameIgnoreCase(nameRole, pageable)
+                .map(userMapper::userToResponseDTO);
+    }
+
+    @Transactional
+    public UserResponseDTO addRole(UUID userPublicId, RoleRequestDTO roleRequestDTO) {
+        User user = userRepository.findByPublicId(userPublicId)
+                .orElseThrow(() -> new NotFoundException("Utilisateur introuvable"));
+
+        Role role = roleService.getRoleByName(roleRequestDTO.getName());
+        user.getRoles().add(role);
+
+        return userMapper.userToResponseDTO(userRepository.save(user));
     }
 
 }

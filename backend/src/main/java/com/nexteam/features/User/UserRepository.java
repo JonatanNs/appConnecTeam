@@ -19,6 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByPublicId(UUID publicId);
     void deleteByPublicId(UUID publicId);
+    Page<User> findByRoles_NameIgnoreCase(String roleName, Pageable pageable);
 
     @Query("""
             SELECT u FROM User u

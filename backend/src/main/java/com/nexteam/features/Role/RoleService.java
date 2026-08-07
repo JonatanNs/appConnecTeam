@@ -35,6 +35,7 @@ public class RoleService {
                 });
 
         Role role = roleMapper.requestDTOToRole(roleRequestDTO);
+        role.setName("ROLE_" + role.getName().toUpperCase());
 
         return roleMapper.roleToResponseDTO(roleRepository.save(role));
     }

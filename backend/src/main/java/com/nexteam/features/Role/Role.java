@@ -26,4 +26,5 @@ public class Role extends AuditableEntity {
     @NotBlank(message = "Le nom du rôle ne peut pas être vide.")
     @Size(max = 100, message = "Le nom du rôle ne peut pas dépasser {max} caractères.")
     private String name;
+
 }

@@ -19,6 +19,6 @@ public class UserPrincipalService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .map(UserPrincipal::from)
-                .orElseThrow(() -> new UsernameNotFoundException("L'utilisateur : " + email + " n'existe pas"));
+                .orElseThrow(() -> new UsernameNotFoundException("Email ou mot de passe incorrect."));
     }
 }

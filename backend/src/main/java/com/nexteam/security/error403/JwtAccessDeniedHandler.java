@@ -43,7 +43,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             logger.warn("Accès refusé - utilisateur : {} - URL : {}", username, request.getRequestURI());
             message = "Vous n'avez pas les droits pour accéder à cette ressource";
         } else {
-            message = "Accès refusé";
+            message = "Accès refusé !";
         }
 
         ApiResponse<?> error = ApiResponse.of(

@@ -15,10 +15,10 @@ import com.nexteam.features.User.dtos.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
 import java.util.UUID;
 
 /**
@@ -33,8 +33,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%";
-    private static final SecureRandom RANDOM = new SecureRandom();
+    //    private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%";
+//    private static final SecureRandom RANDOM = new SecureRandom();
+    private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final AddressService addressService;
     private final RoleService roleService;
@@ -110,13 +111,13 @@ public class UserService {
         return userMapper.userToResponseDTO(userRepository.save(existingUser));
     }
 
-    private String generateRandomPassword() {
-        StringBuilder sb = new StringBuilder(12);
-        for (int i = 0; i < 12; i++) {
-            sb.append(CHARS.charAt(RANDOM.nextInt(CHARS.length())));
-        }
-        return sb.toString();
-    }
+//    private String generateRandomPassword() {
+//        StringBuilder sb = new StringBuilder(12);
+//        for (int i = 0; i < 12; i++) {
+//            sb.append(CHARS.charAt(RANDOM.nextInt(CHARS.length())));
+//        }
+//        return sb.toString();
+//    }
 
     /**
      * Crée un nouvel utilisateur.
@@ -142,9 +143,9 @@ public class UserService {
 
         user.setActive(true);
 
-        String rawPassword = generateRandomPassword();
-        user.setPassword(rawPassword);
-        //user.setPassword(passwordEncoder.encode(rawPassword));
+        String rawPassword = "Password123";
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(rawPassword));
 
         return userMapper.userToResponseDTO(userRepository.save(user));
     }

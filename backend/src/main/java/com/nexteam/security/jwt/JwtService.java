@@ -30,13 +30,13 @@ public class JwtService {
     public String generateToken(UserDetails userDetail) {
 
         // Récupère toutes les autorités/roles de l'utilisateur et les transforme en une seule chaîne séparée par des virgules.
-        String authorities = userDetail.getAuthorities().stream() // renvoie une collection de GrantedAuthority (ex : ROLE_USER, ROLE_ADMIN)
+        String authorities = userDetail.getAuthorities().stream()// renvoie une collection de GrantedAuthority (ex : ROLE_USER, ROLE_ADMIN)
                 .map(GrantedAuthority::getAuthority)// extrait le nom de chaque rôle
                 .collect(Collectors.joining(",")); //concatène tous les rôles en une seule String, séparés par des virgules
 
         Instant now = Instant.now();
         return Jwts.builder()
-                .subject(String.valueOf(userDetail.getUsername()))
+                .subject(userDetail.getUsername())
                 .claim("scp", authorities) // role
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusMillis(expirationMs))) // EXPIRATION_KEY en ms

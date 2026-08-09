@@ -27,7 +27,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         ApiResponse<Void> error = ApiResponse.of(
                 HttpStatus.UNAUTHORIZED.value(),
-                "Authentification requise ou JWT invalide",
+                "Non authentifié.",
                 null
         );
         // Parse en JSON

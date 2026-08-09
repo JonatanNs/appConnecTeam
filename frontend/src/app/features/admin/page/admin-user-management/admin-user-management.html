@@ -33,7 +33,7 @@
     </select>
   </div>
 
-  @if (response.data.totalPages > 0) {
+  @if (response.data.totalPages > 12) {
     <app-paginate
       [totalPages]="response.data.totalPages"
       [number]="response.data.number"
@@ -111,7 +111,7 @@
     </table>
   </div>
 
-  @if (response.data.totalPages > 0) {
+  @if (response.data.totalPages > 12) {
     <app-paginate
       [totalPages]="response.data.totalPages"
       [number]="response.data.number"

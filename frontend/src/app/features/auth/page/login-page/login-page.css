@@ -1,0 +1,5 @@
+/* Masque radial pour un dégradé fluide de la mosaïque */
+.mask-gradient {
+  -webkit-mask-image: radial-gradient(circle at 0% 30%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0) 75%);
+  mask-image: radial-gradient(circle at 0% 30%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0) 75%);
+}

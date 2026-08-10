@@ -48,8 +48,8 @@ export class AdminUserManagement {
     ]).pipe(
       switchMap(([pageable]) =>
         this.userService.getAllUsers(pageable).pipe(
-          catchError(() => {
-            this.flashMessage.error('Erreur lors du chargement des utilisateurs.');
+          catchError((err) => {
+            this.flashMessage.error(err.error.message);
             return of(undefined);
           })
         )

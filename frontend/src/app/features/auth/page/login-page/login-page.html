@@ -36,38 +36,11 @@
       <!-- Titre -->
       <div class="text-center mb-8">
         <h1 class="text-2xl sm:text-3xl font-bold text-nxt-black mb-2">Bienvenue !</h1>
-        <p class="text-gray-500 text-base font-medium">Connectez-vous à votre espace</p>
+        <p class="text-gray-500 text-base font-medium">Connectez-vous à votre espace personnel</p>
       </div>
 
       <!-- Formulaire -->
-      <form class="space-y-6">
-        <div>
-          <label class="sr-only" for="email">Adresse Email</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="ex: jean.dupont@nexteam.fr"
-            class="input w-full bg-gray-50 border border-gray-400 rounded-lg px-5 py-3.5 text-base text-nxt-black outline-none focus:border-nxt-blue focus:ring-1 focus:ring-nxt-blue transition-all placeholder-gray-400 font-medium"/>
-        </div>
-
-        <div>
-          <label class="sr-only" for="password">Mot de passe</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Mot de passe"
-            class="input w-full bg-gray-50 border border-gray-400 rounded-lg px-5 py-3.5 text-base text-nxt-black outline-none focus:border-nxt-blue focus:ring-1 focus:ring-nxt-blue transition-all placeholder-gray-400 font-medium"/>
-        </div>
-
-        <!-- Bouton centré -->
-        <div class="pt-2 flex justify-center">
-          <button
-            type="submit"
-            class="btn-nxt-blue px-10 py-3.5 text-base font-semibold shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-            Se connecter
-          </button>
-        </div>
-      </form>
+      <app-form-login></app-form-login>
 
     </div>
   </div>

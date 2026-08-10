@@ -1,10 +1,11 @@
 import {Component, OnInit, signal} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import {FormLogin} from './components/form-login/form-login';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormLogin],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })

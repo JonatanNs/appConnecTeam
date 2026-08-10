@@ -162,6 +162,19 @@ NexTeam est conçu avec une approche **Product-First** et orientée entreprise.
 
 ---
 
+## License
+
+NexTeam is licensed under the NexTeam Non-Commercial License.
+
+The source code may be viewed, studied, and used for personal,
+educational, and other non-commercial purposes.
+
+Commercial use requires prior written permission from the copyright holder.
+
+See the [LICENSE](LICENSE) file for the full terms.
+
+---
+
 ## 👨‍💻 Auteur
 
 **JonatanNS**

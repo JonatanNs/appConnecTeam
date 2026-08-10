@@ -64,7 +64,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         } catch (Exception ex) {
             SecurityContextHolder.clearContext();
-            logger.error("Non authentifié.");
+            logger.error("Échec de l'authentification JWT : {}", ex.getMessage());
         }
         filterChain.doFilter(request, response);
     }

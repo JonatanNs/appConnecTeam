@@ -7,8 +7,8 @@ package com.nexteam.exceptions;
  * @version 1.0
  * @since 09/08/2026 22:57
  */
-public class BadCredentialsException extends RuntimeException {
-    public BadCredentialsException(String message) {
+public class InvalidCredentialsException extends RuntimeException {
+    public InvalidCredentialsException(String message) {
         super(message);
     }
 }

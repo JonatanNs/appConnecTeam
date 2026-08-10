@@ -1,13 +1,12 @@
 package com.nexteam.advice;
 
 import com.nexteam.exceptions.AlreadyExistException;
-import com.nexteam.exceptions.BadCredentialsException;
+import com.nexteam.exceptions.InvalidCredentialsException;
 import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 public class GlobalRestController{
 
-    private final AuthenticationManager authenticateManager;
-
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiResponse<?>> handlePathNotFound(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -35,9 +32,9 @@ public class GlobalRestController{
                 .body(ApiResponse.of(HttpStatus.CONFLICT.value(), ex.getMessage(), null));
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiResponse<?>> handleBadCredentials(BadCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.of(HttpStatus.UNAUTHORIZED.value(), "Email ou mot de passe incorrect.", null));
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiResponse<?>> handleBadCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.of(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null));
     }
 }

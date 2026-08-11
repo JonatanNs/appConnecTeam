@@ -1,7 +1,7 @@
 @if (flashService.message(); as msg) {
   <div class="fixed top-20 right-6 z-50 w-96">
     <div
-      class="flex items-center bg-nxt-white px-6 py-4 text-sm border-t-2 rounded-lg shadow-sm"
+      class="flex items-center bg-nxt-surface px-6 py-4 text-sm border-t-2 rounded-lg shadow-sm"
       [class.border-[var(--nxt-success)]]="msg.type === 'success'"
       [class.border-[var(--nxt-error)]]="msg.type === 'error'"
       [class.border-[var(--nxt-blue-sky)]]="msg.type === 'info'"

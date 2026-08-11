@@ -93,7 +93,7 @@ public class UserController {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
-                        "Utilisateur crée avec succes.",
+                        "Utilisateur crée avec succès.",
                         userService.createUser(user)
                 )
         );

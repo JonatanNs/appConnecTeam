@@ -2,10 +2,21 @@
 
   <!-- Navigation principale -->
   <div class="flex items-center gap-1">
-    <a routerLink="" class="nav-link-nxt">Accueil</a>
-    <a class="nav-link-nxt">Messageries</a>
-    <a routerLink="/annuaires" class="nav-link-nxt">Annuaires</a>
-    <a class="nav-link-nxt">RH</a>
+    <a routerLink="/accueil" class="nav-link-nxt">
+      Accueil
+    </a>
+
+    <a routerLink="/messageries" class="nav-link-nxt">
+      Messageries
+    </a>
+
+    <a routerLink="/annuaires" class="nav-link-nxt">
+      Annuaires
+    </a>
+
+    <a routerLink="/rh" class="nav-link-nxt">
+      RH
+    </a>
   </div>
 
   <!-- Actions à droite -->
@@ -14,30 +25,78 @@
     <input
       type="text"
       placeholder="Recherche"
-      class="input-nxt w-32 md:w-56" />
+      class="input-nxt w-32 md:w-56"
+    />
 
-    <button class="icon-btn-nxt" aria-label="Notifications">
+    <button
+      class="icon-btn-nxt cursor-pointer"
+      aria-label="Notifications"
+    >
       <fa-icon [icon]="faBell"></fa-icon>
     </button>
 
-    <button class="icon-btn-nxt" aria-label="Paramètres">
+    <button
+      class="icon-btn-nxt cursor-pointer"
+      aria-label="Paramètres"
+    >
       <fa-icon [icon]="faGear"></fa-icon>
     </button>
 
     <!-- Dropdown Profil -->
-    <div class="relative">
-      <button (click)="toggleProfileMenu()" class="icon-btn-nxt" aria-label="Profil">
+    <div
+      class="relative"
+      (mouseenter)="openProfileMenu()"
+      (mouseleave)="closeProfileMenu()"
+    >
+      <!-- Bouton profil -->
+      <button
+        type="button"
+        class="icon-btn-nxt cursor-pointer"
+        aria-label="Profil"
+        [attr.aria-expanded]="isProfileMenuOpen()"
+      >
         <fa-icon [icon]="faUser"></fa-icon>
       </button>
 
       @if (isProfileMenuOpen()) {
-        <ul class="absolute right-0 mt-2 w-52 bg-nxt-white border border-nxt-gray rounded-xl shadow-lg p-2 z-50">
-          <li><a routerLink="/admin" class="dropdown-item-nxt">Administration</a></li>
-          <li><a class="dropdown-item-nxt">Paramètres</a></li>
-          <li><a class="dropdown-item-nxt text-nxt-error">Déconnexion</a></li>
+        <ul
+          class="absolute right-0 top-full w-52
+                 bg-nxt-white border border-nxt-gray
+                 rounded-xl shadow-xl p-2 z-50"
+        >
+          <li>
+            <a
+              routerLink="/admin"
+              class="dropdown-item-nxt cursor-pointer"
+            >
+              <span>Administration</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              routerLink="/parametres"
+              class="dropdown-item-nxt cursor-pointer"
+            >
+              <span>Paramètres</span>
+            </a>
+          </li>
+
+          <li class="my-1 border-t border-nxt-gray"></li>
+
+          <li>
+            <button
+              type="button"
+              class="dropdown-item-nxt text-nxt-error w-full cursor-pointer"
+            >
+              <fa-icon [icon]="faRightFromBracket"></fa-icon>
+              <span>Déconnexion</span>
+            </button>
+          </li>
         </ul>
       }
     </div>
 
   </div>
+
 </nav>

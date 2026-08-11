@@ -1,10 +1,50 @@
-<!--<div class="flex min-h-full flex-col items-start border-r border-gray-200 bg-nxt-white transition-all-->
-<!--            duration-200 is-drawer-close:w-14 is-drawer-open:w-72">-->
-<div class="flex h-full flex-col items-start bg-nxt-white rounded-tr-xl border-t border-r border-gray-300/70 shadow-sm mt-1 transition-all duration-200 overflow-hidden">
+<div
+  class="flex h-full flex-col items-start bg-nxt-white rounded-tr-xl border-t border-r border-gray-300/70 shadow-sm mt-1 transition-all duration-300 overflow-hidden"
+  [class.w-14]="isClosed()"
+  [class.w-64]="!isClosed()">
 
-  <!-- Navigation -->
-  <nav class="w-full grow overflow-y-auto p-2">
-    <ul class="menu w-full space-y-1 p-0">
+  <!-- Navigation (bloque le scroll horizontal) -->
+  <nav
+    class="w-full grow overflow-y-auto overflow-x-hidden transition-all duration-300"
+    [class.p-2]="!isClosed()"
+    [class.px-1]="isClosed()"
+    [class.py-2]="isClosed()">
+
+    <ul class="menu w-full space-y-1 py-4 gap-3 whitespace-nowrap">
+
+      <!-- Bouton Toggle -->
+      <li>
+        <button
+          type="button"
+          (click)="toggleSidebar()"
+          [attr.aria-label]="isClosed() ? 'Agrandir le menu' : 'Réduire le menu'"
+          class="sidebar-link-nxt flex items-center w-full cursor-pointer"
+          [class.justify-center]="isClosed()"
+          [class.px-0]="isClosed()"
+          [class.tooltip]="isClosed()"
+          [class.tooltip-right]="isClosed()"
+          [attr.data-tip]="isClosed() ? 'Agrandir le menu' : 'Réduire le menu'">
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="2"
+            fill="none"
+            stroke="currentColor"
+            class="w-5 h-5 shrink-0 transition-transform duration-300"
+            [class.rotate-180]="isClosed()">
+            <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+            <path d="M9 4v16"></path>
+            <path d="M14 10l2 2l-2 2"></path>
+          </svg>
+
+          @if (!isClosed()) {
+            <span class="truncate font-semibold ml-2">Réduire le menu</span>
+          }
+        </button>
+      </li>
 
       <!-- Calendrier -->
       <li>
@@ -12,10 +52,16 @@
           routerLink="/calendrier"
           routerLinkActive="sidebar-link-nxt-active"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="sidebar-link-nxt flex items-center is-drawer-close:justify-center is-drawer-close:tooltip is-drawer-close:tooltip-right"
+          class="sidebar-link-nxt flex items-center"
+          [class.justify-center]="isClosed()"
+          [class.px-0]="isClosed()"
+          [class.tooltip]="isClosed()"
+          [class.tooltip-right]="isClosed()"
           data-tip="Calendrier">
           <fa-icon [icon]="faCalendarDays" class="w-5 text-center shrink-0"></fa-icon>
-          <span class="is-drawer-close:hidden truncate">Calendrier</span>
+          @if (!isClosed()) {
+            <span class="truncate ml-2">Calendrier</span>
+          }
         </a>
       </li>
 
@@ -24,10 +70,16 @@
         <a
           routerLink="/contacts"
           routerLinkActive="sidebar-link-nxt-active"
-          class="sidebar-link-nxt flex items-center is-drawer-close:justify-center is-drawer-close:tooltip is-drawer-close:tooltip-right"
+          class="sidebar-link-nxt flex items-center"
+          [class.justify-center]="isClosed()"
+          [class.px-0]="isClosed()"
+          [class.tooltip]="isClosed()"
+          [class.tooltip-right]="isClosed()"
           data-tip="Contacts">
           <fa-icon [icon]="faUsers" class="w-5 text-center shrink-0"></fa-icon>
-          <span class="is-drawer-close:hidden truncate">Contacts</span>
+          @if (!isClosed()) {
+            <span class="truncate ml-2">Contacts</span>
+          }
         </a>
       </li>
 
@@ -36,10 +88,16 @@
         <a
           routerLink="/documents"
           routerLinkActive="sidebar-link-nxt-active"
-          class="sidebar-link-nxt flex items-center is-drawer-close:justify-center is-drawer-close:tooltip is-drawer-close:tooltip-right"
+          class="sidebar-link-nxt flex items-center"
+          [class.justify-center]="isClosed()"
+          [class.px-0]="isClosed()"
+          [class.tooltip]="isClosed()"
+          [class.tooltip-right]="isClosed()"
           data-tip="Documents">
           <fa-icon [icon]="faFolderOpen" class="w-5 text-center shrink-0"></fa-icon>
-          <span class="is-drawer-close:hidden truncate">Documents</span>
+          @if (!isClosed()) {
+            <span class="truncate ml-2">Documents</span>
+          }
         </a>
       </li>
 
@@ -48,10 +106,16 @@
         <a
           routerLink="/taches"
           routerLinkActive="sidebar-link-nxt-active"
-          class="sidebar-link-nxt flex items-center is-drawer-close:justify-center is-drawer-close:tooltip is-drawer-close:tooltip-right"
+          class="sidebar-link-nxt flex items-center"
+          [class.justify-center]="isClosed()"
+          [class.px-0]="isClosed()"
+          [class.tooltip]="isClosed()"
+          [class.tooltip-right]="isClosed()"
           data-tip="Tâches">
           <fa-icon [icon]="faListCheck" class="w-5 text-center shrink-0"></fa-icon>
-          <span class="is-drawer-close:hidden truncate">Tâches</span>
+          @if (!isClosed()) {
+            <span class="truncate ml-2">Tâches</span>
+          }
         </a>
       </li>
 

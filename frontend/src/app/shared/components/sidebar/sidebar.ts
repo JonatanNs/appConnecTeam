@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {Component, signal} from '@angular/core';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCalendarDays,
@@ -23,5 +23,12 @@ export class Sidebar {
   protected readonly faFolderOpen = faFolderOpen;
   protected readonly faListCheck = faListCheck;
   protected readonly faCircleQuestion = faCircleQuestion;
+
+  // Indique si la sidebar est réduite
+  isClosed = signal<boolean>(false);
+
+  toggleSidebar(): void {
+    this.isClosed.update((state) => !state);
+  }
 
 }

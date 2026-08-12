@@ -7,9 +7,9 @@
   height: 36px;
   padding: 0 10px;
   border: none;
-  border-radius: var(--radius-mid);
+  border-radius: var(--radius-nxt);
   background-color: transparent;
-  color: var(--nxt-blue);
+  color: var(--color-nxt-primary);
   font-size: 14px;
   font-weight: 600;
   font-family: inherit;
@@ -22,15 +22,15 @@
 }
 
 .btn-nxt-page:disabled {
-  color: var(--nxt-black);
+  color: var(--color-nxt-dark);
   cursor: not-allowed;
 }
 
 .btn-nxt-page-active {
-  background-color: var(--nxt-blue);
-  color: var(--nxt-white);
+  background-color: var(--color-nxt-primary);
+  color: var(--color-nxt-surface);
 }
 
 .btn-nxt-page-active:hover {
-  background-color: var(--nxt-blue) !important;
+  background-color: var(--color-nxt-primary) !important;
 }

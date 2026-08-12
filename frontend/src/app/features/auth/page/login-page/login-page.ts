@@ -12,7 +12,7 @@ import {FormLogin} from './components/form-login/form-login';
 export class LoginPage implements OnInit {
   protected readonly mosaicColors = signal<string[]>([]);
   ngOnInit(): void {
-    // Dégradé inspiré des variables --nxt-blue et --nxt-blue-sky
+    // Dégradé inspiré des variables --ntx-primary et --ntx-secondary
     const palette = [
       '#001b73', '#002ec7', '#003eff', '#3365ff',
       '#5280ff', '#6f9ff8', '#8eb3f9', '#adcafd',

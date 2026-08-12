@@ -9,7 +9,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: var(--nxt-black);
+  color: var(--color-nxt-dark);
   opacity: 0.6;
 }
 
@@ -17,7 +17,7 @@
   padding: 14px 16px;
   font-size: 14px;
   vertical-align: middle;
-  color: var(--nxt-black);
+  color: var(--color-nxt-dark);
 }
 
 .badge-nxt {
@@ -31,12 +31,12 @@
 
 .badge-nxt-success {
   background-color: rgba(51, 173, 94, 0.12);
-  color: var(--nxt-success);
+  color: var(--color-nxt-success);
 }
 
 .badge-nxt-error {
   background-color: rgba(186, 26, 26, 0.1);
-  color: var(--nxt-error);
+  color: var(--color-nxt-error);
 }
 
 .action-link-nxt {
@@ -45,7 +45,7 @@
   padding: 4px 8px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--nxt-blue);
+  color: var(--color-nxt-primary);
   cursor: pointer;
   transition: opacity 0.15s ease-in-out;
   font-family: inherit;
@@ -56,9 +56,9 @@
 }
 
 .action-link-nxt-error {
-  color: var(--nxt-error);
+  color: var(--color-nxt-error);
 }
 
 .action-link-nxt-success {
-  color: var(--nxt-success);
+  color: var(--color-nxt-success);
 }

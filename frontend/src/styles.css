@@ -28,28 +28,32 @@
     color: var(--color-nxt-dark);
     background-color: var(--color-nxt-secondary);
   }
+
+  h1{
+    font-size: 2rem;
+    font-weight: 700;
+  }
 }
 
 @layer components {
-
   /* Bouton d'action principal */
   .btn-nxt-primary {
     @apply px-4 py-2 text-sm font-semibold text-white bg-nxt-primary
-    rounded-[--radius-nxt] hover:bg-nxt-primary-hover transition-colors
+    rounded-(--radius-nxt) hover:bg-nxt-primary-hover transition-colors
     cursor-pointer inline-flex items-center justify-center gap-2;
   }
 
   /* Bouton d'action secondaire */
   .btn-nxt-secondary {
     @apply px-4 py-2 text-sm font-semibold text-nxt-primary bg-nxt-secondary
-    rounded-[--radius-nxt] hover:bg-nxt-secondary-hover transition-colors
+    rounded-(--radius-nxt) hover:bg-nxt-secondary-hover transition-colors
     cursor-pointer inline-flex items-center justify-center gap-2;
   }
 
   /* Bouton contour */
   .btn-nxt-outline {
     @apply px-4 py-2 text-sm font-semibold text-nxt-primary bg-nxt-surface
-    border border-nxt-primary rounded-[--radius-nxt] hover:bg-slate-100
+    border border-nxt-primary rounded-(--radius-nxt) hover:bg-slate-100
     transition-colors cursor-pointer inline-flex items-center justify-center gap-2;
   }
 
@@ -81,53 +85,7 @@
 /*   BOUTONS*/
 /*============================================ *!*/
 
-/*.btn-nxt-blue {*/
-/*  background-color: var(--nxt-blue);*/
-/*  color: var(--nxt-white);*/
-/*  border: none;*/
-/*  border-radius: var(--radius-mid);*/
-/*  padding: 8px 16px;*/
-/*  font-size: 14px;*/
-/*  font-weight: 600;*/
-/*  font-family: inherit;*/
-/*  cursor: pointer;*/
-/*  transition: background-color 0.2s ease-in-out;*/
-/*}*/
-/*.btn-nxt-blue:hover {*/
-/*  background-color: #17356c;*/
-/*}*/
 
-/*.btn-nxt-blue-sky {*/
-/*  background-color: var(--nxt-blue-sky);*/
-/*  color: var(--nxt-blue);*/
-/*  border: none;*/
-/*  border-radius: var(--radius-mid);*/
-/*  padding: 8px 16px;*/
-/*  font-size: 14px;*/
-/*  font-weight: 600;*/
-/*  font-family: inherit;*/
-/*  cursor: pointer;*/
-/*  transition: background-color 0.2s ease-in-out;*/
-/*}*/
-/*.btn-nxt-blue-sky:hover {*/
-/*  background-color: #5a8ce8;*/
-/*}*/
-
-/*.btn-nxt-outline-blue {*/
-/*  background-color: var(--nxt-white);*/
-/*  color: var(--nxt-blue);*/
-/*  border: 1px solid var(--nxt-blue);*/
-/*  border-radius: var(--radius-mid);*/
-/*  padding: 8px 16px;*/
-/*  font-size: 14px;*/
-/*  font-weight: 600;*/
-/*  font-family: inherit;*/
-/*  cursor: pointer;*/
-/*  transition: background-color 0.2s ease-in-out;*/
-/*}*/
-/*.btn-nxt-outline-blue:hover {*/
-/*  background-color: #f0f2f7;*/
-/*}*/
 
 /*.btn-nxt-gray {*/
 /*  background-color: var(--nxt-gray);*/
@@ -175,73 +133,6 @@
 /*}*/
 /*.btn-nxt-success:hover {*/
 /*  background-color: #2a8c4b;*/
-/*}*/
-
-/*!* ============================================*/
-/*   FONDS (bg)*/
-/*============================================ *!*/
-
-/*.bg-nxt-gray {*/
-/*  background-color: var(--nxt-gray);*/
-/*  color: var(--nxt-black);*/
-/*}*/
-
-/*.bg-nxt-black {*/
-/*  background-color: var(--nxt-black);*/
-/*  color: var(--nxt-white);*/
-/*}*/
-
-/*.bg-nxt-white {*/
-/*  background-color: var(--nxt-white);*/
-/*  color: var(--nxt-black);*/
-/*}*/
-
-/*.bg-nxt-blue {*/
-/*  background-color: var(--nxt-blue);*/
-/*  color: var(--nxt-white);*/
-/*}*/
-
-/*.bg-nxt-blue-sky {*/
-/*  background-color: var(--nxt-blue-sky);*/
-/*  color: var(--nxt-white);*/
-/*}*/
-
-/*.bg-nxt-success {*/
-/*  background-color: var(--nxt-success);*/
-/*  color: var(--nxt-black);*/
-/*}*/
-
-/*.bg-nxt-error {*/
-/*  background-color: var(--nxt-error);*/
-/*  color: var(--nxt-white);*/
-/*}*/
-
-/*!* ============================================*/
-/*   TEXTE (text)*/
-/*============================================ *!*/
-
-/*.text-nxt-blue {*/
-/*  color: var(--nxt-blue);*/
-/*}*/
-
-/*.text-nxt-blue-sky {*/
-/*  color: var(--nxt-blue-sky);*/
-/*}*/
-
-/*.text-nxt-gray {*/
-/*  color: var(--nxt-gray);*/
-/*}*/
-
-/*.text-nxt-black {*/
-/*  color: var(--nxt-black);*/
-/*}*/
-
-/*.text-nxt-error {*/
-/*  color: var(--nxt-error);*/
-/*}*/
-
-/*.text-nxt-success {*/
-/*  color: var(--nxt-success);*/
 /*}*/
 
 /*!* ============================================*/

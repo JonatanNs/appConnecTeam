@@ -34,7 +34,7 @@ public class GlobalRestController{
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ApiResponse<?>> handleBadCredentials(InvalidCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.of(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.of(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null));
     }
 }

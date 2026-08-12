@@ -5,6 +5,7 @@ import com.nexteam.security.dto.LoginRequestDTO;
 import com.nexteam.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +25,7 @@ public class AuthService {
             );
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             return jwtService.generateToken(userDetails);
-        } catch (org.springframework.security.authentication.BadCredentialsException ex) {
+        } catch (BadCredentialsException ex) {
             throw new InvalidCredentialsException("Email ou mot de passe incorrect.");
         }
     }

@@ -1,18 +1,18 @@
 @if (flashService.message(); as msg) {
-  <div class="fixed top-20 right-6 z-50 w-96">
+  <div class="fixed top-20 right-6 z-1000 w-96">
     <div
-      class="flex items-center bg-nxt-surface px-6 py-4 text-sm border-t-2 rounded-lg shadow-sm"
-      [class.border-[var(--nxt-success)]]="msg.type === 'success'"
-      [class.border-[var(--nxt-error)]]="msg.type === 'error'"
-      [class.border-[var(--ntx-secondary)]]="msg.type === 'info'"
-      [class.border-[var(--nxt-gray)]]="msg.type === 'warning'"
+      class="flex items-center bg-nxt-gray px-6 py-4 text-md border-t-5 rounded-lg shadow-sm"
+      [class.border-nxt-success]="msg.type === 'success'"
+      [class.border-nxt-error]="msg.type === 'error'"
+      [class.border-ntx-secondary]="msg.type === 'info'"
+      [class.border-nxt-gray]="msg.type === 'warning'"
     >
       <fa-icon
         [icon]="icons[msg.type]"
         class="w-6 h-6 shrink-0"
         [class.text-nxt-success]="msg.type === 'success'"
         [class.text-nxt-error]="msg.type === 'error'"
-        [class.text-ntx-secondary]="msg.type === 'info'"
+        [class.text-nxt-secondary]="msg.type === 'info'"
         [class.text-nxt-black]="msg.type === 'warning'"
       ></fa-icon>
 

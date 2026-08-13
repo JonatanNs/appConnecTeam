@@ -1,25 +1,10 @@
 <div class="relative min-h-screen bg-[#e2e8f0] text-nxt-black antialiased overflow-x-hidden flex items-center justify-center">
 
-  <!-- FOND GAUCHE: Mosaïque (Légèrement adoucie) -->
-  <div
-    class="absolute top-0 left-0 w-1/3 sm:w-2/5 h-full z-0 pointer-events-none overflow-hidden"
-    style="-webkit-mask-image: radial-gradient(circle at 0% 50%, rgba(0,0,0,0.85) 20%, rgba(0,0,0,0) 80%); mask-image: radial-gradient(circle at 0% 50%, rgba(0,0,0,0.85) 20%, rgba(0,0,0,0) 80%);">
-    <div class="absolute top-0 left-0 w-full grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8">
+  <!-- FOND MOSAÏQUE (Gauche + Droite) -->
+  <div class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden mask-gradient-edges">
+    <div class="w-full grid grid-cols-6 sm:grid-cols-10 lg:grid-cols-16">
       @for (color of mosaicColors(); track $index) {
-        <div class="aspect-square w-full" [style.background-color]="color"
-             style="background-image: linear-gradient(135deg, rgb(221 221 221 / 0.36) 0%, rgb(0 0 0 / 0.22) 100%);"></div>
-      }
-    </div>
-  </div>
-
-  <!-- FOND DROITE: Mosaïque (Légèrement adoucie) -->
-  <div
-    class="absolute top-0 right-0 w-1/3 sm:w-2/5 h-full z-0 pointer-events-none overflow-hidden"
-    style="-webkit-mask-image: radial-gradient(circle at 100% 50%, rgba(0,0,0,0.85) 20%, rgba(0,0,0,0) 80%); mask-image: radial-gradient(circle at 100% 50%, rgba(0,0,0,0.85) 20%, rgba(0,0,0,0) 80%);">
-    <div class="absolute top-0 right-0 w-full grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8">
-      @for (color of mosaicColors(); track $index) {
-        <div class="aspect-square w-full" [style.background-color]="color"
-             style="background-image: linear-gradient(135deg, rgb(221 221 221 / 0.36) 0%, rgb(0 0 0 / 0.22) 100%);"></div>
+        <div class="aspect-square w-full mosaic-tile" [style.background-color]="color"></div>
       }
     </div>
   </div>
@@ -28,15 +13,13 @@
   <div class="relative z-10 w-full max-w-[560px] p-6 sm:p-10">
     <div class="bg-nxt-surface p-10 sm:p-12 rounded-2xl border border-gray-200/80 shadow-xl">
 
-      <!-- Logo Centré -->
       <div class="flex justify-center mb-8">
         <img src="logo_nexteam.png" alt="Logo Nexteam" class="h-16 sm:h-20 w-auto object-contain" />
       </div>
 
-      <!-- Titre -->
       <div class="text-center mb-8">
-        <h1 class="text-2xl sm:text-3xl font-bold text-nxt-black mb-2">Bienvenue !</h1>
-        <p class="text-gray-500 text-base font-medium">Connectez-vous à votre espace personnel</p>
+        <h1>Bienvenue !</h1>
+        <p>Connectez-vous à votre espace personnel</p>
       </div>
 
       <!-- Formulaire -->

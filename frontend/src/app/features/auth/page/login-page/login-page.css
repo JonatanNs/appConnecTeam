@@ -1,9 +1,13 @@
-@import "../../../../../styles.css";
-
-/* Masque radial pour un dégradé fluide de la mosaïque */
-.mask-gradient {
-  -webkit-mask-image: radial-gradient(circle at 0% 30%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0) 75%);
-  mask-image: radial-gradient(circle at 0% 30%, rgba(0,0,0,1) 15%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0) 75%);
+.mask-gradient-edges {
+  -webkit-mask-image:
+    radial-gradient(circle at 0% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%),
+    radial-gradient(circle at 100% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%);
+  mask-image:
+    radial-gradient(circle at 0% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%),
+    radial-gradient(circle at 100% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%);
 }
 
-
+/* Relief de chaque tuile */
+.mosaic-tile {
+  background-image: linear-gradient(135deg, rgba(221, 221, 221, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%);
+}

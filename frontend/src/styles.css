@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* ==========================================================================
+   1. CONFIGURATION DU THÈME (Design Tokens)
+   ========================================================================== */
 @theme {
   --font-sans: 'Nunito', sans-serif;
 
@@ -16,187 +19,144 @@
   --color-nxt-muted: #d0d0d0;
 
   --color-nxt-error: #ba1a1a;
+  --color-nxt-error-hover: #800f0f;
   --color-nxt-success: #33ad5e;
+  --color-nxt-success-hover: #258044;
 
   --radius-nxt: 0.5rem;
   --radius-nxt-lg: 1rem;
 }
 
+/* ==========================================================================
+   2. STYLES DE BASE
+   ========================================================================== */
 @layer base {
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-sans), sans-serif;
     color: var(--color-nxt-dark);
     background-color: var(--color-nxt-secondary);
   }
 
-  h1{
+  header{
+    @apply relative flex items-center bg-nxt-surface px-6 py-3 shadow-sm border-b border-gray-200
+  }
+
+  h1 {
     font-size: 2rem;
     font-weight: 700;
   }
+
+  input {
+    @apply w-full bg-slate-50 border border-nxt-muted rounded-nxt px-5 py-3
+    text-base text-nxt-dark outline-none transition-all
+    placeholder:text-slate-400 font-medium;
+
+    &:focus {
+      @apply border-nxt-primary ring-1 ring-nxt-primary bg-white;
+    }
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  fa-icon {
+    @apply shrink-0 transition-colors duration-200 text-xl;
+  }
+
 }
 
+/* ==========================================================================
+   3. COMPOSANTS RÉUTILISABLES
+   ========================================================================== */
 @layer components {
-  /* Bouton d'action principal */
+
+  /* 1. SOCLE COMMUN (Appliqué à tous les boutons en une seule fois) */
+  .btn-nxt,
+  .btn-nxt-primary,
+  .btn-nxt-secondary,
+  .btn-nxt-outline,
+  .btn-nxt-success,
+  .btn-nxt-error {
+    @apply px-5 py-3.5 text-sm font-semibold rounded-nxt
+    transition-colors cursor-pointer inline-flex items-center
+    justify-center gap-2 select-none;
+  }
+
+  /* 2. VARIANTES DE COULEURS */
   .btn-nxt-primary {
-    @apply px-4 py-2 text-sm font-semibold text-white bg-nxt-primary
-    rounded-(--radius-nxt) hover:bg-nxt-primary-hover transition-colors
-    cursor-pointer inline-flex items-center justify-center gap-2;
+    @apply text-white bg-nxt-primary;
+    &:hover {
+      @apply bg-nxt-primary-hover;
+    }
   }
 
-  /* Bouton d'action secondaire */
   .btn-nxt-secondary {
-    @apply px-4 py-2 text-sm font-semibold text-nxt-primary bg-nxt-secondary
-    rounded-(--radius-nxt) hover:bg-nxt-secondary-hover transition-colors
-    cursor-pointer inline-flex items-center justify-center gap-2;
+    @apply text-nxt-primary bg-nxt-secondary;
+    &:hover {
+      @apply bg-nxt-secondary-hover;
+    }
   }
 
-  /* Bouton contour */
   .btn-nxt-outline {
-    @apply px-4 py-2 text-sm font-semibold text-nxt-primary bg-nxt-surface
-    border border-nxt-primary rounded-(--radius-nxt) hover:bg-slate-100
-    transition-colors cursor-pointer inline-flex items-center justify-center gap-2;
+    @apply text-nxt-primary bg-nxt-surface border border-nxt-primary;
+    &:hover {
+      @apply bg-slate-100;
+    }
   }
 
-  /* Liens */
+  .btn-nxt-success {
+    @apply text-nxt-surface bg-nxt-success border border-nxt-success;
+    &:hover {
+      @apply bg-nxt-success-hover;
+    }
+  }
+
+  .btn-nxt-error {
+    @apply text-nxt-surface bg-nxt-error border border-nxt-error;
+    &:hover {
+      @apply bg-nxt-error-hover;
+    }
+  }
+
+  /* --- Liens --- */
   .link-nxt {
     @apply font-semibold text-nxt-primary no-underline hover:underline cursor-pointer;
   }
+
+  .link-nxt-muted {
+    @apply font-medium text-nxt-dark no-underline transition-colors cursor-pointer hover:text-nxt-primary;
+  }
+
+  .link-nxt-error {
+    @apply font-semibold text-nxt-error no-underline transition-opacity cursor-pointer hover:opacity-70;
+  }
+
+  /* --- Structures & Modales --- */
+  .page-title-nxt {
+    @apply text-2xl font-bold text-nxt-dark mb-10;
+  }
+
+  .modal-nxt {
+    @apply border border-nxt-muted rounded-nxt-lg bg-nxt-surface
+    text-nxt-dark p-6 max-w-md w-full shadow-xl;
+  }
+
+  .modal-title-nxt {
+    @apply text-xl font-bold text-nxt-dark mb-4;
+  }
 }
 
-/*@import "tailwindcss";*/
-/*@plugin "daisyui";*/
+/* ==========================================================================
+   4. UTILITAIRES SPÉCIFIQUES
+   ========================================================================== */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-/*:root {*/
-/*  font-family: 'Nunito', sans-serif;*/
-/*  --nxt-blue: #003eff;*/
-/*  --nxt-white: #ffffff;*/
-/*  --nxt-blue-sky: #6f9ff8;*/
-/*  --nxt-gray: #d0d0d0;*/
-/*  --nxt-black: #1a1a1a;*/
-/*  --nxt-error: #ba1a1a;*/
-/*  --nxt-success: #33ad5e;*/
-
-/*  --radius-mid: 0.5rem;*/
-/*  --radius-lg: 1rem;*/
-/*  --border: 1px;*/
-/*}*/
-
-/*!* ============================================*/
-/*   BOUTONS*/
-/*============================================ *!*/
-
-
-
-/*.btn-nxt-gray {*/
-/*  background-color: var(--nxt-gray);*/
-/*  color: var(--nxt-black);*/
-/*  border: none;*/
-/*  border-radius: var(--radius-mid);*/
-/*  padding: 8px 16px;*/
-/*  font-size: 14px;*/
-/*  font-weight: 600;*/
-/*  font-family: inherit;*/
-/*  cursor: pointer;*/
-/*  transition: background-color 0.2s ease-in-out;*/
-/*}*/
-/*.btn-nxt-gray:hover {*/
-/*  background-color: #bfbfbf;*/
-/*}*/
-
-/*.btn-nxt-error {*/
-/*  background-color: var(--nxt-error);*/
-/*  color: var(--nxt-white);*/
-/*  border: none;*/
-/*  border-radius: var(--radius-mid);*/
-/*  padding: 8px 16px;*/
-/*  font-size: 14px;*/
-/*  font-weight: 600;*/
-/*  font-family: inherit;*/
-/*  cursor: pointer;*/
-/*  transition: background-color 0.2s ease-in-out;*/
-/*}*/
-/*.btn-nxt-error:hover {*/
-/*  background-color: #931515;*/
-/*}*/
-
-/*.btn-nxt-success {*/
-/*  background-color: var(--nxt-success);*/
-/*  color: var(--nxt-white);*/
-/*  border: none;*/
-/*  border-radius: var(--radius-mid);*/
-/*  padding: 8px 16px;*/
-/*  font-size: 14px;*/
-/*  font-weight: 600;*/
-/*  font-family: inherit;*/
-/*  cursor: pointer;*/
-/*  transition: background-color 0.2s ease-in-out;*/
-/*}*/
-/*.btn-nxt-success:hover {*/
-/*  background-color: #2a8c4b;*/
-/*}*/
-
-/*!* ============================================*/
-/*   LIENS*/
-/*   ============================================ *!*/
-
-/*.link-nxt {*/
-/*  color: var(--nxt-blue);*/
-/*  text-decoration: none;*/
-/*  font-weight: 600;*/
-/*  cursor: pointer;*/
-/*  transition: color 0.15s ease-in-out, text-decoration-color 0.15s ease-in-out;*/
-/*}*/
-
-/*.link-nxt:hover {*/
-/*  text-decoration: underline;*/
-/*  text-decoration-color: var(--nxt-blue);*/
-/*}*/
-
-/*.link-nxt-muted {*/
-/*  color: var(--nxt-black);*/
-/*  text-decoration: none;*/
-/*  font-weight: 500;*/
-/*  cursor: pointer;*/
-/*  transition: color 0.15s ease-in-out;*/
-/*}*/
-
-/*.link-nxt-muted:hover {*/
-/*  color: var(--nxt-blue);*/
-/*}*/
-
-/*.link-nxt-error {*/
-/*  color: var(--nxt-error);*/
-/*  text-decoration: none;*/
-/*  font-weight: 600;*/
-/*  cursor: pointer;*/
-/*  transition: opacity 0.15s ease-in-out;*/
-/*}*/
-
-/*.link-nxt-error:hover {*/
-/*  opacity: 0.7;*/
-/*}*/
-
-/*.page-title-nxt {*/
-/*  font-size: 1.5rem;*/
-/*  font-weight: 700;*/
-/*  margin-bottom: 2.5rem;*/
-/*  color: var(--nxt-black);*/
-/*}*/
-
-/*.modal-nxt {*/
-/*  border: var(--border) solid var(--nxt-gray);*/
-/*  border-radius: var(--radius-lg);*/
-/*  background-color: var(--nxt-white);*/
-/*  color: var(--nxt-black);*/
-/*  padding: 1.5rem;*/
-/*  max-width: 28rem;*/
-/*  width: 100%;*/
-/*  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);*/
-/*}*/
-
-/*.modal-title-nxt {*/
-/*  font-size: 1.25rem;*/
-/*  font-weight: 700;*/
-/*  color: var(--nxt-black);*/
-/*  margin-bottom: 1rem;*/
-/*}*/
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

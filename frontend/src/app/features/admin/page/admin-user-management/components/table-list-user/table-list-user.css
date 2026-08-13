@@ -1,0 +1,64 @@
+/* ============================================
+   TABLE ADMIN — Users
+   ============================================ */
+
+.table-head-nxt {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-nxt-dark);
+  opacity: 0.6;
+}
+
+.table-cell-nxt {
+  padding: 14px 16px;
+  font-size: 14px;
+  vertical-align: middle;
+  color: var(--color-nxt-dark);
+}
+
+.badge-nxt {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-nxt-success {
+  background-color: rgba(51, 173, 94, 0.12);
+  color: var(--color-nxt-success);
+}
+
+.badge-nxt-error {
+  background-color: rgba(186, 26, 26, 0.1);
+  color: var(--color-nxt-error);
+}
+
+.action-link-nxt {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-nxt-primary);
+  cursor: pointer;
+  transition: opacity 0.15s ease-in-out;
+  font-family: inherit;
+}
+
+.action-link-nxt:hover {
+  opacity: 0.7;
+}
+
+.action-link-nxt-error {
+  color: var(--color-nxt-error);
+}
+
+.action-link-nxt-success {
+  color: var(--color-nxt-success);
+}

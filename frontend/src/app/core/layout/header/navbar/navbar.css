@@ -1,29 +1,15 @@
-.nav-link-nxt {
-  padding: 8px 14px;
-  border-radius: var(--radius-mid);
-  color: var(--nxt-black);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
-  text-decoration: none;
-}
+/* src/app/core/layout/header/navbar/navbar.css */
+@reference "../../../../../styles.css";
 
-.nav-link-nxt:hover {
-  background-color: var(--nxt-gray);
-}
+.link-header-navbar {
+  @apply border-b-2 border-transparent transition-colors duration-300 mx-1.5 text-lg;
 
-.dropdown-item-nxt {
-  display: block;
-  padding: 8px 12px;
-  border-radius: var(--radius-mid);
-  color: var(--nxt-black);
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
-  text-decoration: none;
-}
+  &:hover {
+    @apply text-gray-800 border-blue-500;
+  }
 
-.dropdown-item-nxt:hover {
-  background-color: var(--nxt-gray);
+  /* Gestion du breakpoint sm: (640px) */
+  @media (min-width: 640px) {
+    @apply mx-4;
+  }
 }

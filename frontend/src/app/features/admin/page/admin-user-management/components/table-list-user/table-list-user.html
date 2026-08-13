@@ -1,0 +1,118 @@
+<div class="bg-nxt-surface border border-nxt-gray rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-nxt-gray/30 border-b border-nxt-gray">
+    <tr>
+      <th class="table-head-nxt">Nom</th>
+      <th class="table-head-nxt">Départements</th>
+      <th class="table-head-nxt">Métier</th>
+      <th class="table-head-nxt">Statut</th>
+      <th class="table-head-nxt">Email</th>
+      <th class="table-head-nxt text-right"></th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (user of users().data.content; track user.publicId) {
+        <tr class="border-b border-nxt-gray last:border-0">
+          <td class="table-cell-nxt">
+            <div class="flex items-center gap-3">
+              <img
+                ngSrc="https://i.pravatar.cc/150?u={{ user.publicId }}"
+                alt="Photo de {{ user.firstname }} {{ user.lastname }}"
+                width="40"
+                height="40"
+                class="rounded-full" />
+              <span class="font-medium text-nxt-black">{{ user.firstname }} {{ user.lastname }}</span>
+            </div>
+          </td>
+          <td class="table-cell-nxt text-nxt-gray">Sport</td>
+          <td class="table-cell-nxt text-nxt-gray">Footballeur</td>
+          <td class="table-cell-nxt">
+            @if (user.active) {
+              <span type="submit" class="badge-nxt badge-nxt-success">Actif</span>
+            } @else {
+              <span type="submit" class="badge-nxt badge-nxt-error">Désactivé</span>
+            }
+          </td>
+          <td class="table-cell-nxt text-nxt-gray">{{ user.email }}</td>
+          <td class="table-cell-nxt text-right">
+            <a class="action-link-nxt" [routerLink]="['/admin/gestion-utilisateurs/', user.publicId, 'modifier']">
+              Modifier
+            </a>
+            @if (!user.active) {
+              <button
+                class="btn-nxt-success"
+                (click)="openUserModal(user)">
+                Activer
+              </button>
+            } @else {
+              <button
+                class="btn-nxt-error"
+                (click)="openUserModal(user)">
+                Désactiver
+              </button>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="table-cell-nxt text-center text-nxt-gray py-10">
+            Aucun utilisateur trouvé.
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Ton tableau -->
+
+<dialog #userModal class="modal">
+  <div class="modal-nxt">
+
+    @if (selectedUser) {
+
+      <h3 class="modal-title-nxt">
+        @if (selectedUser.active) {
+          Désactiver l'utilisateur ?
+        } @else {
+          Activer l'utilisateur ?
+        }
+      </h3>
+
+      <p class="py-4">
+        Voulez-vous vraiment
+        @if (selectedUser.active) {
+          désactiver
+        } @else {
+          activer
+        }
+        <strong>
+          {{ selectedUser.firstname }} {{ selectedUser.lastname }}
+        </strong>
+        ?
+      </p>
+
+      <div class="modal-action">
+
+        <button
+          class="link-nxt"
+          (click)="closeUserModal()">
+          Annuler
+        </button>
+
+        <button
+          (click)="confirmAction()"
+          [ngClass]="selectedUser.active ? 'btn-nxt-error' : 'btn-nxt-success'">
+
+          @if (selectedUser.active) {
+            Désactiver
+          } @else {
+            Activer
+          }
+
+        </button>
+
+      </div>
+    }
+  </div>
+</dialog>

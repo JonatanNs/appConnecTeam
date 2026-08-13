@@ -1,16 +1,19 @@
 import {Component, OnInit, signal} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormLogin} from './components/form-login/form-login';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ReactiveFormsModule, FormLogin],
+  imports: [ReactiveFormsModule, FormLogin, NgOptimizedImage],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
 export class LoginPage implements OnInit {
+
   protected readonly mosaicColors = signal<string[]>([]);
+
   ngOnInit(): void {
     // Dégradé inspiré des variables --ntx-primary et --ntx-secondary
     const palette = [
@@ -22,5 +25,7 @@ export class LoginPage implements OnInit {
     this.mosaicColors.set(
       Array.from({ length: 250 }, () => palette[Math.floor(Math.random() * palette.length)])
     );
+
   }
+
 }

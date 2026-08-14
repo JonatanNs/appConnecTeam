@@ -10,10 +10,12 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { UserProfil } from './components/user-profil/user-profil';
+import { UserNotif } from './components/user-notif/user-notif';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, FaIconComponent],
+  imports: [RouterLink, FaIconComponent, UserProfil, UserNotif],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
@@ -25,25 +27,9 @@ export class Navbar {
   protected readonly faChevronRight = faChevronRight;
   protected faRightFromBracket = faRightFromBracket;
 
-  isProfileMenuOpen = signal(false);
 
-  openProfileMenu(): void {
-    this.isProfileMenuOpen.set(true);
-  }
-
-  closeProfileMenu(): void {
-    this.isProfileMenuOpen.set(false);
-  }
 
   protected readonly faCircleQuestion = faCircleQuestion;
 
-  isNotificationMenuOpen = signal(false);
 
-  openNotificationMenu(): void {
-    this.isNotificationMenuOpen.set(true);
-  }
-
-  closeNotificationMenu(): void {
-    this.isNotificationMenuOpen.set(false);
-  }
 }

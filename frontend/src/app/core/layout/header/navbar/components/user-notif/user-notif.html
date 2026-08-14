@@ -1,0 +1,92 @@
+<div class="relative inline-block ml-3"
+     (mouseenter)="openNotificationMenu()"
+     (mouseleave)="closeNotificationMenu()">
+
+  <button type="button" class="cursor-pointer" aria-label="Notifications"
+          [attr.aria-expanded]="isNotificationMenuOpen()">
+    <fa-icon [icon]="faBell"></fa-icon>
+  </button>
+
+  @if (isNotificationMenuOpen()) {
+    <!-- z-50 au lieu de z-20 pour garantir le passage au-dessus du <main> -->
+    <div class="absolute top-full right-0 z-50 w-64 sm:w-80 pt-2">
+      <div class="overflow-hidden origin-top-right bg-nxt-surface rounded-md shadow-lg border border-nxt-gray">
+        <div class="py-2">
+          <a routerLink="/messageries"
+             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 border-b border-nxt-gray hover:bg-nxt-gray"
+          >
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
+              <fa-icon [icon]="faUser"></fa-icon>
+            </div>
+            <p class="mx-2 text-sm text-nxt-dark">
+              <span class="font-bold">Thomas Martin</span>
+              vous a envoyé un message.
+              <span class="text-nxt-primary">Il y a 2 min</span>
+            </p>
+          </a>
+
+          <a routerLink="/annuaires"
+             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 border-b border-nxt-gray hover:bg-nxt-gray"
+          >
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
+              <fa-icon [icon]="faUser"></fa-icon>
+            </div>
+            <p class="mx-2 text-sm text-nxt-dark">
+                  <span class="font-bold">
+                    Sophie Dupont
+                  </span>
+              a mis à jour son profil.
+              <span class="text-nxt-primary">
+                    Il y a 45 min
+                  </span>
+            </p>
+          </a>
+
+          <a routerLink="/rh"
+             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 border-b border-nxt-gray hover:bg-nxt-gray"
+          >
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
+              <fa-icon [icon]="faBell"></fa-icon>
+            </div>
+            <p class="mx-2 text-sm text-nxt-dark">
+                  <span class="font-bold">
+                    Service RH
+                  </span>
+              a publié une nouvelle information.
+              <span class="text-nxt-primary">
+                    Il y a 1 h
+                  </span>
+            </p>
+          </a>
+
+          <a routerLink="/accueil"
+             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 hover:bg-nxt-gray"
+          >
+            <div
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
+              <fa-icon [icon]="faCalendar"></fa-icon>
+            </div>
+            <p class="mx-2 text-sm text-nxt-dark">
+                  <span class="font-bold">
+                    Réunion d'équipe
+                  </span>
+              prévue aujourd'hui.
+              <span class="text-nxt-primary">
+                    Il y a 3 h
+                  </span>
+            </p>
+          </a>
+        </div>
+
+        <a routerLink="/notifications"
+           class="block py-2 font-bold text-center text-nxt-white bg-nxt-dark hover:underline"
+        >
+          Voir toutes les notifications
+        </a>
+      </div>
+    </div>
+  }
+</div>

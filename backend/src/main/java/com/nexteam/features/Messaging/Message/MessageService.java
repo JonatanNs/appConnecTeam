@@ -9,5 +9,4 @@ import org.springframework.stereotype.Service;
 public class MessageService {
     private final ConversationRepository conversationRepository;
 
-
 }

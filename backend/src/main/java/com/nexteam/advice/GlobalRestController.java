@@ -3,7 +3,7 @@ package com.nexteam.advice;
 import com.nexteam.exceptions.AlreadyExistException;
 import com.nexteam.exceptions.InvalidCredentialsException;
 import com.nexteam.exceptions.NotFoundException;
-import com.nexteam.features.common.ApiResponse;
+import com.nexteam.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

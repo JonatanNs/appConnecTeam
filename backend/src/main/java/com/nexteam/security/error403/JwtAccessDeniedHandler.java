@@ -1,6 +1,6 @@
 package com.nexteam.security.error403;
 
-import com.nexteam.features.common.ApiResponse;
+import com.nexteam.common.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

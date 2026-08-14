@@ -1,7 +1,7 @@
 package com.nexteam.security;
 
-import com.nexteam.features.Role.Role;
-import com.nexteam.features.User.User;
+import com.nexteam.features.Users.Role.Role;
+import com.nexteam.features.Users.User.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

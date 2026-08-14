@@ -1,6 +1,6 @@
 package com.nexteam.security.error401;
 
-import com.nexteam.features.common.ApiResponse;
+import com.nexteam.common.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

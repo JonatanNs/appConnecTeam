@@ -1,6 +1,6 @@
 package com.nexteam.security;
 
-import com.nexteam.features.User.UserRepository;
+import com.nexteam.features.Users.User.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

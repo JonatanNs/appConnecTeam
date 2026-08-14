@@ -2,12 +2,12 @@ package com.nexteam.user.service;
 
 import com.nexteam.exceptions.AlreadyExistException;
 import com.nexteam.exceptions.NotFoundException;
-import com.nexteam.features.User.User;
-import com.nexteam.features.User.UserRepository;
-import com.nexteam.features.User.UserService;
-import com.nexteam.features.User.dtos.UserRequestDTO;
-import com.nexteam.features.User.dtos.UserResponseDTO;
-import com.nexteam.features.User.dtos.mapper.UserMapper;
+import com.nexteam.features.Users.User.User;
+import com.nexteam.features.Users.User.UserRepository;
+import com.nexteam.features.Users.User.UserService;
+import com.nexteam.features.Users.User.dtos.UserRequestDTO;
+import com.nexteam.features.Users.User.dtos.UserResponseDTO;
+import com.nexteam.features.Users.User.dtos.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

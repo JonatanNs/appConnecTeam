@@ -11,6 +11,7 @@ import {FormsModule} from '@angular/forms';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interface';
 import {TableListUser} from './components/table-list-user/table-list-user';
+import { SearchFilter } from '../../../../shared/components/search-filter/search-filter';
 
 @Component({
   selector: 'app-admin-user-management',
@@ -20,13 +21,13 @@ import {TableListUser} from './components/table-list-user/table-list-user';
     RouterLink,
     FormsModule,
     NgClass,
-    TableListUser
+    TableListUser,
+    SearchFilter,
   ],
   templateUrl: './admin-user-management.html',
   styleUrl: './admin-user-management.css',
 })
 export class AdminUserManagement {
-
   private userService = inject(UserService);
   private flashMessage = inject(FlashMessageService);
 
@@ -36,48 +37,41 @@ export class AdminUserManagement {
 
   readonly pageable = signal<IPageable>({
     page: 0,
-    size: 12
+    size: 12,
   });
 
   users = toSignal(
-    combineLatest([
-      toObservable(this.pageable),
-      toObservable(this.refreshTrigger)
-    ]).pipe(
+    combineLatest([toObservable(this.pageable), toObservable(this.refreshTrigger)]).pipe(
       switchMap(([pageable]) =>
         this.userService.getAllUsers(pageable).pipe(
           catchError((err) => {
             this.flashMessage.error(err.error.message);
             return of(undefined);
-          })
-        )
-      )
-    )
+          }),
+        ),
+      ),
+    ),
   );
 
   private refreshUsers(): void {
-    this.refreshTrigger.update(v => v + 1);
+    this.refreshTrigger.update((v) => v + 1);
   }
 
   goToPage(page: number): void {
-    this.pageable.update(p => ({
+    this.pageable.update((p) => ({
       ...p,
-      page
+      page,
     }));
   }
 
   changePageSize(size: number): void {
     this.pageable.set({
       page: 0,
-      size
+      size,
     });
   }
 
-  onUserAction(event: {
-    action: 'activate' | 'deactivate';
-    publicId: string;
-  }): void {
-
+  onUserAction(event: { action: 'activate' | 'deactivate'; publicId: string }): void {
     if (event.action === 'deactivate') {
       this.deactivateUser(event.publicId);
     } else {
@@ -93,7 +87,7 @@ export class AdminUserManagement {
       },
       error: (err) => {
         this.flashMessage.error(err.error.message);
-      }
+      },
     });
   }
 
@@ -105,7 +99,7 @@ export class AdminUserManagement {
       },
       error: (err) => {
         this.flashMessage.error(err.error.message);
-      }
+      },
     });
   }
 }

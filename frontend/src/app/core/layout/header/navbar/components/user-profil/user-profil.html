@@ -1,12 +1,16 @@
 <div class="relative inline-block"
      (mouseenter)="openProfileMenu()"
      (mouseleave)="closeProfileMenu()">
+
+  <!-- Bouton profil amélioré -->
   <button type="button"
-          class="relative z-10 flex items-center p-2 text-sm text-nxt-dark bg-nxt-surface border border-transparent rounded-md
-                     hover:text-nxt-dark hover:bg-nxt-gray focus:outline-none transition-colors duration-300"
+          class="relative z-10 flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200/80 rounded-xl
+                     hover:bg-gray-50 hover:text-gray-900 focus:outline-none transition-all duration-200 shadow-xs cursor-pointer"
           [attr.aria-expanded]="isProfileMenuOpen()">
-    <fa-icon [icon]="faUser"></fa-icon>
-    <svg class="w-4 h-4 mx-1 transition-transform duration-200"
+    <div class="flex items-center justify-center w-7 h-7 rounded-full bg-nxt-primary/10 text-nxt-primary">
+      <fa-icon [icon]="faUser" class="text-xs"></fa-icon>
+    </div>
+    <svg class="w-4 h-4 text-gray-400 transition-transform duration-200"
          [class.rotate-180]="isProfileMenuOpen()"
          viewBox="0 0 24 24"
          fill="none"
@@ -19,56 +23,77 @@
   </button>
 
   @if (isProfileMenuOpen()) {
-    <div class="absolute right-0 z-50 w-56">
-      <div class="overflow-hidden origin-top-right bg-nxt-surface rounded-xl shadow-xl border border-nxt-gray">
-        <a routerLink="/profil"
-           class="flex items-center p-3 text-sm text-nxt-dark border-b border-transparent hover:bg-nxt-gray transition-colors duration-300">
-              <span
-                class="flex items-center justify-center w-9 h-9 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
-                <fa-icon [icon]="faUser"></fa-icon>
-              </span>
-          <div class="mx-2">
-            <h1 class="text-sm font-semibold">Mon profil</h1>
-            <p class="text-xs text-nxt-gray-dark">Voir mon profil</p>
+    <div class="absolute right-0 z-50 w-64 pt-2">
+      <!-- Conteneur principal avec ombre portée soignée -->
+      <div class="overflow-hidden origin-top-right bg-nxt-surface rounded-2xl shadow-xl border border-gray-200/80 backdrop-blur-md">
+
+        <!-- En-tête du profil (Rappel utilisateur) -->
+        <div class="px-4 py-3.5 bg-gray-50/50 border-b border-gray-100 flex items-center space-x-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-nxt-primary/15 text-nxt-primary font-bold">
+            <fa-icon [icon]="faUser" class="text-sm"></fa-icon>
           </div>
-        </a>
+          <div class="overflow-hidden">
+            <p class="text-sm font-semibold text-gray-900 truncate">Mon compte</p>
+            <p class="text-xs text-gray-500 truncate">Utilisateur Nexteam</p>
+          </div>
+        </div>
 
-        <hr class="border-nxt-gray">
+        <!-- Liens de navigation -->
+        <div class="p-1.5 space-y-0.5">
+          <a routerLink="/profil"
+             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+              <fa-icon [icon]="faUser" class="text-xs"></fa-icon>
+            </span>
+            Voir mon profil
+          </a>
 
-        <a routerLink="/admin"
-           class="flex items-center p-3 text-sm text-nxt-dark border-b-2 border-transparent hover:text-nxt-dark
-                      hover:bg-nxt-gray hover:border-nxt-primary transition-colors duration-300">
-          <span class="mx-2">Administration</span>
-        </a>
+          <a routerLink="/admin"
+             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+              <fa-icon [icon]="faGear" class="text-xs"></fa-icon>
+            </span>
+            Administration
+          </a>
 
-        <a routerLink="/parametres"
-           class="flex items-center p-3 text-sm text-nxt-dark border-b-2 border-transparent hover:text-nxt-dark
-                     hover:bg-nxt-gray hover:border-nxt-primary transition-colors duration-300">
-          <fa-icon [icon]="faGear" class="w-5 mx-1"></fa-icon>
-          <span class="mx-2">Paramètres</span>
-        </a>
+          <a routerLink="/parametres"
+             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+              <fa-icon [icon]="faGear" class="text-xs"></fa-icon>
+            </span>
+            Paramètres
+          </a>
 
-        <a routerLink="/notifications"
-           class="flex items-center p-3 text-sm text-nxt-dark border-b-2 border-transparent hover:text-nxt-dark
-                     hover:bg-nxt-gray hover:border-nxt-primary transition-colors duration-300">
-          <fa-icon [icon]="faBell" class="w-5 mx-1"></fa-icon>
-          <span class="mx-2">Notifications</span>
-        </a>
+          <a routerLink="/notifications"
+             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+              <fa-icon [icon]="faBell" class="text-xs"></fa-icon>
+            </span>
+            Notifications
+          </a>
 
-        <hr class="border-nxt-gray">
+          <div class="my-1 border-t border-gray-100"></div>
 
-        <a routerLink="/aide"
-           class="flex items-center p-3 text-sm text-nxt-dark border-b-2 border-transparent hover:text-nxt-dark
-                      hover:bg-nxt-gray hover:border-nxt-primary transition-colors duration-300">
-          <fa-icon [icon]="faCircleQuestion" class="w-5 mx-1"></fa-icon>
-          <span class="mx-2">Aide</span>
-        </a>
+          <a routerLink="/aide"
+             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+              <fa-icon [icon]="faCircleQuestion" class="text-xs"></fa-icon>
+            </span>
+            Aide & Support
+          </a>
+        </div>
 
-        <button type="button"
-                class="bg-nxt-error w-full p-3 text-nxt-surface">
-          <fa-icon [icon]="faRightFromBracket" class="w-5 mx-1"></fa-icon>
-          <span class="mx-2">Déconnexion</span>
-        </button>
+        <!-- Bouton Déconnexion -->
+        <div class="p-1.5 bg-gray-50/50 border-t border-gray-100">
+          <button type="button"
+                  class="flex items-center w-full px-3 py-2.5 text-xs font-medium text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200 cursor-pointer">
+            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-red-100/50 text-red-500">
+              <fa-icon [icon]="faRightFromBracket" class="text-xs"></fa-icon>
+            </span>
+            Déconnexion
+          </button>
+        </div>
+
       </div>
     </div>
   }

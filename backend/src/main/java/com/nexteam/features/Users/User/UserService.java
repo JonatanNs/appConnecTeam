@@ -106,8 +106,12 @@ public class UserService {
                     );
                 });
 
-        existingUser.setFirstname(userRequestDTO.getFirstname());
-        existingUser.setLastname(userRequestDTO.getLastname());
+        String firstname = userRequestDTO.getFirstname();
+        String lastName = userRequestDTO.getLastname();
+
+
+        existingUser.setFirstname(firstname.substring(0, 1).toUpperCase() + firstname.substring(1).toLowerCase());
+        existingUser.setLastname(lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase());
         existingUser.setEmail(userRequestDTO.getEmail());
 
         return userMapper.userToResponseDTO(userRepository.save(existingUser));
@@ -126,6 +130,16 @@ public class UserService {
                 + "."
                 + userRequestDTO.getLastname().toLowerCase()
                 + "@nexteam.com";
+        String firstname = userRequestDTO.getFirstname();
+        String lastName = userRequestDTO.getLastname();
+
+        userRequestDTO.setFirstname(
+                firstname.substring(0, 1).toUpperCase() + firstname.substring(1).toLowerCase()
+        );
+
+        userRequestDTO.setLastname(
+                lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase()
+        );
 
         userRepository.findByEmail(email).ifPresent(existingUser -> {
             throw new AlreadyExistException("L'email est déjà associé à un compte.");

@@ -2,90 +2,97 @@
      (mouseenter)="openNotificationMenu()"
      (mouseleave)="closeNotificationMenu()">
 
-  <button type="button" class="cursor-pointer" aria-label="Notifications"
+  <!-- Bouton cloche avec effet de survol et badge de notification -->
+  <button type="button"
+          class="relative p-2 text-gray-600 hover:text-nxt-dark hover:bg-gray-100 rounded-full transition-colors cursor-pointer focus:outline-none"
+          aria-label="Notifications"
           [attr.aria-expanded]="isNotificationMenuOpen()">
-    <fa-icon [icon]="faBell"></fa-icon>
+    <fa-icon [icon]="faBell" class="text-lg"></fa-icon>
+    <!-- Petit badge rouge/primaire pour indiquer des actus -->
+    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-nxt-primary rounded-full ring-2 ring-white"></span>
   </button>
 
   @if (isNotificationMenuOpen()) {
-    <!-- z-50 au lieu de z-20 pour garantir le passage au-dessus du <main> -->
-    <div class="absolute top-full right-0 z-50 w-64 sm:w-80 pt-2">
-      <div class="overflow-hidden origin-top-right bg-nxt-surface rounded-md shadow-lg border border-nxt-gray">
-        <div class="py-2">
+    <div class="absolute top-full right-0 z-50 w-80 sm:w-96 pt-2">
+      <!-- Conteneur principal de la popup avec ombre accentuée et bordure fine -->
+      <div class="overflow-hidden origin-top-right bg-nxt-surface rounded-xl shadow-xl border border-gray-200/80 backdrop-blur-md">
+
+        <!-- En-tête du menu -->
+        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+          <span class="text-xs font-semibold uppercase tracking-wider text-gray-500">Notifications</span>
+          <span class="text-xs text-nxt-primary font-medium cursor-pointer hover:underline">Tout marquer comme lu</span>
+        </div>
+
+        <!-- Liste des notifications -->
+        <div class="divide-y divide-gray-100 max-h-[380px] overflow-y-auto">
+
+          <!-- Item 1 -->
           <a routerLink="/messageries"
-             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 border-b border-nxt-gray hover:bg-nxt-gray"
-          >
-            <div
-              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
-              <fa-icon [icon]="faUser"></fa-icon>
+             class="flex items-start px-4 py-3.5 transition-colors duration-200 hover:bg-gray-50 group">
+            <div class="flex-shrink-0 flex items-center justify-center w-9 h-9 mt-0.5 rounded-full bg-nxt-primary/10 text-nxt-primary group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+              <fa-icon [icon]="faUser" class="text-sm"></fa-icon>
             </div>
-            <p class="mx-2 text-sm text-nxt-dark">
-              <span class="font-bold">Thomas Martin</span>
-              vous a envoyé un message.
-              <span class="text-nxt-primary">Il y a 2 min</span>
-            </p>
+            <div class="ml-3 flex-1">
+              <p class="text-xs text-gray-800 leading-relaxed">
+                <span class="font-semibold text-nxt-dark">Thomas Martin</span> vous a envoyé un message.
+              </p>
+              <span class="inline-block mt-1 text-[11px] text-nxt-primary font-medium">Il y a 2 min</span>
+            </div>
+            <!-- Indicateur non-lu -->
+            <span class="w-2 h-2 bg-nxt-primary rounded-full self-center ml-2"></span>
           </a>
 
+          <!-- Item 2 -->
           <a routerLink="/annuaires"
-             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 border-b border-nxt-gray hover:bg-nxt-gray"
-          >
-            <div
-              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
-              <fa-icon [icon]="faUser"></fa-icon>
+             class="flex items-start px-4 py-3.5 transition-colors duration-200 hover:bg-gray-50 group">
+            <div class="flex-shrink-0 flex items-center justify-center w-9 h-9 mt-0.5 rounded-full bg-nxt-primary/10 text-nxt-primary group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+              <fa-icon [icon]="faUser" class="text-sm"></fa-icon>
             </div>
-            <p class="mx-2 text-sm text-nxt-dark">
-                  <span class="font-bold">
-                    Sophie Dupont
-                  </span>
-              a mis à jour son profil.
-              <span class="text-nxt-primary">
-                    Il y a 45 min
-                  </span>
-            </p>
+            <div class="ml-3 flex-1">
+              <p class="text-xs text-gray-800 leading-relaxed">
+                <span class="font-semibold text-nxt-dark">Sophie Dupont</span> a mis à jour son profil.
+              </p>
+              <span class="inline-block mt-1 text-[11px] text-gray-400">Il y a 45 min</span>
+            </div>
           </a>
 
+          <!-- Item 3 -->
           <a routerLink="/rh"
-             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 border-b border-nxt-gray hover:bg-nxt-gray"
-          >
-            <div
-              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
-              <fa-icon [icon]="faBell"></fa-icon>
+             class="flex items-start px-4 py-3.5 transition-colors duration-200 hover:bg-gray-50 group">
+            <div class="flex-shrink-0 flex items-center justify-center w-9 h-9 mt-0.5 rounded-full bg-nxt-primary/10 text-nxt-primary group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+              <fa-icon [icon]="faBell" class="text-sm"></fa-icon>
             </div>
-            <p class="mx-2 text-sm text-nxt-dark">
-                  <span class="font-bold">
-                    Service RH
-                  </span>
-              a publié une nouvelle information.
-              <span class="text-nxt-primary">
-                    Il y a 1 h
-                  </span>
-            </p>
+            <div class="ml-3 flex-1">
+              <p class="text-xs text-gray-800 leading-relaxed">
+                <span class="font-semibold text-nxt-dark">Service RH</span> a publié une nouvelle information.
+              </p>
+              <span class="inline-block mt-1 text-[11px] text-gray-400">Il y a 1 h</span>
+            </div>
           </a>
 
+          <!-- Item 4 -->
           <a routerLink="/accueil"
-             class="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 hover:bg-nxt-gray"
-          >
-            <div
-              class="flex-shrink-0 flex items-center justify-center w-8 h-8 mx-1 rounded-full bg-nxt-primary/10 text-nxt-primary">
-              <fa-icon [icon]="faCalendar"></fa-icon>
+             class="flex items-start px-4 py-3.5 transition-colors duration-200 hover:bg-gray-50 group">
+            <div class="flex-shrink-0 flex items-center justify-center w-9 h-9 mt-0.5 rounded-full bg-nxt-primary/10 text-nxt-primary group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+              <fa-icon [icon]="faCalendar" class="text-sm"></fa-icon>
             </div>
-            <p class="mx-2 text-sm text-nxt-dark">
-                  <span class="font-bold">
-                    Réunion d'équipe
-                  </span>
-              prévue aujourd'hui.
-              <span class="text-nxt-primary">
-                    Il y a 3 h
-                  </span>
-            </p>
+            <div class="ml-3 flex-1">
+              <p class="text-xs text-gray-800 leading-relaxed">
+                <span class="font-semibold text-nxt-dark">Réunion d'équipe</span> prévue aujourd'hui.
+              </p>
+              <span class="inline-block mt-1 text-[11px] text-gray-400">Il y a 3 h</span>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Pied de page -->
+        <div class="p-2 bg-gray-50/80 border-t border-gray-100 text-center">
+          <a routerLink="/notifications" class="block w-full py-2 text-xs font-semibold text-nxt-primary hover:bg-gray-100/80 rounded-lg transition-colors">
+            Voir toutes les notifications
           </a>
         </div>
 
-        <a routerLink="/notifications"
-           class="block py-2 font-bold text-center text-nxt-white bg-nxt-dark hover:underline"
-        >
-          Voir toutes les notifications
-        </a>
       </div>
     </div>
   }

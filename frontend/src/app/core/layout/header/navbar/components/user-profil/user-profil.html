@@ -10,16 +10,11 @@
     <div class="flex items-center justify-center w-7 h-7 rounded-full bg-nxt-primary/10 text-nxt-primary">
       <fa-icon [icon]="faUser" class="text-xs"></fa-icon>
     </div>
-    <svg class="w-4 h-4 text-gray-400 transition-transform duration-200"
-         [class.rotate-180]="isProfileMenuOpen()"
-         viewBox="0 0 24 24"
-         fill="none"
-         xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M12 15.713L18.01 9.703L16.597 8.288L12 12.888L7.404 8.288L5.99 9.702L12 15.713Z"
-            fill="currentColor"
-      />
-    </svg>
+    <fa-icon
+      [icon]="faChevronDown"
+      class="text-sm text-gray-400 transition-transform duration-200"
+      [class.rotate-180]="isProfileMenuOpen()">
+    </fa-icon>
   </button>
 
   @if (isProfileMenuOpen()) {
@@ -40,43 +35,31 @@
 
         <!-- Liens de navigation -->
         <div class="p-1.5 space-y-0.5">
-          <a routerLink="/profil"
-             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+          <a routerLink="/profil">
+            <span>
               <fa-icon [icon]="faUser" class="text-xs"></fa-icon>
             </span>
             Voir mon profil
           </a>
 
-          <a routerLink="/admin"
-             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
-              <fa-icon [icon]="faGear" class="text-xs"></fa-icon>
+          <a routerLink="/admin">
+            <span>
+              <fa-icon [icon]="faShieldHalved" class="text-xs"></fa-icon>
             </span>
             Administration
           </a>
 
-          <a routerLink="/parametres"
-             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+          <a routerLink="/parametres">
+            <span>
               <fa-icon [icon]="faGear" class="text-xs"></fa-icon>
             </span>
             Paramètres
           </a>
 
-          <a routerLink="/notifications"
-             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
-              <fa-icon [icon]="faBell" class="text-xs"></fa-icon>
-            </span>
-            Notifications
-          </a>
-
           <div class="my-1 border-t border-gray-100"></div>
 
-          <a routerLink="/aide"
-             class="flex items-center px-3 py-2.5 text-xs font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-gray-100 text-gray-600">
+          <a routerLink="/aide">
+            <span>
               <fa-icon [icon]="faCircleQuestion" class="text-xs"></fa-icon>
             </span>
             Aide & Support
@@ -85,10 +68,9 @@
 
         <!-- Bouton Déconnexion -->
         <div class="p-1.5 bg-gray-50/50 border-t border-gray-100">
-          <button type="button"
-                  class="flex items-center w-full px-3 py-2.5 text-xs font-medium text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200 cursor-pointer">
+          <button type="button" class="w-full btn-nxt-error text-nxt-surface">
             <span class="flex items-center justify-center w-7 h-7 mr-2 rounded-lg bg-red-100/50 text-red-500">
-              <fa-icon [icon]="faRightFromBracket" class="text-xs"></fa-icon>
+              <fa-icon [icon]="faRightFromBracket" class="text-xs text-nxt-surface"></fa-icon>
             </span>
             Déconnexion
           </button>

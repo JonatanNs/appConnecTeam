@@ -2,9 +2,10 @@ import { Component, signal } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 import {
+  faArrowRight, faChevronDown,
   faCircleQuestion,
   faGear,
-  faRightFromBracket,
+  faRightFromBracket, faShieldHalved,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
@@ -31,4 +32,8 @@ export class UserProfil {
   closeProfileMenu(): void {
     this.isProfileMenuOpen.set(false);
   }
+
+  protected readonly faArrowRight = faArrowRight;
+  protected readonly faShieldHalved = faShieldHalved;
+  protected readonly faChevronDown = faChevronDown;
 }

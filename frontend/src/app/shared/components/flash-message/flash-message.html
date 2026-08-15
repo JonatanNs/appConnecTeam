@@ -13,14 +13,14 @@
         [class.text-nxt-success]="msg.type === 'success'"
         [class.text-nxt-error]="msg.type === 'error'"
         [class.text-nxt-secondary]="msg.type === 'info'"
-        [class.text-nxt-black]="msg.type === 'warning'"
+        [class.text-nxt-dark]="msg.type === 'warning'"
       ></fa-icon>
 
-      <div class="ml-3 flex-1 text-left text-nxt-black">
+      <div class="ml-3 flex-1 text-left text-nxt-dark">
         {{ msg.text }}
       </div>
 
-      <button (click)="flashService.message.set(null)" class="ml-2 text-nxt-gray hover:text-nxt-black shrink-0">
+      <button (click)="flashService.message.set(null)" class="ml-2 text-nxt-gray hover:text-nxt-dark shrink-0">
         <fa-icon [icon]="faXmark"></fa-icon>
       </button>
     </div>

@@ -1,60 +1,213 @@
-<h1 class="page-title-nxt">Administration</h1>
+<!-- En-tête de page moderne et textuel plus grand -->
+<div class="mb-8 pb-6 border-b border-gray-200/70 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+  <div>
+    <h1>Administration</h1>
+    <p class="text-sm text-gray-600 font-medium">Centre de contrôle et de pilotage de l'intranet unifié NexTeam.</p>
+  </div>
 
-<div class="grid gap-8 md:grid-cols-2 lg:gap-12 p-6 md:p-10 mt-12">
-
-  <div class="flex-1">
-    <div class="admin-icon-nxt">
-      <fa-icon [icon]="faUsers" class="text-2xl"></fa-icon>
+  <!-- [NOUVEAU] Widget date du jour & semaine en cours -->
+  <div class="bg-white border border-gray-200/80 rounded-2xl px-4 py-3 shadow-xs flex items-center gap-3">
+    <div class="p-2.5 rounded-xl bg-nxt-primary/10 text-nxt-primary">
+      <fa-icon [icon]="faCalendarDays" class="text-base"></fa-icon>
     </div>
-    <a routerLink="/admin/gestion-utilisateurs" class="admin-card-nxt">
-      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Gestion des utilisateurs</h5>
-      <p class="mb-6 text-base text-nxt-gray">Créer, modifier ou désactiver des comptes employés</p>
-      <span class="admin-link-nxt">
-        Accéder à l'annuaire
-        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
+    <div>
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Aujourd'hui</p>
+      <p class="text-sm font-bold text-gray-900">Samedi 15 Août <span class="text-nxt-primary font-medium">(Semaine 33)</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- [NOUVEAU] Section : Arrivées imminentes (Stagiaires, alternants, nouveaux employés) -->
+<div class="mb-8 bg-gradient-to-r from-nxt-primary/5 via-white to-white border border-nxt-primary/20 rounded-2xl p-6 shadow-xs">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-3">
+      <div class="p-2 rounded-xl bg-nxt-primary/10 text-nxt-primary">
+        <fa-icon [icon]="faUsers" class="text-base"></fa-icon>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-gray-900">Prochaines arrivées dans l'entreprise</h3>
+        <p class="text-xs text-gray-500">Intégrations prévues pour les nouveaux collaborateurs, alternants et stagiaires</p>
+      </div>
+    </div>
+    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-nxt-primary/10 text-nxt-primary">3 arrivées cette semaine</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <!-- Carte Arrivée 1 -->
+    <div class="bg-white border border-gray-200/80 rounded-xl p-4 flex items-center gap-3 shadow-xs">
+      <img src="https://i.pravatar.cc/150?u=nouveau1" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-nxt-primary/20">
+      <div class="overflow-hidden">
+        <p class="text-sm font-semibold text-gray-900 truncate">Lucas Bernard</p>
+        <p class="text-xs text-nxt-primary font-medium">Alternant Développeur • <span class="text-gray-500">Lundi</span></p>
+      </div>
+    </div>
+    <!-- Carte Arrivée 2 -->
+    <div class="bg-white border border-gray-200/80 rounded-xl p-4 flex items-center gap-3 shadow-xs">
+      <img src="https://i.pravatar.cc/150?u=nouveau2" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-nxt-primary/20">
+      <div class="overflow-hidden">
+        <p class="text-sm font-semibold text-gray-900 truncate">Chloé Leroy</p>
+        <p class="text-xs text-nxt-primary font-medium">Stagiaire RH • <span class="text-gray-500">Mercredi</span></p>
+      </div>
+    </div>
+    <!-- Carte Arrivée 3 -->
+    <div class="bg-white border border-gray-200/80 rounded-xl p-4 flex items-center gap-3 shadow-xs">
+      <img src="https://i.pravatar.cc/150?u=nouveau3" alt="Avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-nxt-primary/20">
+      <div class="overflow-hidden">
+        <p class="text-sm font-semibold text-gray-900 truncate">Antoine Morel</p>
+        <p class="text-xs text-nxt-primary font-medium">Nouvel Employé (Commercial) • <span class="text-gray-500">Jeudi</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION : Indicateurs clés (KPIs) rapides -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-6 shadow-xs">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Utilisateurs Actifs</span>
+      <span class="p-2.5 rounded-xl bg-nxt-primary/10 text-nxt-primary">
+        <fa-icon [icon]="faUsers" class="text-base"></fa-icon>
       </span>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-3xl font-bold text-gray-900">248</span>
+      <span class="text-xs font-semibold text-emerald-600">+12 ce mois</span>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-6 shadow-xs">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Sécurité / Rôles</span>
+      <span class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600">
+        <fa-icon [icon]="faShieldHalved" class="text-base"></fa-icon>
+      </span>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-3xl font-bold text-gray-900">6</span>
+      <span class="text-xs font-semibold text-gray-500">Niveaux actifs</span>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-6 shadow-xs">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Actualités publiées</span>
+      <span class="p-2.5 rounded-xl bg-blue-500/10 text-blue-600">
+        <fa-icon [icon]="faNewspaper" class="text-base"></fa-icon>
+      </span>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-3xl font-bold text-gray-900">14</span>
+      <span class="text-xs font-semibold text-blue-600">Actives</span>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-6 shadow-xs">
+    <div class="flex items-center justify-between mb-3">
+      <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">État de l'intranet</span>
+      <span class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+      </span>
+    </div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-3xl font-bold text-gray-900">99.9%</span>
+      <span class="text-xs font-semibold text-emerald-600">Opérationnel</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION : Cartes de gestion principales et avancées (Textes plus grands) -->
+<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+  <!-- Gestion des utilisateurs -->
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-7 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+    <div>
+      <div class="w-14 h-14 rounded-2xl bg-nxt-primary/10 text-nxt-primary flex items-center justify-center mb-5 group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+        <fa-icon [icon]="faUsers" class="text-2xl"></fa-icon>
+      </div>
+      <h5 class="mb-3 text-xl font-bold text-gray-900">Gestion des utilisateurs</h5>
+      <p class="mb-6 text-sm text-gray-600 leading-relaxed">Créer, modifier ou désactiver les comptes employés, stagiaires et alternants.</p>
+    </div>
+    <a routerLink="/admin/gestion-utilisateurs" class="inline-flex items-center gap-2 text-sm font-semibold text-nxt-primary hover:underline">
+      Accéder à l'annuaire
+      <fa-icon [icon]="faArrowRight" class="text-xs"></fa-icon>
     </a>
   </div>
 
-  <div class="flex-1">
-    <div class="admin-icon-nxt">
-      <fa-icon [icon]="faBriefcase" class="text-2xl"></fa-icon>
+  <!-- Gestion des métiers -->
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-7 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+    <div>
+      <div class="w-14 h-14 rounded-2xl bg-nxt-primary/10 text-nxt-primary flex items-center justify-center mb-5 group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+        <fa-icon [icon]="faBriefcase" class="text-2xl"></fa-icon>
+      </div>
+      <h5 class="mb-3 text-xl font-bold text-gray-900">Gestion des métiers</h5>
+      <p class="mb-6 text-sm text-gray-600 leading-relaxed">Ajouter ou modifier les postes, les départements et la structure organisationnelle.</p>
     </div>
-    <a routerLink="/admin/jobs" class="admin-card-nxt">
-      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Gestion des métiers</h5>
-      <p class="mb-6 text-base text-nxt-gray">Ajouter ou modifier les postes et départements</p>
-      <span class="admin-link-nxt">
-        Gérer les métiers
-        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
-      </span>
+    <a routerLink="/admin/jobs" class="inline-flex items-center gap-2 text-sm font-semibold text-nxt-primary hover:underline">
+      Gérer les métiers
+      <fa-icon [icon]="faArrowRight" class="text-xs"></fa-icon>
     </a>
   </div>
 
-  <div class="flex-1">
-    <div class="admin-icon-nxt">
-      <fa-icon [icon]="faShieldHalved" class="text-2xl"></fa-icon>
+  <!-- Rôles et permissions -->
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-7 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+    <div>
+      <div class="w-14 h-14 rounded-2xl bg-nxt-primary/10 text-nxt-primary flex items-center justify-center mb-5 group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+        <fa-icon [icon]="faShieldHalved" class="text-2xl"></fa-icon>
+      </div>
+      <h5 class="mb-3 text-xl font-bold text-gray-900">Rôles et permissions</h5>
+      <p class="mb-6 text-sm text-gray-600 leading-relaxed">Définir les matrices d'accès, les privilèges administrateur et niveaux d'autorisation.</p>
     </div>
-    <a routerLink="/admin/roles" class="admin-card-nxt">
-      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Rôles et permissions</h5>
-      <p class="mb-6 text-base text-nxt-gray">Définir les accès et niveaux d'autorisation</p>
-      <span class="admin-link-nxt">
-        Configurer les rôles
-        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
-      </span>
+    <a routerLink="/admin/roles" class="inline-flex items-center gap-2 text-sm font-semibold text-nxt-primary hover:underline">
+      Configurer les rôles
+      <fa-icon [icon]="faArrowRight" class="text-xs"></fa-icon>
     </a>
   </div>
 
-  <div class="flex-1">
-    <div class="admin-icon-nxt">
-      <fa-icon [icon]="faNewspaper" class="text-2xl"></fa-icon>
+  <!-- Actualités -->
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-7 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+    <div>
+      <div class="w-14 h-14 rounded-2xl bg-nxt-primary/10 text-nxt-primary flex items-center justify-center mb-5 group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+        <fa-icon [icon]="faNewspaper" class="text-2xl"></fa-icon>
+      </div>
+      <h5 class="mb-3 text-xl font-bold text-gray-900">Actualités & Communication</h5>
+      <p class="mb-6 text-sm text-gray-600 leading-relaxed">Publier, épingler ou modifier les actualités et annonces officielles de l'entreprise.</p>
     </div>
-    <a routerLink="/admin/news" class="admin-card-nxt">
-      <h5 class="mb-3 text-xl font-bold lg:text-2xl text-nxt-black">Actualités</h5>
-      <p class="mb-6 text-base text-nxt-gray">Publier ou modifier les actualités de l'entreprise</p>
-      <span class="admin-link-nxt">
-        Gérer les actualités
-        <fa-icon [icon]="faArrowRight" class="ml-2"></fa-icon>
-      </span>
+    <a routerLink="/admin/news" class="inline-flex items-center gap-2 text-sm font-semibold text-nxt-primary hover:underline">
+      Gérer les actualités
+      <fa-icon [icon]="faArrowRight" class="text-xs"></fa-icon>
+    </a>
+  </div>
+
+  <!-- [NOUVEAU] Gestion des e-mails reçus par l'entreprise -->
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-7 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+    <div>
+      <div class="w-14 h-14 rounded-2xl bg-nxt-primary/10 text-nxt-primary flex items-center justify-center mb-5 group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+        <fa-icon [icon]="faBell" class="text-2xl"></fa-icon>
+      </div>
+      <h5 class="mb-3 text-xl font-bold text-gray-900">E-mails et Flux entrants</h5>
+      <p class="mb-6 text-sm text-gray-600 leading-relaxed">Suivre la boîte de réception centrale de l'entreprise, les formulaires de contact et requêtes externes.</p>
+    </div>
+    <a routerLink="/admin/emails" class="inline-flex items-center gap-2 text-sm font-semibold text-nxt-primary hover:underline">
+      Gérer les e-mails
+      <fa-icon [icon]="faArrowRight" class="text-xs"></fa-icon>
+    </a>
+  </div>
+
+  <!-- Journaux d'audit / Sécurité -->
+  <div class="bg-white border border-gray-200/80 rounded-2xl p-7 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+    <div>
+      <div class="w-14 h-14 rounded-2xl bg-nxt-primary/10 text-nxt-primary flex items-center justify-center mb-5 group-hover:bg-nxt-primary group-hover:text-white transition-colors">
+        <fa-icon [icon]="faListCheck" class="text-2xl"></fa-icon>
+      </div>
+      <h5 class="mb-3 text-xl font-bold text-gray-900">Journaux d'audit & Logs</h5>
+      <p class="mb-6 text-sm text-gray-600 leading-relaxed">Consulter l'historique des connexions, des modifications de profils et des actions sensibles.</p>
+    </div>
+    <a routerLink="/admin/logs" class="inline-flex items-center gap-2 text-sm font-semibold text-nxt-primary hover:underline">
+      Voir les activités
+      <fa-icon [icon]="faArrowRight" class="text-xs"></fa-icon>
     </a>
   </div>
 

@@ -1,12 +1,11 @@
 import {Component, OnInit, signal} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {FormLogin} from './components/form-login/form-login';
-import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ReactiveFormsModule, FormLogin, NgOptimizedImage],
+  imports: [ReactiveFormsModule, FormLogin],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })

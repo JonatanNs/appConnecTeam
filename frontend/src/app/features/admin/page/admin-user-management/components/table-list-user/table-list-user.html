@@ -62,13 +62,13 @@
               </a>
               @if (!user.active) {
                 <button
-                  class="px-3.5 py-2 text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 rounded-xl hover:bg-emerald-100 transition-colors cursor-pointer shadow-xs"
+                  class="btn-nxt-success"
                   (click)="openUserModal(user)">
                   Activer
                 </button>
               } @else {
                 <button
-                  class="px-3.5 py-2 text-sm font-semibold text-red-700 bg-red-50 border border-red-200/60 rounded-xl hover:bg-red-100 transition-colors cursor-pointer shadow-xs"
+                  class="btn-nxt-error"
                   (click)="openUserModal(user)">
                   Désactiver
                 </button>
@@ -117,17 +117,16 @@
 
       <div class="flex items-center justify-end gap-3 pt-5 border-t border-gray-100">
 
-        <button
-          type="button"
-          class="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer"
+        <a
+          class="link-nxt"
           (click)="closeUserModal()">
           Annuler
-        </button>
+        </a>
 
         <button
           type="button"
-          class="px-5 py-2.5 text-sm font-semibold text-white rounded-xl shadow-md transition-all cursor-pointer"
-          [ngClass]="selectedUser.active ? 'bg-red-600 hover:bg-red-700 shadow-red-600/20' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20'"
+
+          [ngClass]="selectedUser.active ? 'btn-nxt-error' : 'btn-nxt-success'"
           (click)="confirmAction()">
 
           @if (selectedUser.active) {

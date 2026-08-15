@@ -5,10 +5,9 @@ import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {catchError, combineLatest, of, switchMap} from 'rxjs';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {Paginate} from '../../../../shared/components/paginate/paginate';
-import {NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faArrowLeft, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interface';
 import {TableListUser} from './components/table-list-user/table-list-user';
 import { SearchFilter } from '../../../../shared/components/search-filter/search-filter';
@@ -20,7 +19,6 @@ import { SearchFilter } from '../../../../shared/components/search-filter/search
     Paginate,
     RouterLink,
     FormsModule,
-    NgClass,
     TableListUser,
     SearchFilter,
   ],
@@ -102,4 +100,6 @@ export class AdminUserManagement {
       },
     });
   }
+
+  protected readonly faArrowLeft = faArrowLeft;
 }

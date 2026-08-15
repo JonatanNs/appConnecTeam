@@ -1,8 +1,15 @@
 <div class="flex flex-col sm:flex-row gap-3 mb-6">
-  <input
-    type="text"
-    placeholder="Rechercher un nom, un email..."
-    class="input-nxt flex-1"/>
+
+  <div class="relative hidden lg:block w-full">
+      <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+        <fa-icon [icon]="faMagnifyingGlass" class="text-sm"></fa-icon>
+      </span>
+    <input
+      type="text"
+      class="w-full pl-10"
+      placeholder="Rechercher un nom, un email...">
+  </div>
+
 
   <select class="select-nxt">
     <option value="all">Tous les statuts</option>

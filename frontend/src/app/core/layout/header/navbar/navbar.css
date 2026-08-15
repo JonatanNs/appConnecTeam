@@ -1,15 +1,17 @@
-/* src/app/core/layout/header/navbar/navbar.css */
 @reference "../../../../../styles.css";
 
 .link-header-navbar {
-  @apply border-b-2 border-transparent transition-colors duration-300 mx-1.5 text-lg;
+  @apply border-b-2 border-transparent transition-all duration-200 mx-2 px-1 py-2 text-sm font-medium text-gray-600;
 
   &:hover {
-    @apply text-gray-800 border-blue-500;
+    @apply text-gray-900 border-gray-300;
   }
 
-  /* Gestion du breakpoint sm: (640px) */
   @media (min-width: 640px) {
-    @apply mx-4;
+    @apply mx-3 text-base;
   }
+}
+
+.linkActive {
+  @apply text-gray-900 border-b-2 border-nxt-primary font-semibold;
 }

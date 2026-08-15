@@ -1,29 +1,40 @@
-<nav class="flex items-center justify-between ml-5">
+<nav class="flex items-center justify-between ml-5 px-4 py-2">
 
   <!-- Navigation principale -->
-    <div class="flex items-center gap-1">
-      <a routerLink="/accueil" class="link-header-navbar">
+  <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2">
+      <a routerLink="/accueil" routerLinkActive="linkActive" class="link-header-navbar">
         Accueil
       </a>
-      <a routerLink="/actualites" class="link-header-navbar">
+      <a routerLink="/actualites" routerLinkActive="linkActive" class="link-header-navbar">
         Actualités
       </a>
-      <a routerLink="/messageries" class="link-header-navbar">
+      <a routerLink="/messageries" routerLinkActive="linkActive" class="link-header-navbar">
         Messageries
       </a>
-      <a routerLink="/annuaires" class="link-header-navbar">
+      <a routerLink="/annuaires" routerLinkActive="linkActive" class="link-header-navbar">
         Annuaires
       </a>
-      <a routerLink="/rh" class="link-header-navbar">
+      <a routerLink="/rh" routerLinkActive="linkActive" class="link-header-navbar">
         RH
       </a>
+      <a routerLink="/admin" routerLinkActive="linkActive" class="link-header-navbar">
+        Administration
+      </a>
     </div>
+  </div>
 
-  <!-- Actions à droite -->
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-4">
 
-    <!-- Recherche -->
-    <input type="text" class="pl-3" placeholder="Recherche"/>
+    <div class="relative hidden lg:block">
+      <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+        <fa-icon [icon]="faMagnifyingGlass" class="text-sm"></fa-icon>
+      </span>
+      <input
+        type="text"
+        class="pl-10"
+        placeholder="Rechercher sur NexTeam...">
+    </div>
 
     <!-- Dropdown Notifications -->
     <app-user-notif/>

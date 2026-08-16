@@ -1,12 +1,11 @@
 package com.nexteam.features.Messaging.Conversation.dtos;
 
-import com.nexteam.features.Messaging.Message.Message;
-import com.nexteam.features.Users.User.User;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.Instant;
-import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,8 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConvRequestDTO {
-    private Set<User> user;
+    private Set<UUID> usersIds;
+    @NotBlank(message = "Le nom de la conversation ne peut pas être vide.")
+    @Size(max = 255, message = "Le nom ne peut pas dépasser {max} caractères.")
     private String name;
-    private Instant createdAt;
-    private List<Message> messages;
 }

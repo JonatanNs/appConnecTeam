@@ -1,12 +1,12 @@
 package com.nexteam.features.Users.User;
 
+import com.nexteam.common.ApiResponse;
+import com.nexteam.common.dto.PageResponseDTO;
+import com.nexteam.common.dto.mapper.PageMapper;
 import com.nexteam.features.Users.Address.dtos.AddressRequestDTO;
 import com.nexteam.features.Users.Role.dtos.RoleRequestDTO;
 import com.nexteam.features.Users.User.dtos.UserRequestDTO;
 import com.nexteam.features.Users.User.dtos.UserResponseDTO;
-import com.nexteam.common.ApiResponse;
-import com.nexteam.common.dto.PageResponseDTO;
-import com.nexteam.common.dto.mapper.PageMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -162,15 +162,14 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<PageResponseDTO<UserResponseDTO>>> searchUsers(
-            @RequestParam(required = false) String firstname,
-            @RequestParam(required = false) String lastname,
+            @RequestParam(required = false) String name,
             Pageable pageable
     ) {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Utilisateurs trouvés.",
-                        pageMapper.toPageResponse(userService.searchUsers(firstname, lastname, pageable))
+                        pageMapper.toPageResponse(userService.searchUsers(name, pageable))
                 )
         );
     }

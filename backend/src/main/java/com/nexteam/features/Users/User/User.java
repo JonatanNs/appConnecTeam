@@ -1,15 +1,18 @@
 package com.nexteam.features.Users.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nexteam.common.AuditableEntity;
+import com.nexteam.features.Messaging.Message.Message;
 import com.nexteam.features.Users.Address.Address;
 import com.nexteam.features.Users.Role.Role;
-import com.nexteam.common.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -53,6 +56,9 @@ public class User extends AuditableEntity {
     @Column(nullable = false)
     private boolean active = true;
 
+    @Column(nullable = false)
+    private boolean isOnline;
+
     /**
      * Relation ManyToMany entre User et Role.
      * Un utilisateur peut avoir plusieurs rôles et un rôle peut être attribué à plusieurs utilisateurs
@@ -73,6 +79,10 @@ public class User extends AuditableEntity {
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Message> messages = new ArrayList<>();
 }
 
 

@@ -41,8 +41,6 @@ public class UserService {
     private final RoleService roleService;
     private final RoleMapper roleMapper;
 
-
-
     /**
      *
      * Méthode en charge de récupérer tous les utilisateurs avec pagination.
@@ -50,7 +48,6 @@ public class UserService {
      * @param pageable
      * @return une page d'utilisateurs
      */
-
     public Page<UserResponseDTO> getUsers(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         return users.map(userMapper::userToResponseDTO);
@@ -62,7 +59,6 @@ public class UserService {
      * @param publicId
      * @return l'utilisateur trouvé
      */
-
     public UserResponseDTO getUser(UUID publicId) {
 
         User user = userRepository.findByPublicId(publicId)
@@ -77,7 +73,6 @@ public class UserService {
      * @param email
      * @return l'utilisateur trouvé
      */
-
     public UserResponseDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
@@ -184,8 +179,8 @@ public class UserService {
         user.setActive(false);
     }
 
-    public Page<UserResponseDTO> searchUsers(String firstname, String lastname, Pageable pageable) {
-        Page<User> users = userRepository.search(firstname, lastname, pageable);
+    public Page<UserResponseDTO> searchUsers(String name, Pageable pageable) {
+        Page<User> users = userRepository.search(name, pageable);
         return users.map(userMapper::userToResponseDTO);
     }
 
@@ -235,5 +230,10 @@ public class UserService {
 
         return userMapper.userToResponseDTO(userRepository.save(user));
     }
+//
+//    public Page<UserResponseDTO> getUsersIsOnline(Pageable pageable){
+//        return userRepository.findByIsOnlineTrue(pageable)
+//                .map(userMapper::userToResponseDTO);
+//    }
 
 }

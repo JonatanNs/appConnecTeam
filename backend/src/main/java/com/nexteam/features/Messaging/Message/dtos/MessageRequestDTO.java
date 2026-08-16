@@ -1,9 +1,9 @@
 package com.nexteam.features.Messaging.Message.dtos;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.List;
 
 @Getter
 @Setter
@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageRequestDTO {
-    private List<String> content;
-    private Instant updatedAt;
+    @NotBlank(message = "Le contenu du message ne peut pas être vide.")
+    private String content;
+    private Instant createdAt;
+
 }

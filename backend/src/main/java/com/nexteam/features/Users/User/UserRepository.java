@@ -2,11 +2,14 @@ package com.nexteam.features.Users.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -16,19 +19,25 @@ import java.util.UUID;
  * @since 2026-06-19
  */
 public interface UserRepository extends JpaRepository<User, Long> {
+    @EntityGraph(attributePaths = {"roles", "address"})
     Optional<User> findByEmail(String email);
+
+    @EntityGraph(attributePaths = {"roles", "address"})
     Optional<User> findByPublicId(UUID publicId);
+
     void deleteByPublicId(UUID publicId);
+
     Page<User> findByRoles_NameIgnoreCase(String roleName, Pageable pageable);
 
     @Query("""
             SELECT u FROM User u
-            WHERE (:firstname IS NULL OR LOWER(u.firstname) LIKE LOWER(CONCAT('%', :firstname, '%')))
-            AND (:lastname IS NULL OR LOWER(u.lastname) LIKE LOWER(CONCAT('%', :lastname, '%')))
+            WHERE (:name IS NULL OR LOWER(u.firstname) LIKE LOWER(CONCAT('%', :name, '%')))
+            AND (:name IS NULL OR LOWER(u.lastname) LIKE LOWER(CONCAT('%', :name, '%')))
             """)
     Page<User> search(
-            @Param("firstname") String firstname,
-            @Param("lastname") String lastname,
+            @Param("name") String name,
             Pageable pageable
     );
+
+    List<User> findAllByPublicIdIn(Set<UUID> publicIds);
 }

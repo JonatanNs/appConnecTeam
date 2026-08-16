@@ -1,12 +1,14 @@
 package com.nexteam.advice;
 
+import com.nexteam.common.ApiResponse;
 import com.nexteam.exceptions.AlreadyExistException;
 import com.nexteam.exceptions.InvalidCredentialsException;
 import com.nexteam.exceptions.NotFoundException;
-import com.nexteam.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -36,5 +38,16 @@ public class GlobalRestController{
     public ResponseEntity<ApiResponse<?>> handleBadCredentials(InvalidCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiResponse.of(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage)
+                .findFirst()
+                .orElse("Erreur de validation.");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.of(HttpStatus.BAD_REQUEST.value(), message, null));
     }
 }

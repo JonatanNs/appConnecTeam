@@ -6,6 +6,7 @@ import com.nexteam.websocket.messaging.message.dtos.TypingEventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -27,7 +28,9 @@ public class MessageWsController {
     private final MessageWsService messageService;
 
     @MessageMapping("/conversations/{conversationId}/send")
-    public void sendMessage(@DestinationVariable UUID conversationId, MessageRequestDTO dto, Principal principal) {
+    public void sendMessage(@DestinationVariable UUID conversationId,
+                            @Payload MessageRequestDTO dto,
+                            Principal principal) {
         MessageResponseDTO message = messageService.sendMessage(conversationId, dto, principal.getName());
         messagingTemplate.convertAndSend("/topic/conversations/" + conversationId, message);
     }

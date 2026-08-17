@@ -23,6 +23,7 @@ public class UserResponseDTO {
     private UUID publicId;
     private String firstname;
     private String lastname;
+    private String fullname = firstname + " " + lastname;
     private String email;
     private boolean active;
     private Set<RoleResponseDTO> roles;

@@ -83,6 +83,8 @@ public class User extends AuditableEntity {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Message> messages = new ArrayList<>();
+
+    private String fullName = firstname + " " + lastname;
 }
 
 

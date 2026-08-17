@@ -56,8 +56,9 @@ public class SecurityConfig {
         // Origines autorisées — jamais "*" en production
         config.setAllowedOrigins(List.of(
                 "http://localhost:4200",      // dev
-                "https://nexteam.com"          // production
-        ));
+                "https://nexteam.com",        // production
+                "http://127.0.0.1:5500" // websocket
+                ));
 
         // Méthodes HTTP autorisées — lister explicitement, éviter "*"
         config.setAllowedMethods(List.of(

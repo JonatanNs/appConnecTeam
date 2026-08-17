@@ -1,18 +1,14 @@
 package com.nexteam.websocket.config;
 
-import com.nexteam.websocket.security.JwtHandshakeInterceptor;
+import com.nexteam.websocket.exception.CustomStompErrorHandler;
+import com.nexteam.websocket.security.JwtChannelInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
-
-import java.security.Principal;
-import java.util.Map;
 
 /**
  * Class 'WebSocketConfig' en charge de la configuration du support WebSocket/STOMP
@@ -27,27 +23,28 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
+    private final JwtChannelInterceptor jwtChannelInterceptor;
+    private final CustomStompErrorHandler customStompErrorHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
-                .addInterceptors(jwtHandshakeInterceptor)
-                .setHandshakeHandler(new DefaultHandshakeHandler() {
-                    @Override
-                    protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler,
-                                                      Map<String, Object> attributes) {
-                        return (Principal) attributes.get("principal");
-                    }
-                })
                 .withSockJS()
                 .setSessionCookieNeeded(false);
+
+        registry.setErrorHandler(customStompErrorHandler);
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/topic", "/queue");
         registry.setApplicationDestinationPrefixes("/app");
+        registry.setUserDestinationPrefix("/user");
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(jwtChannelInterceptor);
     }
 }

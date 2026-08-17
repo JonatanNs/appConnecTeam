@@ -1,4 +1,4 @@
-package com.nexteam.features.Messaging.Conversation;
+package com.nexteam.features.Conversation;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +17,10 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
     List<Conversation> findByNameContainingIgnoreCase(String word);
 
     Page<Conversation> findByUsersPublicId(UUID publicId, Pageable pageable);
+
+    boolean existsByPublicIdAndUsers_Email(UUID publicId, String email);
+
+    boolean existsByPublicIdAndOwner_Email(UUID publicId, String email);
 
     void deleteByPublicId(UUID publicId);
 }

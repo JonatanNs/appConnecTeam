@@ -1,15 +1,15 @@
 package com.nexteam.websocket.messaging.conversation;
 
 import com.nexteam.exceptions.NotFoundException;
-import com.nexteam.features.Messaging.Conversation.Conversation;
-import com.nexteam.features.Messaging.Conversation.ConversationRepository;
-import com.nexteam.features.Messaging.Message.Message;
-import com.nexteam.features.Messaging.Message.MessageRepository;
-import com.nexteam.features.Messaging.Message.dtos.MessageResponseDTO;
-import com.nexteam.features.Messaging.Message.dtos.mapper.MessageMapper;
-import com.nexteam.features.Messaging.Message.enums.MessageType;
+import com.nexteam.features.Conversation.Conversation;
+import com.nexteam.features.Conversation.ConversationRepository;
 import com.nexteam.features.Users.User.User;
 import com.nexteam.features.Users.User.UserRepository;
+import com.nexteam.websocket.messaging.message.Message;
+import com.nexteam.websocket.messaging.message.MessageRepository;
+import com.nexteam.websocket.messaging.message.dtos.MessageResponseDTO;
+import com.nexteam.websocket.messaging.message.dtos.mapper.MessageMapper;
+import com.nexteam.websocket.messaging.message.enums.MessageType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

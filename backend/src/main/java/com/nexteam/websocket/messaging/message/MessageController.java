@@ -1,7 +1,7 @@
 package com.nexteam.websocket.messaging.message;
 
-import com.nexteam.features.Messaging.Message.dtos.MessageRequestDTO;
-import com.nexteam.features.Messaging.Message.dtos.MessageResponseDTO;
+import com.nexteam.websocket.messaging.message.dtos.MessageRequestDTO;
+import com.nexteam.websocket.messaging.message.dtos.MessageResponseDTO;
 import com.nexteam.websocket.messaging.message.dtos.TypingEventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -14,7 +14,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 /**
- * Class 'MessageWsController' en charge de
+ * Class 'MessageController' en charge de
  *
  * @author JonatanNs
  * @version 1.0
@@ -22,10 +22,10 @@ import java.util.UUID;
  */
 @Controller
 @RequiredArgsConstructor
-public class MessageWsController {
+public class MessageController {
 
     private final SimpMessagingTemplate messagingTemplate;
-    private final MessageWsService messageService;
+    private final MessageService messageService;
 
     @MessageMapping("/conversations/{conversationId}/send")
     public void sendMessage(@DestinationVariable UUID conversationId,

@@ -1,9 +1,9 @@
-package com.nexteam.features.Messaging.Conversation;
+package com.nexteam.features.Conversation;
 
 
 import com.nexteam.common.AuditableEntity;
-import com.nexteam.features.Messaging.Message.Message;
 import com.nexteam.features.Users.User.User;
+import com.nexteam.websocket.messaging.message.Message;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,4 +37,8 @@ public class Conversation extends AuditableEntity {
     @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Message> messages = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 }

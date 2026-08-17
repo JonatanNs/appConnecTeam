@@ -1,7 +1,7 @@
-package com.nexteam.features.Messaging.Conversation.dtos;
+package com.nexteam.features.Conversation.dtos;
 
-import com.nexteam.features.Messaging.Message.dtos.MessageResponseDTO;
 import com.nexteam.features.Users.User.dtos.UserResponseDTO;
+import com.nexteam.websocket.messaging.message.dtos.MessageResponseDTO;
 import lombok.*;
 
 import java.time.Instant;

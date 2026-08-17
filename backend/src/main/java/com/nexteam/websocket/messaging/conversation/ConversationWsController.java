@@ -1,6 +1,7 @@
 package com.nexteam.websocket.messaging.conversation;
 
-import com.nexteam.features.Messaging.Message.dtos.MessageResponseDTO;
+import com.nexteam.features.Conversation.ConversationService;
+import com.nexteam.websocket.messaging.message.dtos.MessageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -23,19 +24,14 @@ public class ConversationWsController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final ConversationWsService wsService;
+    private final ConversationService conversationService;
+    private final ConversationPresenceService presenceService;
 
-    //    @MessageMapping("/conversations/{conversationId}/join")
-//    public void join(@DestinationVariable UUID conversationId, Principal principal) {
-//        MessageResponseDTO systemMessage = wsService.createSystemMessage(
-//                conversationId, principal.getName(), "a rejoint la conversation");
-//        messagingTemplate.convertAndSend("/topic/conversations/" + conversationId, systemMessage);
-//    }
     @MessageMapping("/conversations/{conversationId}/join")
     public void join(@DestinationVariable UUID conversationId, Principal principal) {
+        conversationService.assertParticipant(conversationId, principal.getName());
 
-        System.out.println("========== JOIN ==========");
-        System.out.println("Conversation : " + conversationId);
-        System.out.println("Principal : " + principal);
+        presenceService.markOpen(principal.getName(), conversationId.toString());
 
         MessageResponseDTO systemMessage = wsService.createSystemMessage(
                 conversationId,
@@ -43,18 +39,18 @@ public class ConversationWsController {
                 "a rejoint la conversation"
         );
 
-        System.out.println("Message créé : " + systemMessage);
-
         messagingTemplate.convertAndSend(
                 "/topic/conversations/" + conversationId,
                 systemMessage
         );
-
-        System.out.println("Message envoyé !");
     }
 
     @MessageMapping("/conversations/{conversationId}/leave")
     public void leave(@DestinationVariable UUID conversationId, Principal principal) {
+        conversationService.assertParticipant(conversationId, principal.getName());
+
+        presenceService.markClosed(principal.getName(), conversationId.toString());
+
         MessageResponseDTO systemMessage = wsService.createSystemMessage(
                 conversationId, principal.getName(), "a quitté la conversation");
         messagingTemplate.convertAndSend("/topic/conversations/" + conversationId, systemMessage);

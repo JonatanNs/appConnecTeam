@@ -1,6 +1,6 @@
-package com.nexteam.features.Messaging.Message.dtos;
+package com.nexteam.websocket.messaging.message.dtos;
 
-import com.nexteam.features.Messaging.Message.enums.MessageType;
+import com.nexteam.websocket.messaging.message.enums.MessageType;
 import lombok.*;
 
 import java.time.Instant;

@@ -1,4 +1,4 @@
-package com.nexteam.features.Messaging.Message.enums;
+package com.nexteam.websocket.messaging.message.enums;
 
 /**
  * Class 'MessageType' en charge de

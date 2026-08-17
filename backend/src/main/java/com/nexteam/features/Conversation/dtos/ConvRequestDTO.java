@@ -1,4 +1,4 @@
-package com.nexteam.features.Messaging.Conversation.dtos;
+package com.nexteam.features.Conversation.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

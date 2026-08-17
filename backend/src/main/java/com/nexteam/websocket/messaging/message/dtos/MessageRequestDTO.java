@@ -1,4 +1,4 @@
-package com.nexteam.features.Messaging.Message.dtos;
+package com.nexteam.websocket.messaging.message.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -16,5 +16,4 @@ public class MessageRequestDTO {
     private String content;
     private Instant createdAt;
     private UUID sender;
-
 }

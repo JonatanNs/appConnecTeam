@@ -1,8 +1,8 @@
-package com.nexteam.features.Messaging.Message.dtos.mapper;
+package com.nexteam.websocket.messaging.message.dtos.mapper;
 
-import com.nexteam.features.Messaging.Message.Message;
-import com.nexteam.features.Messaging.Message.dtos.MessageRequestDTO;
-import com.nexteam.features.Messaging.Message.dtos.MessageResponseDTO;
+import com.nexteam.websocket.messaging.message.Message;
+import com.nexteam.websocket.messaging.message.dtos.MessageRequestDTO;
+import com.nexteam.websocket.messaging.message.dtos.MessageResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

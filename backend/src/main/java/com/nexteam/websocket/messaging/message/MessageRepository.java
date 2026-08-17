@@ -1,4 +1,4 @@
-package com.nexteam.features.Messaging.Message;
+package com.nexteam.websocket.messaging.message;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,9 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
+
+    Optional<Message> findByPublicId(UUID publicId);
 
     /**
      * Récupère les messages d'une conversation, paginés par curseur temporel.

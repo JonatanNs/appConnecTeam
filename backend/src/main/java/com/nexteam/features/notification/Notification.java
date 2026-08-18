@@ -28,7 +28,10 @@ import java.time.Instant;
 public class Notification extends AuditableEntity {
     @Column(nullable = false)
     private String content;
+
+    @Column(name = "is_read")
     private Boolean read;
+
     private Instant readAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

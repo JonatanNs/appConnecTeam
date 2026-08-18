@@ -4,13 +4,16 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {UserService} from '../../../../../../core/services/user/user-service';
 import {IUser} from '../../../../../../shared/interfaces/user.interface';
 import {FlashMessageService} from '../../../../../../core/services/flashMessage/flash-message-service';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-form-update-user',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    FaIconComponent
   ],
   templateUrl: './form-update-user.html',
   styleUrl: './form-update-user.css',
@@ -96,4 +99,5 @@ export class FormUpdateUser {
       });
   }
 
+  protected readonly faArrowLeft = faArrowLeft;
 }

@@ -1,5 +1,7 @@
 package com.nexteam.websocket.messaging.message;
 
+import com.nexteam.features.Users.User.UserService;
+import com.nexteam.features.Users.User.dtos.UserResponseDTO;
 import com.nexteam.websocket.messaging.message.dtos.MessageRequestDTO;
 import com.nexteam.websocket.messaging.message.dtos.MessageResponseDTO;
 import com.nexteam.websocket.messaging.message.dtos.TypingEventDTO;
@@ -26,6 +28,7 @@ public class MessageController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final MessageService messageService;
+    private final UserService userService;
 
     @MessageMapping("/conversations/{conversationId}/send")
     public void sendMessage(@DestinationVariable UUID conversationId,
@@ -36,7 +39,19 @@ public class MessageController {
     }
 
     @MessageMapping("/conversations/{conversationId}/typing")
-    public void typing(@DestinationVariable UUID conversationId, TypingEventDTO event) {
-        messagingTemplate.convertAndSend("/topic/conversations/" + conversationId + "/typing", event);
+    public void typing(@DestinationVariable UUID conversationId,
+                       @Payload TypingEventDTO event,
+                       Principal principal) {
+
+        UserResponseDTO sender = userService.getUserByEmail(principal.getName());
+
+        TypingEventDTO enrichedEvent = TypingEventDTO.builder()
+                .conversationId(conversationId)
+                .userId(sender.getPublicId())
+                .userName(sender.getFullname())
+                .isTyping(event.isTyping())
+                .build();
+
+        messagingTemplate.convertAndSend("/topic/conversations/" + conversationId + "/typing", enrichedEvent);
     }
 }

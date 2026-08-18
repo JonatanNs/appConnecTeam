@@ -1,0 +1,76 @@
+<aside id="sidebar" class="sidebar active flex flex-col w-full md:w-80 lg:w-96 border-r border-gray-200 bg-nxt-surface shrink-0 h-full">
+
+  <!-- Sidebar Header -->
+  <div class="flex items-center justify-between p-4 border-b border-gray-200">
+    <h2 class="text-lg font-bold text-gray-900 tracking-tight">Messagerie</h2>
+    <div class="flex items-center gap-3 text-gray-500">
+      <button class="hover:text-nxt-primary transition-colors">
+        <i class="far fa-comment-dots text-xl"></i>
+      </button>
+      <button class="hover:text-nxt-primary transition-colors">
+        <i class="fas fa-ellipsis-v text-xl"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="p-3 border-b border-gray-100">
+    <div class="relative w-full">
+      <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+      <input type="text" class="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 border border-gray-200/80 rounded-nxt focus:outline-none focus:ring-2 focus:ring-nxt-primary/20 focus:border-nxt-primary transition-all text-gray-800 placeholder-gray-400" placeholder="Rechercher une discussion...">
+    </div>
+  </div>
+
+  <!-- Chat List -->
+  <div class="flex-1 overflow-y-auto divide-y divide-gray-50 no-scrollbar">
+
+    <!-- Chat Item 1 (Active) -->
+    <div class="chat-item active flex items-center gap-3 p-3.5 cursor-pointer bg-nxt-secondary/15 border-l-4 border-nxt-primary transition-colors" data-chat="1">
+      <div class="relative shrink-0">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jessica Smith" class="w-12 h-12 rounded-full object-cover border border-gray-200">
+        <span class="absolute bottom-0 right-0 w-3 h-3 bg-nxt-success border-2 border-white rounded-full"></span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-semibold text-gray-900 truncate">jessica_smith</span>
+          <span class="text-xs text-gray-400 shrink-0">2h</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <p class="truncate pr-2">Hey! How are you doing?</p>
+          <i class="fas fa-check text-nxt-primary"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Item 2 -->
+    <div class="chat-item flex items-center gap-3 p-3.5 cursor-pointer hover:bg-gray-50 transition-colors" data-chat="2">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mike Johnson" class="w-12 h-12 rounded-full object-cover border border-gray-200 shrink-0">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-semibold text-gray-900 truncate">mike_johnson</span>
+          <span class="text-xs text-gray-400 shrink-0">5h</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <p class="truncate pr-2 font-medium text-gray-900">Let's meet tomorrow</p>
+          <span class="bg-nxt-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-5 text-center">3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Item 3 -->
+    <div class="chat-item flex items-center gap-3 p-3.5 cursor-pointer hover:bg-gray-50 transition-colors" data-chat="3">
+      <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sarah Williams" class="w-12 h-12 rounded-full object-cover border border-gray-200 shrink-0">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-semibold text-gray-900 truncate">sarah_williams</span>
+          <span class="text-xs text-gray-400 shrink-0">1d</span>
+        </div>
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <p class="truncate pr-2">Thanks for the photo!</p>
+          <i class="fas fa-check text-gray-400"></i>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>

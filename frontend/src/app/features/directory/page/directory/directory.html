@@ -1,32 +1,35 @@
-<h1>Annuaire des employés</h1>
-@if (users(); as response) {
-  @if (response.data.totalPages > 12){
-    <app-paginate
-      [totalPages]="response.data.totalPages"
-      [number]="response.data.number"
-      [first]="response.data.first"
-      [last]="response.data.last"
-      [pageSize]="pageable().size"
-      (pageChange)="goToPage($event)"
-      (pageSizeChange)="changePageSize($event)">
-    </app-paginate>
-  }
+<section class="p-5">
 
-  <app-list-user [users]="response"></app-list-user>
+  <h1>Annuaire des employés</h1>
+  @if (users(); as response) {
+    @if (response.data.totalPages > 12) {
+      <app-paginate
+        [totalPages]="response.data.totalPages"
+        [number]="response.data.number"
+        [first]="response.data.first"
+        [last]="response.data.last"
+        [pageSize]="pageable().size"
+        (pageChange)="goToPage($event)"
+        (pageSizeChange)="changePageSize($event)">
+      </app-paginate>
+    }
 
-  @if (response.data.totalPages > 12){
-    <app-paginate
-      [totalPages]="response.data.totalPages"
-      [number]="response.data.number"
-      [first]="response.data.first"
-      [last]="response.data.last"
-      [pageSize]="pageable().size"
-      (pageChange)="goToPage($event)"
-      (pageSizeChange)="changePageSize($event)">
-    </app-paginate>
-  }
+    <app-list-user [users]="response"></app-list-user>
 
-  @if (response.data.totalElements === 0) {
-    <p class="text-center text-nxt-gray">Aucun utilisateur trouvé.</p>
+    @if (response.data.totalPages > 12) {
+      <app-paginate
+        [totalPages]="response.data.totalPages"
+        [number]="response.data.number"
+        [first]="response.data.first"
+        [last]="response.data.last"
+        [pageSize]="pageable().size"
+        (pageChange)="goToPage($event)"
+        (pageSizeChange)="changePageSize($event)">
+      </app-paginate>
+    }
+
+    @if (response.data.totalElements === 0) {
+      <p class="text-center text-nxt-gray">Aucun utilisateur trouvé.</p>
+    }
   }
-}
+</section>

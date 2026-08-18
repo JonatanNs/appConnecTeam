@@ -1,0 +1,68 @@
+<!-- Calendrier -->
+<li>
+  <a
+    routerLink="/calendrier" routerLinkActive="bg-nxt-primary/10 text-nxt-primary font-semibold"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="flex items-center px-3 py-2.5 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+    [class.justify-center]="closed()"
+    [class.px-0]="closed()"
+    [class.tooltip]="closed()"
+    [class.tooltip-right]="closed()"
+    data-tip="Calendrier">
+    <fa-icon [icon]="faCalendarDays" class="w-5 text-center shrink-0 text-gray-500"></fa-icon>
+    @if (!closed()) {
+      <span class="truncate ml-3 text-sm">Calendrier</span>
+    }
+  </a>
+</li>
+
+<!-- Contacts -->
+<li>
+  <a
+    routerLink="/contacts" routerLinkActive="bg-nxt-primary/10 text-nxt-primary font-semibold"
+    class="flex items-center px-3 py-2.5 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+    [class.justify-center]="closed()"
+    [class.px-0]="closed()"
+    [class.tooltip]="closed()"
+    [class.tooltip-right]="closed()"
+    data-tip="Contacts">
+    <fa-icon [icon]="faUsers" class="w-5 text-center shrink-0 text-gray-500"></fa-icon>
+    @if (!closed()) {
+      <span class="truncate ml-3 text-sm">Contacts</span>
+    }
+  </a>
+</li>
+
+<!-- Documents -->
+<li>
+  <a
+    routerLink="/documents" routerLinkActive="bg-nxt-primary/10 text-nxt-primary font-semibold"
+    class="flex items-center px-3 py-2.5 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+    [class.justify-center]="closed()"
+    [class.px-0]="closed()"
+    [class.tooltip]="closed()"
+    [class.tooltip-right]="closed()"
+    data-tip="Documents">
+    <fa-icon [icon]="faFolderOpen" class="w-5 text-center shrink-0 text-gray-500"></fa-icon>
+    @if (!closed()) {
+      <span class="truncate ml-3 text-sm">Documents</span>
+    }
+  </a>
+</li>
+
+<!-- Tâches -->
+<li>
+  <a
+    routerLink="/taches" routerLinkActive="bg-nxt-primary/10 text-nxt-primary font-semibold"
+    class="flex items-center px-3 py-2.5 rounded-xl text-xs font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+    [class.justify-center]="closed()"
+    [class.px-0]="closed()"
+    [class.tooltip]="closed()"
+    [class.tooltip-right]="closed()"
+    data-tip="Tâches">
+    <fa-icon [icon]="faListCheck" class="w-5 text-center shrink-0 text-gray-500"></fa-icon>
+    @if (!closed()) {
+      <span class="truncate ml-3 text-sm">Tâches</span>
+    }
+  </a>
+</li>

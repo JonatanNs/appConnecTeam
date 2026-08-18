@@ -1,16 +1,24 @@
 import {Component, inject} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import {Sidebar} from '../../../shared/components/sidebar/sidebar';
-import {FlashMessageService} from '../../services/flashMessage/flash-message-service';
 import {FlashMessage} from '../../../shared/components/flash-message/flash-message';
+import {
+  ListConversation
+} from '../../../features/messaging/pages/conversation-page/components/list-conversation/list-conversation';
+import { ListSidebar } from '../../../shared/components/sidebar/components/list-sidebar/list-sidebar';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, Header, Footer, Sidebar, FlashMessage],
+  imports: [RouterOutlet, Header, Footer, Sidebar, FlashMessage, ListConversation, ListSidebar],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })
 export class MainLayout {
+  private router = inject(Router);
+
+  get currentRoute(): string {
+    return this.router.url;
+  }
 }

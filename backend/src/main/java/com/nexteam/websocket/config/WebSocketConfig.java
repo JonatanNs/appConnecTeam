@@ -1,7 +1,9 @@
 package com.nexteam.websocket.config;
 
 import com.nexteam.websocket.exception.CustomStompErrorHandler;
-import com.nexteam.websocket.security.JwtChannelInterceptor;
+import com.nexteam.websocket.security.CustomHandshakeHandler;
+import com.nexteam.websocket.security.JwtHandshakeInterceptor;
+import com.nexteam.websocket.security.StompSessionGuardInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -23,15 +25,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final JwtChannelInterceptor jwtChannelInterceptor;
+    private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
+    private final StompSessionGuardInterceptor stompSessionGuardInterceptor;
     private final CustomStompErrorHandler customStompErrorHandler;
 
+    // TODO: remplacer le hardcode par une valeur configurable (application.yml / variable d'env)
+    //       avant le passage en prod, pour ne pas coder en dur le domaine front.
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")
-                .withSockJS()
-                .setSessionCookieNeeded(false);
+                .setAllowedOrigins("http://localhost:4200")
+                .addInterceptors(jwtHandshakeInterceptor)
+                .setHandshakeHandler(new CustomHandshakeHandler());
 
         registry.setErrorHandler(customStompErrorHandler);
     }
@@ -45,6 +50,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(jwtChannelInterceptor);
+        registration.interceptors(stompSessionGuardInterceptor);
     }
 }

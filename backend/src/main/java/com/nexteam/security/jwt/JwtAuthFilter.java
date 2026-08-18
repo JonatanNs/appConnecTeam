@@ -2,6 +2,7 @@ package com.nexteam.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -23,6 +24,8 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
+    private static final String COOKIE_NAME = "access_token";
+
     private final JwtService jwtTokenUtil;
     private final UserDetailsService userDetailService;
 
@@ -33,12 +36,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         try {
+            String jwtToken = extractTokenFromCookies(request.getCookies());
 
-            String requestTokenHeader = request.getHeader("Authorization");
-
-            if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-
-                String jwtToken = requestTokenHeader.substring(7);
+            if (jwtToken != null) {
                 String email = jwtTokenUtil.extractUsername(jwtToken);
 
                 if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -67,5 +67,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             logger.error("Échec de l'authentification JWT : {}", ex.getMessage());
         }
         filterChain.doFilter(request, response);
+    }
+
+    private String extractTokenFromCookies(Cookie[] cookies) {
+        if (cookies == null) return null;
+        for (Cookie cookie : cookies) {
+            if (COOKIE_NAME.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }

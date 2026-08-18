@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,7 +13,8 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
     @EntityGraph(attributePaths = "users")
     Optional<Conversation> findByPublicId(UUID publicId);
 
-    List<Conversation> findByNameContainingIgnoreCase(String word);
+    @EntityGraph(attributePaths = "users")
+    Page<Conversation> findByNameContainingIgnoreCase(String word, Pageable pageable);
 
     Page<Conversation> findByUsersPublicId(UUID publicId, Pageable pageable);
 

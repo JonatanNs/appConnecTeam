@@ -10,7 +10,7 @@ package com.nexteam.websocket.messaging.message.enums;
  * @since 16/08/2026 16:09
  */
 public enum MessageType {
-    CHAT,   // message normal, persisté, déclenche notif
+    CHAT,
     SYSTEM
 }
 

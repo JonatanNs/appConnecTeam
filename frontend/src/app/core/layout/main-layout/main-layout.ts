@@ -7,11 +7,10 @@ import {FlashMessage} from '../../../shared/components/flash-message/flash-messa
 import {
   ListConversation
 } from '../../../features/messaging/pages/conversation-page/components/list-conversation/list-conversation';
-import { ListSidebar } from '../../../shared/components/sidebar/components/list-sidebar/list-sidebar';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, Header, Footer, Sidebar, FlashMessage, ListConversation, ListSidebar],
+  imports: [RouterOutlet, Header, Footer, Sidebar, FlashMessage, ListConversation],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })

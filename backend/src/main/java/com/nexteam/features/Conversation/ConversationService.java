@@ -15,7 +15,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,16 +33,9 @@ public class ConversationService {
         );
     }
 
-    public List<ConvResponseDTO> getByNameContaining(String word) {
-        List<Conversation> conversations = convRepository.findByNameContainingIgnoreCase(word);
-
-        if (conversations.isEmpty()) {
-            throw new NotFoundException("Aucune conversation trouvée.");
-        }
-
-        return conversations.stream()
-                .map(convMapper::convToResponseDTO)
-                .toList();
+    public Page<ConvResponseDTO> getByNameContaining(String word, Pageable pageable) {
+        Page<Conversation> conversations = convRepository.findByNameContainingIgnoreCase(word, pageable);
+        return conversations.map(convMapper::convToResponseDTO);
     }
 
     public Page<ConvResponseDTO> getByUsersPublicId(UUID userPublicId, Pageable pageable) {

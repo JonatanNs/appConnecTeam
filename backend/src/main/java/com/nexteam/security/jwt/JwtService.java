@@ -3,6 +3,7 @@ package com.nexteam.security.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class JwtService {
 
     private final String secretKey;
+    @Getter
     private final long expirationMs;
 
     public JwtService(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") long expirationMs) {

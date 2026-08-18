@@ -34,7 +34,8 @@ public class NotificationController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponseDTO<NotificationResponseDTO>>> getMyNotifications(
-            Pageable pageable, @AuthenticationPrincipal UserDetails principal) {
+            Pageable pageable,
+            @AuthenticationPrincipal UserDetails principal) {
         UserResponseDTO user = userService.getUserByEmail(principal.getUsername());
         UUID recipientPublicId = user.getPublicId();
         return ResponseEntity.ok().body(

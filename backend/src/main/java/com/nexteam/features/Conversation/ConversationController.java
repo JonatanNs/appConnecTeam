@@ -9,6 +9,7 @@ import com.nexteam.features.Users.User.UserService;
 import com.nexteam.features.Users.User.dtos.UserResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -46,19 +46,23 @@ public class ConversationController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<ConvResponseDTO>>> getConvByNameContaining(@RequestParam("word") String word) {
+    public ResponseEntity<ApiResponse<Page<ConvResponseDTO>>> getConvByNameContaining(
+            @RequestParam("word") String word,
+            Pageable pageable) {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Conversations trouvé avec succès.",
-                        conversationService.getByNameContaining(word)
+                        conversationService.getByNameContaining(word, pageable)
                 )
         );
     }
 
     @GetMapping("/users/{userPublicId}")
     public ResponseEntity<ApiResponse<PageResponseDTO<ConvResponseDTO>>> getConvByUserUUID(
-            @PathVariable UUID userPublicId, Pageable pageable, @AuthenticationPrincipal UserDetails principal) {
+            @PathVariable UUID userPublicId,
+            Pageable pageable,
+            @AuthenticationPrincipal UserDetails principal) {
 
         UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         if (!requester.getPublicId().equals(userPublicId)) {
@@ -82,7 +86,8 @@ public class ConversationController {
 
     @PutMapping("/{publicId}")
     public ResponseEntity<ApiResponse<ConvResponseDTO>> updateConversation(
-            @PathVariable UUID publicId, @Valid @RequestBody ConvRequestDTO requestDTO,
+            @PathVariable UUID publicId,
+            @Valid @RequestBody ConvRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetails principal) {
         conversationService.assertOwner(publicId, principal.getUsername());
         return ResponseEntity.ok().body(

@@ -1,12 +1,13 @@
 package com.nexteam.features.Messaging.conversation;
 
+import com.nexteam.exceptions.AlreadyExistException;
 import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.Messaging.conversation.dtos.ConvRequestDTO;
 import com.nexteam.features.Messaging.conversation.dtos.ConvResponseDTO;
 import com.nexteam.features.Messaging.conversation.dtos.mapper.ConvMapper;
+import com.nexteam.features.Messaging.notification.NotificationService;
 import com.nexteam.features.Users.User.User;
 import com.nexteam.features.Users.User.UserRepository;
-import com.nexteam.features.Messaging.notification.NotificationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -45,36 +46,71 @@ public class ConversationService {
 
     @Transactional
     public ConvResponseDTO createConversation(ConvRequestDTO requestDTO, String creatorEmail) {
+
         User creator = userRepository.findByEmail(creatorEmail)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable."));
 
-        Set<User> participants = new HashSet<>(userRepository.findAllByPublicIdIn(requestDTO.getUsersIds()));
-        participants.add(creator); // le créateur fait partie des participants
+        Set<User> participants = new HashSet<>(
+                userRepository.findAllByPublicIdIn(requestDTO.getUsersIds())
+        );
+
+        participants.add(creator);
+
+        String conversationName = requestDTO.getName();
+
+        if (participants.size() == 2) {
+
+            User otherUser = participants.stream()
+                    .filter(u -> !u.getPublicId().equals(creator.getPublicId()))
+                    .findFirst()
+                    .orElseThrow(() -> new NotFoundException("Autre participant introuvable."));
+
+            conversationName = otherUser.getFirstname() + " " + otherUser.getLastname();
+        }
+
+        // Vérification APRÈS avoir déterminé le vrai nom
+        if (convRepository.existsByNameIgnoreCase(conversationName)) {
+            throw new AlreadyExistException(
+                    "Nom de conversation déjà utilisé ou existante."
+            );
+        }
 
         Conversation conversation = Conversation.builder()
-                .name(requestDTO.getName())
+                .name(conversationName)
                 .owner(creator)
                 .users(participants)
                 .build();
 
         Conversation saved = convRepository.save(conversation);
 
-        // Notifier les participants ajoutés (hors créateur)
         participants.stream()
                 .filter(u -> !u.getPublicId().equals(creator.getPublicId()))
-                .forEach(u -> notificationService.notifyAddedToConversation(u, saved.getPublicId(), creator.getFirstname() + " " + creator.getLastname()));
+                .forEach(u ->
+                        notificationService.notifyAddedToConversation(
+                                u,
+                                saved.getPublicId(),
+                                creator.getFirstname() + " " + creator.getLastname()
+                        )
+                );
 
         return convMapper.convToResponseDTO(saved);
     }
 
     @Transactional
     public ConvResponseDTO updateConversation(UUID publicId, ConvRequestDTO requestDTO) {
+
         Conversation conversation = convRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
 
+        if (!conversation.getName().equalsIgnoreCase(requestDTO.getName()) && convRepository.existsByNameIgnoreCase(requestDTO.getName())) {
+            throw new AlreadyExistException("Conversation déjà présente.");
+        }
+
         conversation.setName(requestDTO.getName());
 
-        return convMapper.convToResponseDTO(convRepository.save(conversation));
+        return convMapper.convToResponseDTO(
+                convRepository.save(conversation)
+        );
     }
 
     @Transactional

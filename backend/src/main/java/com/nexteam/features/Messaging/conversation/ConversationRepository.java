@@ -23,4 +23,6 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
     boolean existsByPublicIdAndOwner_Email(UUID publicId, String email);
 
     void deleteByPublicId(UUID publicId);
+
+    boolean existsByNameIgnoreCase(String name);
 }

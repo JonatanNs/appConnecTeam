@@ -31,8 +31,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("""
             SELECT u FROM User u
-            WHERE (:name IS NULL OR LOWER(u.firstname) LIKE LOWER(CONCAT('%', :name, '%')))
-            AND (:name IS NULL OR LOWER(u.lastname) LIKE LOWER(CONCAT('%', :name, '%')))
+            WHERE :name IS NULL
+               OR LOWER(u.firstname) LIKE LOWER(CONCAT('%', :name, '%'))
+               OR LOWER(u.lastname) LIKE LOWER(CONCAT('%', :name, '%'))
             """)
     Page<User> search(
             @Param("name") String name,

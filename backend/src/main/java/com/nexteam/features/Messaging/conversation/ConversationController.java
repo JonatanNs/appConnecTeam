@@ -9,7 +9,6 @@ import com.nexteam.features.Users.User.UserService;
 import com.nexteam.features.Users.User.dtos.UserResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,14 +45,14 @@ public class ConversationController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<Page<ConvResponseDTO>>> getConvByNameContaining(
+    public ResponseEntity<ApiResponse<PageResponseDTO<ConvResponseDTO>>> getConvByNameContaining(
             @RequestParam("word") String word,
             Pageable pageable) {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Conversations trouvé avec succès.",
-                        conversationService.getByNameContaining(word, pageable)
+                        pageMapper.toPageResponse(conversationService.getByNameContaining(word, pageable))
                 )
         );
     }

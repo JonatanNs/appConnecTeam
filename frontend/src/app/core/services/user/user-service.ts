@@ -1,4 +1,4 @@
-import {HttpClient, httpResource} from '@angular/common/http';
+import {HttpClient, HttpParams, httpResource} from '@angular/common/http';
 import {computed, inject, Service, signal} from '@angular/core';
 import { Observable } from 'rxjs';
 import { IUser } from '../../../shared/interfaces/user.interface';
@@ -22,6 +22,15 @@ export class UserService {
 
   getUserByEmail(email : string) : Observable<IApiResponse<IUser>> {
     return this.http.get<IApiResponse<IUser>>(`${this.baseUrl}/users/email?=${email}`);
+  }
+
+  searchUser(name: string, pageable: IPageable): Observable<IApiResponse<IPage<IUser>>> {
+    const params = new HttpParams()
+      .set('name', name)
+      .set('page', pageable.page.toString())
+      .set('size', pageable.size.toString());
+
+    return this.http.get<IApiResponse<IPage<IUser>>>(`${this.baseUrl}/users/search`, { params });
   }
 
   updateUser(publicId : string, user : IUser) : Observable<IApiResponse<void>> {

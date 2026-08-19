@@ -138,21 +138,4 @@
 
 </aside>
 
-<dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-  <div class="modal-box rounded-nxt-lg border border-nxt-muted bg-nxt-surface">
-    <h3 class="text-lg font-bold text-nxt-dark">Nouvelle conversation</h3>
-    <p class="mt-1 text-sm text-gray-500">Créez une nouvelle discussion.</p>
-
-    <form class="mt-5">
-      <label for="name" class="mb-2 block text-sm font-semibold text-nxt-dark">Nom de la conversation</label>
-      <input type="text" id="name" name="name" placeholder="Ex. Équipe développement" class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
-    </form>
-
-    <div class="modal-action">
-      <form method="dialog" class="flex gap-2">
-        <button class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100">Annuler</button>
-        <button type="button" class="btn-nxt-primary">Créer</button>
-      </form>
-    </div>
-  </div>
-</dialog>
+<app-form-create-conversation />

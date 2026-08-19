@@ -22,7 +22,6 @@ import { TableListUser } from './components/table-list-user/table-list-user';
     FontAwesomeModule,
     RouterLink,
     FormsModule,
-    DatePipe,
     SearchFilter,
     Paginate,
     TableListUser,

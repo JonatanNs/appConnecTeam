@@ -5,27 +5,24 @@ import { ConversationService } from '../../../../services/conversation/conversat
 import { AuthService } from '../../../../../auth/service/auth-service';
 import { IConversation } from '../../../../interfaces/conversation.interface';
 import { IMessageSend } from '../../../../interfaces/message.interface';
-import { DatePipe, JsonPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { WebSocketService } from '../../../../../../core/websocket/services/websocket-service';
 import {
   faPlus,
   faEllipsisVertical,
-  faCheckDouble,
-  faGear,
   faMagnifyingGlass,
   faThumbtack,
-  faCheck,
   faTrash,
   faComments,
   faCommentSlash,
   faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { FormCreateConversation } from './form-create-conversation/form-create-conversation';
 
 @Component({
   selector: 'app-list-conversation',
-  imports: [DatePipe, RouterLink, JsonPipe, FaIconComponent],
+  imports: [DatePipe, RouterLink, FaIconComponent, FormCreateConversation],
   templateUrl: './list-conversation.html',
   styleUrl: './list-conversation.css',
 })
@@ -39,13 +36,24 @@ export class ListConversation {
 
   refreshTrigger = signal(0);
 
+  refresh(): void {
+    this.refreshTrigger.update((n) => n + 1);
+  }
+
+  constructor() {
+    this.conversationService.onConversationCreated.subscribe(() => this.refresh());
+  }
+
   conversations = toSignal(
-    combineLatest([toObservable(this.userId), toObservable(this.refreshTrigger)]).pipe(
+    combineLatest([
+      toObservable(this.userId),
+      toObservable(this.refreshTrigger)
+    ]).pipe(
       switchMap(([publicId]) =>
         publicId
           ? this.conversationService
-              .getConversationByUserId(publicId, this.defaultPageable)
-              .pipe(map((response) => response.data.content))
+            .getConversationByUserId(publicId, this.defaultPageable)
+            .pipe(map((response) => response.data.content))
           : of([] as IConversation[]),
       ),
     ),
@@ -60,16 +68,12 @@ export class ListConversation {
   selectConversation(publicId: string): void {
     this.selectedConversationId.set(publicId);
   }
-
-  protected readonly faCheck = faCheck;
   protected readonly faTrash = faTrash;
   protected readonly faThumbtack = faThumbtack;
   protected readonly faEllipsisVertical = faEllipsisVertical;
   protected readonly faCommentSlash = faCommentSlash;
   protected readonly faMagnifyingGlass = faMagnifyingGlass;
   protected readonly faPlus = faPlus;
-  protected readonly faGear = faGear;
-  protected readonly faCheckDouble = faCheckDouble;
   protected readonly faComments = faComments;
   protected readonly faArrowRightFromBracket = faArrowRightFromBracket;
 }

@@ -1,0 +1,78 @@
+<dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box rounded-nxt-lg border border-nxt-muted bg-nxt-surface">
+    <h3 class="text-lg font-bold text-nxt-dark">Nouvelle conversation</h3>
+    <p class="mt-1 text-sm text-gray-500">Créez une nouvelle discussion.</p>
+
+    <form class="mt-5">
+
+      <!-- Nom de la conversation — visible seulement si 2+ participants (groupe) -->
+      @if (selectedUsers().length >= 2) {
+        <label for="name" class="mb-2 block text-sm font-semibold text-nxt-dark">Nom de la conversation</label>
+        <input
+          type="text"
+          id="name"
+          [ngModel]="conversationName()"
+          (ngModelChange)="conversationName.set($event)"
+          name="name"
+          placeholder="Ex. Équipe développement"
+          class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+      }
+
+      <label class="mb-2 mt-4 block text-sm font-semibold text-nxt-dark">Participants</label>
+
+      <!-- Chips des utilisateurs sélectionnés -->
+      @if (selectedUsers().length > 0) {
+        <div class="mb-2 flex flex-wrap gap-2">
+          @for (user of selectedUsers(); track user.publicId) {
+            <span class="flex items-center gap-1.5 rounded-full bg-nxt-primary/10 px-3 py-1 text-xs font-medium text-nxt-primary">
+              {{ user.firstname }} {{ user.lastname }}
+              <button type="button" (click)="removeUser(user)" class="text-nxt-primary/70 hover:text-nxt-primary">
+                <fa-icon [icon]="faTimes" class="text-xs"></fa-icon>
+              </button>
+            </span>
+          }
+        </div>
+      }
+
+      <!-- Champ de recherche -->
+      <div class="relative">
+        <input
+          type="text"
+          [ngModel]="query()"
+          (ngModelChange)="query.set($event)"
+          name="search"
+          placeholder="Rechercher un utilisateur..."
+          class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+
+        @if (searchResults().length > 0) {
+          <div class="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-nxt-surface shadow-lg max-h-48 overflow-y-auto">
+            @for (user of searchResults(); track user.publicId) {
+              <button
+                type="button"
+                (click)="selectUser(user)"
+                class="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-nxt-dark hover:bg-gray-50 transition-colors">
+                <span class="font-medium">{{ user.firstname }} {{ user.lastname }}</span>
+                <span class="text-xs text-gray-400">{{ user.email }}</span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </form>
+
+    <div class="modal-action">
+      <form method="dialog" class="flex gap-2">
+        <button class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100">
+          Annuler
+        </button>
+        <button
+          type="button"
+          [disabled]="selectedUsers().length === 0"
+          (click)="onCreateConversation()"
+          class="btn-nxt-primary disabled:opacity-50 disabled:cursor-not-allowed">
+          Créer
+        </button>
+      </form>
+    </div>
+  </div>
+</dialog>

@@ -1,11 +1,12 @@
 import {inject, Service} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ENVIRONMENT} from '../../../../environments/environement';
-import {Observable} from 'rxjs';
+import {Observable, Subject, tap} from 'rxjs';
 import {IApiResponse} from '../../../../shared/interfaces/api-response.interface';
 import {IConversation} from '../../interfaces/conversation.interface';
 import {IPage} from '../../../../shared/interfaces/pageable/page.interface';
 import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interface';
+import {ICreateConversation} from '../../interfaces/create-conversation.interface';
 
 @Service()
 export class ConversationService {
@@ -13,8 +14,16 @@ export class ConversationService {
   private http = inject(HttpClient);
   private baseUrl = ENVIRONMENT.apiUrl;
 
-  createConversation(conversation : IConversation) : Observable<IApiResponse<IConversation>>{
-    return this.http.post<IApiResponse<IConversation>>(`${this.baseUrl}/conversations'`, conversation)
+  // ConversationService
+  private conversationCreated$ = new Subject<void>();
+  readonly onConversationCreated = this.conversationCreated$.asObservable();
+
+  createConversation(conversation: ICreateConversation): Observable<IApiResponse<IConversation>> {
+    return this.http.post<IApiResponse<IConversation>>(
+      `${this.baseUrl}/conversations`, conversation
+    ).pipe(
+      tap(() => this.conversationCreated$.next())
+    );
   }
 
   updateConversation(publicId : string, conversation : IConversation) : Observable<IApiResponse<IConversation>>{

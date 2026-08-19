@@ -4,23 +4,28 @@ import {UserService} from '../../../../core/services/user/user-service';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {catchError, combineLatest, of, switchMap} from 'rxjs';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {Paginate} from '../../../../shared/components/paginate/paginate';
 import {RouterLink} from '@angular/router';
-import {FormsModule} from '@angular/forms';
-import {faArrowLeft, faPlus} from '@fortawesome/free-solid-svg-icons';
-import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interface';
-import {TableListUser} from './components/table-list-user/table-list-user';
+import { FormsModule } from '@angular/forms';
+import { IPageable } from '../../../../shared/interfaces/pageable/pageable.interface';
+import { DatePipe } from '@angular/common';
+import {
+  faPlus,
+  faArrowLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import { SearchFilter } from '../../../../shared/components/search-filter/search-filter';
+import { Paginate } from '../../../../shared/components/paginate/paginate';
+import { TableListUser } from './components/table-list-user/table-list-user';
 
 @Component({
   selector: 'app-admin-user-management',
   imports: [
     FontAwesomeModule,
-    Paginate,
     RouterLink,
     FormsModule,
-    TableListUser,
+    DatePipe,
     SearchFilter,
+    Paginate,
+    TableListUser,
   ],
   templateUrl: './admin-user-management.html',
   styleUrl: './admin-user-management.css',

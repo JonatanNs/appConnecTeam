@@ -5,10 +5,12 @@ import {Observable, tap} from 'rxjs';
 import {IApiResponse} from '../../../shared/interfaces/api-response.interface';
 import {ILoginDTO} from '../../../shared/interfaces/login-dto.interface';
 import {ICurrentUser} from '../../../shared/interfaces/current-user.interface';
+import { WebSocketService } from '../../../core/websocket/services/websocket-service';
 
 @Service()
 export class AuthService {
   private http = inject(HttpClient);
+  private wsService = inject(WebSocketService);
   private baseUrl = ENVIRONMENT.apiUrl;
 
   private _currentUser = signal<ICurrentUser | null>(null);
@@ -21,20 +23,25 @@ export class AuthService {
           publicId: response.data.publicId,
           email: response.data.email,
           firstname: response.data.firstname,
-          lastname: response.data.lastname
+          lastname: response.data.lastname,
         });
-      })
+        this.wsService.connect();
+      }),
     );
   }
 
-  logout(): void {
+  logout(): Observable<IApiResponse<void>> {
     this._currentUser.set(null);
-    // + appel au endpoint /auth/logout qu'on avait préparé côté backend, pour effacer le cookie
+    this.wsService.disconnect();
+    return this.http.post<IApiResponse<void>>(`${this.baseUrl}/auth/logout`, null);
   }
 
   fetchCurrentUser(): Observable<IApiResponse<ICurrentUser>> {
     return this.http.get<IApiResponse<ICurrentUser>>(`${this.baseUrl}/auth/me`).pipe(
-      tap((response) => this._currentUser.set(response.data))
+      tap((response) => {
+        this._currentUser.set(response.data);
+        this.wsService.connect();
+      }),
     );
   }
 }

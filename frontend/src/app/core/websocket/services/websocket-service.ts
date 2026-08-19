@@ -1,8 +1,9 @@
-import {Injectable, Service} from '@angular/core';
+import {  Service } from '@angular/core';
 import { Client, IMessage, IMessage as StompMessage, StompSubscription } from '@stomp/stompjs';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { INotification } from '../../../features/messaging/interfaces/notification.interface';
 import {ENVIRONMENT} from '../../../environments/environement';
+import { IMessageSend } from '../../../features/messaging/interfaces/message.interface';
 
 @Service()
 export class WebSocketService {
@@ -19,6 +20,7 @@ export class WebSocketService {
     this.client = new Client({
       brokerURL: ENVIRONMENT.wsUrl,
       reconnectDelay: 5000,
+      debug: (str) => console.log('[STOMP]', str),
       onConnect: () => this.connected$.next(true),
       onStompError: (frame) => {
         const errorMsg = frame.headers['message'] ?? 'Erreur STOMP inconnue';
@@ -47,8 +49,8 @@ export class WebSocketService {
     return this.connected$.asObservable();
   }
 
-  subscribeToConversation(conversationId: string): Observable<IMessage> {
-    return this.createTopicObservable<IMessage>(`/topic/conversations/${conversationId}`);
+  subscribeToConversation(conversationId: string): Observable<IMessageSend> {
+    return this.createTopicObservable<IMessageSend>(`/topic/conversations/${conversationId}`);
   }
 
   subscribeToTyping(conversationId: string): Observable<unknown> {
@@ -85,6 +87,7 @@ export class WebSocketService {
           return;
         }
         stompSub = this.client.subscribe(destination, (frame: StompMessage) => {
+          console.log('[TOPIC]', destination, frame.body);
           subscriber.next(JSON.parse(frame.body));
         });
       };
@@ -104,18 +107,30 @@ export class WebSocketService {
   }
 
   private publish(destination: string, body?: unknown): void {
-    if (!this.client?.active) {
-      console.warn(`Impossible d'envoyer sur ${destination} : WebSocket non connecté.`);
+    if (this.connected$.value) {
+      this.client!.publish({
+        destination,
+        body: body !== undefined ? JSON.stringify(body) : undefined,
+      });
       return;
     }
-    this.client.publish({
-      destination,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+
+    console.warn(`En attente de connexion pour envoyer sur ${destination}...`);
+    const sub = this.connected$.subscribe((isConnected) => {
+      if (isConnected) {
+        this.client!.publish({
+          destination,
+          body: body !== undefined ? JSON.stringify(body) : undefined,
+        });
+        sub.unsubscribe();
+      }
     });
   }
 
   private isAuthError(message: string): boolean {
     const lower = message.toLowerCase();
-    return lower.includes('authentification') || lower.includes('token') || lower.includes('participant');
+    return (
+      lower.includes('authentification') || lower.includes('token') || lower.includes('participant')
+    );
   }
 }

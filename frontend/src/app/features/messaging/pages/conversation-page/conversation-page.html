@@ -1,23 +1,91 @@
-<section class="relative flex flex-col h-full min-h-0 w-full overflow-hidden bg-gray-50 text-nxt-dark font-sans">
+<section class="flex flex-col h-full min-h-0 w-full overflow-hidden bg-gray-50 text-nxt-dark font-sans">
 
-  <!-- En-tête de la conversation -->
-  <div class="flex shrink-0 items-center justify-between border-b border-gray-200 bg-nxt-surface px-6 py-3.5 shadow-xs z-10">
-    <div class="flex items-center gap-3">
-      <button class="text-lg text-gray-600 hover:text-nxt-primary md:hidden">
-        <i class="fas fa-arrow-left"></i>
+  <!-- En-tête de la conversation (shrink-0 : hauteur fixe en haut) -->
+  <div class="flex shrink-0 items-center justify-between border-b border-gray-200 bg-nxt-surface px-4 py-3 md:px-6 shadow-xs z-10">
+
+    <!-- Info Groupe & Navigation -->
+    <div class="flex items-center gap-3 min-w-0">
+
+      <!-- Bouton retour mobile -->
+      <button
+
+        class="text-lg text-gray-500 hover:text-nxt-primary md:hidden shrink-0"
+        aria-label="Retour">
+        <i class="fa-solid fa-arrow-left"></i>
       </button>
-      <div>
-        <h3 class="text-sm font-bold leading-tight text-gray-900">Conversation</h3>
+
+      <!-- Avatar du Groupe (Carré arrondi) -->
+      <div class="relative shrink-0">
+        <div class="h-10 w-10 rounded-xl bg-nxt-primary/10 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary font-bold text-sm shadow-xs overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=100&q=80"
+            alt="Projet ConnecTeam"
+            class="h-full w-full object-cover">
+        </div>
+        <!-- Badge nombre de membres -->
+        <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-nxt-primary text-[9px] font-bold text-white border-2 border-white">
+        8
+      </span>
       </div>
+
+      <!-- Titre du Groupe & Sous-titre -->
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center gap-2">
+          <h3 class="text-sm font-bold leading-tight text-gray-900 truncate">
+            Équipe Dev - ConnecTeam 🚀
+          </h3>
+          <span class="inline-flex items-center rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 shrink-0">
+          Projet
+        </span>
+        </div>
+        <p class="text-[11px] font-medium text-gray-500 truncate">
+          8 membres • <span class="text-nxt-success">3 en ligne</span>
+        </p>
+      </div>
+
     </div>
+
+    <!-- Actions & Bouton Modifier -->
+    <div class="flex items-center gap-1.5 md:gap-2 shrink-0">
+
+      <!-- Bouton Modifier la Conversation -->
+      <button
+
+        class="flex items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-all hover:bg-nxt-primary/10 hover:text-nxt-primary hover:border-nxt-primary/30"
+        title="Modifier la conversation">
+        <i class="fa-solid fa-pen-to-square text-nxt-primary text-xs"></i>
+        <span class="hidden sm:inline">Modifier</span>
+      </button>
+
+      <!-- Séparateur -->
+      <div class="h-4 w-px bg-gray-200 mx-1 hidden sm:block"></div>
+
+      <!-- Boutons d'actions secondaires -->
+      <button
+
+        class="p-2 rounded-lg text-gray-400 hover:text-nxt-primary hover:bg-gray-100 transition-colors"
+        title="Appel vidéo">
+        <i class="fa-solid fa-video text-base text-sky-500"></i>
+      </button>
+
+      <button
+
+        class="p-2 rounded-lg text-gray-400 hover:text-nxt-primary hover:bg-gray-100 transition-colors"
+        title="Infos du groupe">
+        <i class="fa-solid fa-circle-info text-base text-gray-400"></i>
+      </button>
+
+    </div>
+
   </div>
 
-  <!-- Messages -->
-  <div #messagesContainer class="flex-1 min-h-0 space-y-4 overflow-y-auto bg-gray-50 p-4 md:p-6 pb-24">
+  <!-- Messages (flex-1 & overflow-y-auto : prend tout l'espace restant et défile) -->
+  <div #messagesContainer class="flex-1 min-h-0 space-y-4 overflow-y-auto bg-gray-50 p-4 md:p-6">
 
     @for (message of messages(); track message.publicId) {
 
       @if (message.type === 'SYSTEM') {
+
         <div class="flex items-center justify-center my-2">
           <span class="bg-gray-200/70 text-gray-600 text-[11px] font-medium px-3 py-1 rounded-full">
             {{ message.content }}
@@ -49,8 +117,8 @@
 
   </div>
 
-  <!-- Zone de saisie -->
-  <div class="absolute bottom-0 inset-x-0 z-20 flex shrink-0 items-center gap-2 border-t border-gray-200 bg-nxt-surface p-3 md:p-4">
+  <!-- Zone de saisie (shrink-0 & bg-nxt-surface : reste fixée en bas sans masquer les messages) -->
+  <div class="flex shrink-0 items-center gap-2 border-t border-gray-200 bg-nxt-surface p-3 md:p-4 z-10">
     <textarea
       rows="1"
       [(ngModel)]="draft"

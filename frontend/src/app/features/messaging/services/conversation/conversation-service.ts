@@ -8,7 +8,7 @@ import {IPage} from '../../../../shared/interfaces/pageable/page.interface';
 import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interface';
 
 @Service()
-export class CnnversationService {
+export class ConversationService {
 
   private http = inject(HttpClient);
   private baseUrl = ENVIRONMENT.apiUrl;

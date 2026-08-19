@@ -1,9 +1,9 @@
-package com.nexteam.websocket.messaging.message;
+package com.nexteam.features.Messaging.message;
 
 import com.nexteam.common.AuditableEntity;
-import com.nexteam.features.Conversation.Conversation;
+import com.nexteam.features.Messaging.conversation.Conversation;
 import com.nexteam.features.Users.User.User;
-import com.nexteam.websocket.messaging.message.enums.MessageType;
+import com.nexteam.features.Messaging.message.enums.MessageType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

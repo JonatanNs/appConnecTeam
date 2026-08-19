@@ -8,8 +8,8 @@
 <div class="flex h-[calc(100vh-64px)] overflow-hidden">
 
   <!-- Sidebar : shrink-0 empêche flex de la déformer, sa largeur est gérée par app-sidebar -->
-  <aside class="h-full shrink-0 ">
-    @if (currentRoute === '/messageries') {
+  <aside class="h-full shrink-0">
+    @if (currentRoute.startsWith('/messageries')) {
       <app-list-conversation></app-list-conversation>
     } @else {
       <app-sidebar></app-sidebar>

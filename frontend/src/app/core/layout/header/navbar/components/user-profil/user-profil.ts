@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   faArrowRight, faChevronDown,
   faCircleQuestion,
@@ -9,6 +9,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
+import { AuthService } from '../../../../../../features/auth/service/auth-service';
 
 @Component({
   selector: 'app-user-profil',
@@ -18,22 +19,26 @@ import { faBell } from '@fortawesome/free-regular-svg-icons';
 })
 export class UserProfil {
   protected readonly faRightFromBracket = faRightFromBracket;
-  protected readonly faBell = faBell;
   protected readonly faUser = faUser;
   protected readonly faGear = faGear;
+  protected readonly faShieldHalved = faShieldHalved;
   protected readonly faCircleQuestion = faCircleQuestion;
+  protected readonly faChevronDown = faChevronDown;
+
+  private authService =  inject(AuthService);
+  private router =  inject(Router);
 
   isProfileMenuOpen = signal(false);
 
   openProfileMenu(): void {
     this.isProfileMenuOpen.set(true);
   }
-
   closeProfileMenu(): void {
     this.isProfileMenuOpen.set(false);
   }
 
-  protected readonly faArrowRight = faArrowRight;
-  protected readonly faShieldHalved = faShieldHalved;
-  protected readonly faChevronDown = faChevronDown;
+  logout(): void {
+    this.authService.logout()
+    this.router.navigate(['/']);
+  }
 }

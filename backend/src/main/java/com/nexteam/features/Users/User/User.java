@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nexteam.common.AuditableEntity;
 import com.nexteam.features.Users.Address.Address;
 import com.nexteam.features.Users.Role.Role;
-import com.nexteam.websocket.messaging.message.Message;
+import com.nexteam.features.Messaging.message.Message;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

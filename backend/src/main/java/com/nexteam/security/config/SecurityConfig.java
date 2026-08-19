@@ -93,8 +93,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/admin/**").hasAnyRole("ADMIN", "ADMIN_SUPER")
-                        .anyRequest().permitAll())
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .anyRequest().authenticated())
                 // accessDeniedHandler → quand un utilisateur connecté tente d’accéder à une ressource pour laquelle il n’a pas le droit.
                 .exceptionHandling(e -> e
                         .accessDeniedHandler(accessDeniedHandler)

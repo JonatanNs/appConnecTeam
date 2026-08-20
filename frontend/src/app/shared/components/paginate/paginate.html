@@ -1,9 +1,9 @@
-<div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-nxt-surface border border-nxt-gray rounded-xl shadow-sm p-4 my-6">
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-nxt-surface shadow-sm p-4 my-6">
 
   <div class="flex items-center gap-2">
     <span class="text-sm text-nxt-dark">Afficher</span>
     <select
-      class="select-nxt bg-nxt-primary"
+      class="select-nxt border border-nxt-gray rounded-xl p-1"
       [value]="pageSize()"
       (change)="onPageSizeChange($event)">
       <option value="12">12</option>
@@ -16,15 +16,14 @@
 
   <div class="flex items-center gap-1">
     <button
-      class="btn-nxt-page"
+      class="btn-nxt-outline"
       [disabled]="first()"
       (click)="goToPage(0)"
       aria-label="Première page">
       «
     </button>
     <button
-      class="btn-nxt-page"
-      [disabled]="first()"
+      class="btn-nxt-outline" [disabled]="first()"
       (click)="goToPage(number() - 1)"
       aria-label="Page précédente">
       ‹
@@ -32,23 +31,20 @@
 
     @for (page of pagesArray(); track page) {
       <button
-        class="btn-nxt-page"
-        [class.btn-nxt-page-active]="page === number()"
+        class="btn-nxt-outline" [class.btn-nxt-page-active]="page === number()"
         (click)="goToPage(page)">
         {{ page + 1 }}
       </button>
     }
 
     <button
-      class="btn-nxt-page"
-      [disabled]="last()"
+      class="btn-nxt-outline" [disabled]="last()"
       (click)="goToPage(number() + 1)"
       aria-label="Page suivante">
       ›
     </button>
     <button
-      class="btn-nxt-page"
-      [disabled]="last()"
+      class="btn-nxt-outline" [disabled]="last()"
       (click)="goToPage(totalPages() - 1)"
       aria-label="Dernière page">
       »

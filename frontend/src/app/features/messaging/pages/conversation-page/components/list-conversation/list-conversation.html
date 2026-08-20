@@ -1,14 +1,17 @@
-<aside id="sidebar" class="flex h-full w-full shrink-0 flex-col border-r border-gray-200/80 bg-nxt-surface md:w-72 lg:w-80">
+<aside id="sidebar"
+       class="flex h-full w-full shrink-0 flex-col border-r border-gray-200/80 bg-nxt-surface md:w-72 lg:w-80">
 
   <!-- Header -->
   <div class="flex shrink-0 items-center justify-between border-b border-gray-200/80 px-3.5 py-3">
     <div class="min-w-0">
-      <h2 class="truncate text-base font-bold tracking-tight text-nxt-dark">Mes conversations</h2>
-      <p class="mt-0.5 text-[11px] text-gray-400">Vos discussions</p>
+      <h1 class="text-lg">Mes conversations</h1>
+      <p class="text-[11px]">Vos discussions</p>
     </div>
 
     <div class="flex shrink-0 items-center gap-1">
-      <button type="button" onclick="my_modal_5.showModal()" class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-nxt-primary/10 hover:text-nxt-primary" title="Nouvelle conversation">
+      <button type="button" onclick="my_modal_5.showModal()"
+              class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-nxt-primary/10 hover:text-nxt-primary"
+              title="Nouvelle conversation">
         <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
       </button>
     </div>
@@ -16,7 +19,8 @@
 
   <!-- Nouvelle conversation -->
   <div class="shrink-0 px-3 pt-3">
-    <button type="button" onclick="my_modal_5.showModal()" class="flex w-full items-center justify-center gap-2 rounded-lg bg-nxt-primary px-3 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-nxt-primary-hover">
+    <button type="button" onclick="my_modal_5.showModal()"
+            class="flex w-full items-center justify-center gap-2 rounded-lg bg-nxt-primary px-3 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-nxt-primary-hover">
       <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
       <span>Nouvelle conversation</span>
     </button>
@@ -25,8 +29,11 @@
   <!-- Recherche -->
   <div class="shrink-0 px-3 py-3">
     <div class="relative">
-      <fa-icon [icon]="faMagnifyingGlass" class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></fa-icon>
-      <input type="text" class="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-8 pr-3 text-xs text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20" placeholder="Rechercher une discussion...">
+      <fa-icon [icon]="faMagnifyingGlass"
+               class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></fa-icon>
+      <input type="text"
+             class="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-8 pr-3 text-xs text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20"
+             placeholder="Rechercher une discussion...">
     </div>
   </div>
 
@@ -36,88 +43,98 @@
     @for (conv of conversations(); track conv.publicId) {
 
       <a [routerLink]="['conversation', conv.publicId]">
-        <div class="group relative flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2.5 transition-colors" [class.bg-nxt-muted]="conv.publicId === selectedConversationId()" [class.hover:bg-gray-50]="conv.publicId !== selectedConversationId()" [attr.data-chat]="conv.publicId" (click)="selectConversation(conv.publicId)">
+        <div class="group relative flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2.5 transition-colors"
+             [class.bg-nxt-muted]="conv.publicId === selectedConversationId()"
+             [class.hover:bg-gray-50]="conv.publicId !== selectedConversationId()" [attr.data-chat]="conv.publicId"
+             (click)="selectConversation(conv.publicId)">
 
-        <!-- Indicateur sélection -->
-        @if (conv.publicId === selectedConversationId()) {
-          <span class="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r-full bg-nxt-primary"></span>
-        }
+          <!-- Indicateur sélection -->
+          @if (conv.publicId === selectedConversationId()) {
+            <span class="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-r-full bg-nxt-primary"></span>
+          }
 
-        <!-- Avatar -->
-        <div class="relative shrink-0">
-          <img [src]="'https://ui-avatars.com/api/?name=' + conv.name + '&background=random'" [alt]="conv.name" class="h-10 w-10 rounded-full border border-gray-200 object-cover">
-          <span class="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-nxt-surface bg-nxt-success"></span>
-        </div>
+          <!-- Avatar -->
+          <div class="relative shrink-0">
+            <img [src]="'https://ui-avatars.com/api/?name=' + conv.name + '&background=random'"
+                 [alt]="conv.name"
+                 class="h-10 w-10 rounded-full border border-gray-200 object-cover">
 
-        <!-- Informations -->
-        <div class="min-w-0 flex-1">
-          <div class="flex items-center justify-between gap-2">
-              <span class="truncate text-sm font-semibold" [class.text-nxt-primary]="conv.publicId === selectedConversationId()" [class.text-nxt-dark]="conv.publicId !== selectedConversationId()">
+            <span
+              class="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-nxt-surface bg-nxt-success"></span>
+          </div>
+
+          <!-- Informations -->
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="truncate text-sm font-semibold"
+                    [class.text-nxt-primary]="conv.publicId === selectedConversationId()"
+                    [class.text-nxt-dark]="conv.publicId !== selectedConversationId()">
                 {{ conv.name }}
               </span>
 
-            @if (lastMessage(conv); as last) {
-              <span class="shrink-0 text-[10px] text-gray-400">{{ last.createdAt | date: 'short' }}</span>
-            }
+              @if (lastMessage(conv); as last) {
+                <span class="shrink-0 text-[10px] text-gray-400">{{ last.createdAt | date: 'short' }}</span>
+              }
+            </div>
+
+            <div class="mt-1 flex items-center gap-2">
+              @if (lastMessage(conv); as last) {
+                <p class="truncate text-xs text-gray-500">{{ last.content }}</p>
+              } @else {
+                <p class="truncate text-xs italic text-gray-400">
+                  <fa-icon [icon]="faCommentSlash" class="mr-1 text-[10px] text-nxt-secondary"></fa-icon>
+                  Débuter la conversation !
+                </p>
+              }
+            </div>
           </div>
 
-          <div class="mt-1 flex items-center gap-2">
-            @if (lastMessage(conv); as last) {
-              <p class="truncate text-xs text-gray-500">{{ last.content }}</p>
-            } @else {
-              <p class="truncate text-xs italic text-gray-400">
-                <fa-icon [icon]="faCommentSlash" class="mr-1 text-[10px] text-nxt-secondary"></fa-icon>
-                Débuter la conversation !
-              </p>
-            }
+          <!-- Actions -->
+          <div class="dropdown dropdown-end shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
+            <button tabindex="0" type="button" class="btn-nxt-outline">
+              <fa-icon [icon]="faEllipsisVertical" class="text-xs"></fa-icon>
+            </button>
+
+            <ul tabindex="0"
+                class="dropdown-content z-50 mt-1 w-52 rounded-xl border border-gray-200 bg-nxt-surface p-1 shadow-xl">
+
+              <li>
+                <button
+                  type="button"
+                  class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-dark transition-colors hover:bg-gray-100">
+
+                  <fa-icon [icon]="faThumbtack" class="w-4 text-xs text-gray-500"></fa-icon>
+                  <span>Épingler</span>
+
+                </button>
+              </li>
+
+              <li>
+                <button
+                  type="button"
+                  class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-dark transition-colors hover:bg-gray-100">
+
+                  <fa-icon [icon]="faArrowRightFromBracket" class="w-4 text-xs text-gray-500"></fa-icon>
+                  <span>Quitter la conversation</span>
+
+                </button>
+              </li>
+
+              <li class="my-1 border-t border-gray-100"></li>
+
+              <li>
+                <button
+                  type="button"
+                  class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-error transition-colors hover:bg-nxt-error/10">
+
+                  <fa-icon [icon]="faTrash" class="w-4 text-xs"></fa-icon>
+                  <span>Supprimer</span>
+
+                </button>
+              </li>
+
+            </ul>
           </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="dropdown dropdown-end shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
-          <button tabindex="0" type="button" class="btn-nxt-outline">
-            <fa-icon [icon]="faEllipsisVertical" class="text-xs"></fa-icon>
-          </button>
-
-          <ul tabindex="0" class="dropdown-content z-50 mt-1 w-52 rounded-xl border border-gray-200 bg-nxt-surface p-1 shadow-xl">
-
-            <li>
-              <button
-                type="button"
-                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-dark transition-colors hover:bg-gray-100">
-
-                <fa-icon [icon]="faThumbtack" class="w-4 text-xs text-gray-500"></fa-icon>
-                <span>Épingler</span>
-
-              </button>
-            </li>
-
-            <li>
-              <button
-                type="button"
-                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-dark transition-colors hover:bg-gray-100">
-
-                <fa-icon [icon]="faArrowRightFromBracket" class="w-4 text-xs text-gray-500"></fa-icon>
-                <span>Quitter la conversation</span>
-
-              </button>
-            </li>
-
-            <li class="my-1 border-t border-gray-100"></li>
-
-            <li>
-              <button
-                type="button"
-                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-error transition-colors hover:bg-nxt-error/10">
-
-                <fa-icon [icon]="faTrash" class="w-4 text-xs"></fa-icon>
-                <span>Supprimer</span>
-
-              </button>
-            </li>
-
-          </ul>
-        </div>
 
         </div>
       </a>

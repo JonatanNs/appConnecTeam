@@ -8,12 +8,19 @@ import { AuthService } from '../../../auth/service/auth-service';
 import { DatePipe } from '@angular/common';
 import { scan } from 'rxjs';
 import { IMessageSend } from '../../interfaces/message.interface';
-import { IMessage } from '@stomp/stompjs';
 import { ActivatedRoute } from '@angular/router';
-
+import { ConversationService } from '../../services/conversation/conversation-service';
+import { IConversation } from '../../interfaces/conversation.interface';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import {
+  faArrowLeft,
+  faCircleInfo,
+  faPenToSquare,
+  faVideo,
+} from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-conversation-page',
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, FaIconComponent],
   templateUrl: './conversation-page.html',
   styleUrl: './conversation-page.css',
 })
@@ -21,9 +28,25 @@ export class ConversationPage {
   private wsService = inject(WebSocketService);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
+  private conversationService = inject(ConversationService);
 
   conversationId = input.required<string>();
   draft = signal('');
+
+  conversation = toSignal(
+    toObservable(this.conversationId).pipe(
+      switchMap((id) =>
+        this.conversationService.getConversation(id).pipe(
+          map((response) => response.data),
+          catchError((err) => {
+            console.error('Erreur chargement conversation', err);
+            return of(null as IConversation | null);
+          }),
+        ),
+      ),
+    ),
+    { initialValue: null as IConversation | null },
+  );
 
   messages = toSignal(
     toObservable(this.conversationId).pipe(
@@ -102,4 +125,10 @@ export class ConversationPage {
         this.messagesContainer.nativeElement.scrollHeight;
     }
   }
+
+  protected readonly faCircleInfo = faCircleInfo;
+  protected readonly faVideo = faVideo;
+  protected readonly faPenToSquare = faPenToSquare;
+  protected readonly faArrowLeft = faArrowLeft;
 }
+

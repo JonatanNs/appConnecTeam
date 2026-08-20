@@ -34,6 +34,10 @@ export class ConversationService {
     return this.http.delete<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`)
   }
 
+  getConversation(publicId : string) : Observable<IApiResponse<IConversation>>{
+    return this.http.get<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`)
+  }
+
   searchConversation(word : string, pageable : IPageable) : Observable<IApiResponse<IPage<IConversation>>>{
     return this.http.get<IApiResponse<IPage<IConversation>>>(
       `${this.baseUrl}/conversations/search?${word}?page=${pageable.page}&size=${pageable.size}`)
@@ -41,9 +45,7 @@ export class ConversationService {
 
   getConversationByUserId(publicId : string, pageable : IPageable) : Observable<IApiResponse<IPage<IConversation>>>{
     return this.http.get<IApiResponse<IPage<IConversation>>>(
-      `${this.baseUrl}/conversations/users/${publicId}?page=${pageable.page}&size=${pageable.size}`)
+      `${this.baseUrl}/conversations/users/${publicId}?page=${pageable.page}&size=${pageable.size}`);
   }
-
-
 
 }

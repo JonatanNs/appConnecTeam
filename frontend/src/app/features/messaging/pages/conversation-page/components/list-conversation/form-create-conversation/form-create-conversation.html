@@ -1,11 +1,9 @@
 <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
   <div class="modal-box rounded-nxt-lg border border-nxt-muted bg-nxt-surface">
-    <h3 class="text-lg font-bold text-nxt-dark">Nouvelle conversation</h3>
-    <p class="mt-1 text-sm text-gray-500">Créez une nouvelle discussion.</p>
+    <h3 class="text-xl text-gray-900">Nouvelle conversation</h3>
+    <p>Créez une nouvelle discussion.</p>
 
     <form class="mt-5">
-
-      <!-- Nom de la conversation — visible seulement si 2+ participants (groupe) -->
       @if (selectedUsers().length >= 2) {
         <label for="name" class="mb-2 block text-sm font-semibold text-nxt-dark">Nom de la conversation</label>
         <input
@@ -15,7 +13,7 @@
           (ngModelChange)="conversationName.set($event)"
           name="name"
           placeholder="Ex. Équipe développement"
-          class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+          class="w-full">
       }
 
       <label class="mb-2 mt-4 block text-sm font-semibold text-nxt-dark">Participants</label>
@@ -40,9 +38,9 @@
           type="text"
           [ngModel]="query()"
           (ngModelChange)="query.set($event)"
+          class="w-full"
           name="search"
-          placeholder="Rechercher un utilisateur..."
-          class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+          placeholder="Rechercher un utilisateur...">
 
         @if (searchResults().length > 0) {
           <div class="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-nxt-surface shadow-lg max-h-48 overflow-y-auto">

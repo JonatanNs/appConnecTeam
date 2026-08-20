@@ -1,13 +1,10 @@
-import {Component, computed, debounced, inject, output, resource, signal} from '@angular/core';
+import {Component, computed, debounced, inject, resource, signal} from '@angular/core';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {UserService} from '../../../../../../../core/services/user/user-service';
-import {debounce} from '@angular/forms/signals';
-import {firstValueFrom, map} from 'rxjs';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {firstValueFrom} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 import {IUser} from '../../../../../../../shared/interfaces/user.interface';
-import {IPage} from '../../../../../../../shared/interfaces/pageable/page.interface';
 import {ConversationService} from '../../../../../services/conversation/conversation-service';
 
 @Component({
@@ -25,7 +22,6 @@ export class FormCreateConversation {
   private conversationService = inject(ConversationService);
 
   selectedUsers = signal<IUser[]>([]);
-
   removeUser(user: IUser): void {
     this.selectedUsers.update((users) => users.filter((u) => u.publicId !== user.publicId));
   }
@@ -64,13 +60,13 @@ export class FormCreateConversation {
     return results.filter((u) => !selectedIds.has(u.publicId));
   });
 
-  conversationName = signal('');
 
+  conversationName = signal('');
   onCreateConversation(): void {
     const usersIds = this.selectedUsers().map((u) => u.publicId);
 
     this.conversationService.createConversation({
-      name: this.selectedUsers().length >= 2 ? this.conversationName() : 'void',
+      name: this.selectedUsers().length >= 2 ? this.conversationName() : 'Moi',
       usersIds,
     }).subscribe({
       next: () => {

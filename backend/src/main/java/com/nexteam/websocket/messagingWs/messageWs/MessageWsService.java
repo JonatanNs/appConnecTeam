@@ -3,25 +3,22 @@ package com.nexteam.websocket.messagingWs.messageWs;
 import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.Messaging.conversation.Conversation;
 import com.nexteam.features.Messaging.conversation.ConversationRepository;
-import com.nexteam.features.Messaging.conversation.ConversationService;
 import com.nexteam.features.Messaging.message.Message;
 import com.nexteam.features.Messaging.message.MessageRepository;
-import com.nexteam.features.Users.User.User;
-import com.nexteam.features.Users.User.UserRepository;
-import com.nexteam.features.Messaging.notification.NotificationService;
-import com.nexteam.websocket.messagingWs.conversationWs.ConversationPresenceService;
 import com.nexteam.features.Messaging.message.dtos.MessageRequestDTO;
 import com.nexteam.features.Messaging.message.dtos.MessageResponseDTO;
 import com.nexteam.features.Messaging.message.dtos.mapper.MessageMapper;
 import com.nexteam.features.Messaging.message.enums.MessageType;
+import com.nexteam.features.Messaging.notification.NotificationService;
+import com.nexteam.features.Users.User.User;
+import com.nexteam.features.Users.User.UserRepository;
+import com.nexteam.websocket.messagingWs.conversationWs.ConversationPresenceService;
+import com.nexteam.websocket.messagingWs.messageWs.dtosWs.TypingEventDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +39,6 @@ public class MessageWsService {
     private final MessageMapper messageMapper;
     private final ConversationPresenceService presenceService;
     private final NotificationService notificationService;
-    private final ConversationService conversationService;
 
     @Transactional
     public MessageResponseDTO sendMessage(UUID conversationId, MessageRequestDTO requestDTO, String senderEmail) {
@@ -79,5 +75,26 @@ public class MessageWsService {
                                 sender.getFirstname() + " " + sender.getLastname()));
 
         return messageMapper.messageToResponseDTO(saved);
+    }
+
+    public TypingEventDTO buildTypingEvent(UUID conversationId, boolean isTyping, String senderEmail) {
+        User sender = userRepository.findByEmail(senderEmail)
+                .orElseThrow(() -> new NotFoundException("Utilisateur introuvable."));
+
+        return TypingEventDTO.builder()
+                .conversationId(conversationId)
+                .userId(sender.getPublicId())
+                .userName(sender.getFirstname() + " " + sender.getLastname())
+                .isTyping(isTyping)
+                .build();
+    }
+
+    public List<User> getOtherParticipants(UUID conversationId, String excludedEmail) {
+        Conversation conversation = conversationRepository.findByPublicId(conversationId)
+                .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
+
+        return conversation.getUsers().stream()
+                .filter(u -> !u.getEmail().equals(excludedEmail))
+                .toList();
     }
 }

@@ -30,7 +30,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
                 FROM Message m
                 WHERE m.conversation.publicId = :conversationId
                   AND m.createdAt < :before
-                ORDER BY m.createdAt ASC
+                ORDER BY m.createdAt DESC
             """)
     List<Message> findMessagesBefore(
             @Param("conversationId") UUID conversationId,

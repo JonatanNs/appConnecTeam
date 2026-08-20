@@ -5,8 +5,11 @@ import com.nexteam.exceptions.AlreadyExistException;
 import com.nexteam.exceptions.InvalidCredentialsException;
 import com.nexteam.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +23,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class GlobalRestController{
+@Slf4j
+public class GlobalRestController {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiResponse<?>> handlePathNotFound(NotFoundException ex) {
@@ -29,7 +33,7 @@ public class GlobalRestController{
     }
 
     @ExceptionHandler(AlreadyExistException.class)
-    public ResponseEntity<ApiResponse<?>> handleAlreadyExist(AlreadyExistException ex){
+    public ResponseEntity<ApiResponse<?>> handleAlreadyExist(AlreadyExistException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiResponse.of(HttpStatus.CONFLICT.value(), ex.getMessage(), null));
     }
@@ -49,5 +53,31 @@ public class GlobalRestController{
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.of(HttpStatus.BAD_REQUEST.value(), message, null));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<?>> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.of(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<?>> handleAccessDenied(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.of(HttpStatus.FORBIDDEN.value(), ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleAuthenticationMissing(AuthenticationCredentialsNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.of(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<?>> handleUnexpected(Exception ex) {
+        log.error("Erreur inattendue", ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        "Une erreur interne est survenue.", null));
     }
 }

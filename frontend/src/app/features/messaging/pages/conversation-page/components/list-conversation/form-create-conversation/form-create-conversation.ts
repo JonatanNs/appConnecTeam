@@ -6,6 +6,7 @@ import {firstValueFrom} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 import {IUser} from '../../../../../../../shared/interfaces/user.interface';
 import {ConversationService} from '../../../../../services/conversation/conversation-service';
+import {AuthService} from '../../../../../../auth/service/auth-service';
 
 @Component({
   selector: 'app-form-create-conversation',
@@ -20,6 +21,7 @@ export class FormCreateConversation {
   protected readonly faTimes = faTimes;
   private userService = inject(UserService);
   private conversationService = inject(ConversationService);
+  private authService = inject(AuthService);
 
   selectedUsers = signal<IUser[]>([]);
   removeUser(user: IUser): void {
@@ -37,18 +39,14 @@ export class FormCreateConversation {
   searchResource = resource({
     params: () => {
       const q = this.debouncedQuery.value();
-      console.log('debounced query:', q);
       return q;
     },
     loader: async ({ params: q }) => {
-      console.log('loader called with:', q);
       if (!q || !q.trim()) return [];
       try {
         const res = await firstValueFrom(this.userService.searchUser(q, {page: 0, size: 20}));
-        console.log('search results:', res.data.content);
         return res.data.content;
       } catch (err) {
-        console.error('search error:', err);
         throw err;
       }
     }
@@ -56,8 +54,9 @@ export class FormCreateConversation {
 
   searchResults = computed(() => {
     const results = this.searchResource.value() ?? [];
+    const currentUserId = this.authService.currentUser()?.publicId;
     const selectedIds = new Set(this.selectedUsers().map((u) => u.publicId));
-    return results.filter((u) => !selectedIds.has(u.publicId));
+    return results.filter((u) => !selectedIds.has(u.publicId) && u.publicId !== currentUserId);
   });
 
 
@@ -66,7 +65,7 @@ export class FormCreateConversation {
     const usersIds = this.selectedUsers().map((u) => u.publicId);
 
     this.conversationService.createConversation({
-      name: this.selectedUsers().length >= 2 ? this.conversationName() : 'Moi',
+      name: this.selectedUsers().length >= 2 ? this.conversationName() : '',
       usersIds,
     }).subscribe({
       next: () => {
@@ -74,7 +73,7 @@ export class FormCreateConversation {
         this.selectedUsers.set([]);
         (document.getElementById('my_modal_5') as HTMLDialogElement)?.close();
       },
-      error: (err) => console.error('Erreur création conversation', err),
+      error: (err) =>  err,
     });
   }
 }

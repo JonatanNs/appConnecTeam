@@ -47,4 +47,8 @@ export class ConversationService {
   deleteConversation(publicId : string) : Observable<IApiResponse<IConversation>>{
     return this.http.delete<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`)
   }
+
+  leaveConversation(conversationId: string): Observable<IApiResponse<void>> {
+    return this.http.delete<IApiResponse<void>>(`${this.baseUrl}/conversations/${conversationId}/leave`);
+  }
 }

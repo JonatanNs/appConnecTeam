@@ -5,7 +5,7 @@ import {ADMIN_ROUTES} from './features/admin/admin.routes';
 import {LoginPage} from './features/auth/page/login-page/login-page';
 import { MESSAGING_ROUTES } from './features/messaging/messaging.route';
 import { NEWS_ROUTES } from './features/news/news.route';
-import { AuthGuard } from './core/guard/authGuard';
+import { AuthGuard } from './core/guards/authGuard';
 
 export const routes: Routes = [
   { path: 'auth/connexion', component: LoginPage },

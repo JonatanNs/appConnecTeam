@@ -54,8 +54,8 @@ export class WebSocketService {
     return this.createTopicObservable<IMessageSend>(`/topic/conversations/${conversationId}`);
   }
 
-  subscribeToTyping(conversationId: string): Observable<unknown> {
-    return this.createTopicObservable(`/topic/conversations/${conversationId}/typing`);
+  subscribeToTyping(conversationId: string): Observable<ITyping> {
+    return this.createTopicObservable<ITyping>(`/user/queue/conversations/${conversationId}/typing`);
   }
 
   subscribeToNotifications(): Observable<INotification> {

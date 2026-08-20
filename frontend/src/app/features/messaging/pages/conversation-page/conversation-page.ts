@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, input, signal, ViewChild } from '@angular/core';
+import {Component, computed, effect, ElementRef, inject, input, signal, ViewChild} from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, debounceTime, map, merge, of, Subject, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -33,6 +33,7 @@ export class ConversationPage {
   private typingTrigger$ = new Subject<void>();
   private typingTimeout?: ReturnType<typeof setTimeout>;
 
+  isGroup = computed(() => (this.conversation()?.users?.length ?? 0) > 2);
 
   conversationId = input.required<string>();
   draft = signal('');
@@ -112,12 +113,11 @@ export class ConversationPage {
       if (!id) return;
 
       const sub = this.wsService.subscribeToTyping(id).subscribe((event: any) => {
-        console.log('[TYPING] event reçu:', event); // <-- ajoute ça en premier
         if (event.userPublicId === this.authService.currentUser()?.publicId) return;
         this.typingUser.set(event.userName ?? "Quelqu'un");
 
         clearTimeout(this.typingTimeout);
-        this.typingTimeout = setTimeout(() => this.typingUser.set(null), 3000);
+        this.typingTimeout = setTimeout(() => this.typingUser.set(null), 2000);
       });
 
       onCleanup(() => {

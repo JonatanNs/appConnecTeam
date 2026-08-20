@@ -1,73 +1,82 @@
 <section class="flex flex-col h-full min-h-0 w-full overflow-hidden bg-gray-50 text-nxt-dark font-sans">
   <!-- En-tête de la conversation -->
-  <div class="flex shrink-0 items-center justify-between border-b border-gray-200 bg-nxt-surface px-4 py-3 md:px-6 shadow-xs z-10">
+  <div class="flex shrink-0 items-center justify-between border-b border-gray-200 bg-nxt-surface px-3 py-2.5 sm:px-4 md:px-6 md:py-3 shadow-xs z-10">
 
     <!-- Info Groupe & Navigation -->
-    <div class="flex items-center gap-3 min-w-0">
+    <div class="flex items-center gap-2 sm:gap-3 min-w-0">
 
       <!-- Bouton retour mobile -->
       <button
-        class="text-lg text-gray-500 hover:text-nxt-primary md:hidden shrink-0 transition-colors"
+        class="text-lg text-gray-500 hover:text-nxt-primary md:hidden shrink-0 transition-colors p-1 -ml-1"
         aria-label="Retour">
         <fa-icon [icon]="faArrowLeft"></fa-icon>
       </button>
 
-      <!-- Avatar du Groupe -->
+      <!-- Avatar -->
       <div class="relative shrink-0">
-        <div class="h-10 w-10 rounded-xl bg-nxt-primary/10 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary font-bold text-sm shadow-xs overflow-hidden">
+        <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-nxt-primary/10 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary font-bold text-sm shadow-xs overflow-hidden">
           <img class="h-full w-full object-cover"
                [src]="'https://ui-avatars.com/api/?name=' + (conversation()?.name ?? '?')"
                [alt]="conversation()?.name">
         </div>
-        @if (conversation()?.users?.length; as count) {
+        @if (isGroup()) {
           <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-nxt-primary text-[9px] font-bold text-white border-2 border-white">
-          {{ count }}
-        </span>
+            {{ conversation()?.users?.length }}
+          </span>
         }
       </div>
 
-      <!-- Titre du Groupe & Sous-titre -->
+      <!-- Titre & Sous-titre -->
       <div class="min-w-0 flex-1">
-        <div class="flex items-center gap-2">
-          <h3 class="text-sm font-bold leading-tight text-gray-900 truncate">
-            {{ conversation()?.name ?? 'Conversation' }}
-          </h3>
-        </div>
-        @if (conversation()?.users?.length; as count) {
+        <h3 class="text-sm font-bold leading-tight text-gray-900 truncate">
+          {{ conversation()?.name ?? 'Conversation' }}
+        </h3>
+
+        @if (isGroup()) {
           <p class="text-[11px] font-medium text-gray-500 truncate">
-            {{ count }} membre{{ count > 1 ? 's' : '' }}
+            {{ conversation()?.users?.length }} membres
+          </p>
+        } @else {
+          <p class="text-[11px] font-medium text-gray-400 truncate">
+            Conversation privée
           </p>
         }
       </div>
     </div>
 
     <!-- Actions -->
-    <div class="flex items-center gap-1.5 md:gap-2 shrink-0">
+    <div class="flex items-center gap-1 sm:gap-1.5 md:gap-2 shrink-0">
 
       <button
-        class="flex items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-all hover:bg-nxt-primary/10 hover:text-nxt-primary hover:border-nxt-primary/30"
-        title="Modifier la conversation">
-        <fa-icon [icon]="faPenToSquare" class="text-nxt-primary text-xs"></fa-icon>
-        <span class="hidden sm:inline">Modifier</span>
+        type="button"
+        disabled
+        title="Bientôt disponible"
+        class="hidden sm:flex items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-400 cursor-not-allowed opacity-60">
+        <fa-icon [icon]="faPenToSquare" class="text-xs"></fa-icon>
+        <span>Modifier</span>
       </button>
 
       <div class="h-4 w-px bg-gray-200 mx-1 hidden sm:block"></div>
 
       <button
-        class="p-2 rounded-lg text-gray-400 hover:text-nxt-primary hover:bg-gray-100 transition-colors"
-        title="Appel vidéo">
-        <fa-icon [icon]="faVideo" class="text-base text-sky-500"></fa-icon>
+        type="button"
+        disabled
+        title="Bientôt disponible"
+        class="p-2 rounded-lg text-gray-300 cursor-not-allowed">
+        <fa-icon [icon]="faVideo" class="text-base"></fa-icon>
       </button>
 
       <button
-        class="p-2 rounded-lg text-gray-400 hover:text-nxt-primary hover:bg-gray-100 transition-colors"
-        title="Infos du groupe">
-        <fa-icon [icon]="faCircleInfo" class="text-base text-gray-400"></fa-icon>
+        type="button"
+        disabled
+        title="Bientôt disponible"
+        class="p-2 rounded-lg text-gray-300 cursor-not-allowed">
+        <fa-icon [icon]="faCircleInfo" class="text-base"></fa-icon>
       </button>
     </div>
   </div>
 
-  <div #messagesContainer class="flex-1 min-h-0 space-y-4 overflow-y-auto bg-gray-50 p-4 md:p-6">
+  <div #messagesContainer class="flex-1 min-h-0 space-y-3 sm:space-y-4 overflow-y-auto bg-gray-50 p-3 sm:p-4 md:p-6">
 
     @for (message of messages(); track message.publicId) {
 
@@ -81,8 +90,8 @@
 
       } @else if (isMine(message)) {
 
-        <div class="ml-auto flex max-w-[80%] items-end justify-end gap-2 md:max-w-[65%]">
-          <div class="rounded-2xl rounded-br-xs bg-nxt-primary p-2 text-xs text-white shadow-xs">
+        <div class="ml-auto flex max-w-[85%] sm:max-w-[80%] items-end justify-end gap-2 md:max-w-[65%]">
+          <div class="rounded-2xl rounded-br-xs bg-nxt-primary p-2 text-xs text-white shadow-xs break-words">
             <p class="leading-relaxed">{{ message.content }}</p>
             <span class="mt-1 block text-right text-[10px] text-white/70">
               {{ message.createdAt | date:'HH:mm' }}
@@ -92,8 +101,8 @@
 
       } @else {
 
-        <div class="flex max-w-[80%] items-end gap-2 md:max-w-[65%]">
-          <div class="rounded-2xl rounded-bl-xs border border-gray-200/80 bg-white p-2 text-xs text-nxt-dark shadow-xs">
+        <div class="flex max-w-[85%] sm:max-w-[80%] items-end gap-2 md:max-w-[65%]">
+          <div class="rounded-2xl rounded-bl-xs border border-gray-200/80 bg-white p-2 text-xs text-nxt-dark shadow-xs break-words">
             <p class="leading-relaxed">{{ message.content }}</p>
             <span class="mt-1 block text-right text-[10px] text-gray-400">
               {{ message.createdAt | date:'HH:mm' }}
@@ -108,27 +117,25 @@
 
   </div>
 
-  <!-- Zone de saisie (shrink-0 & bg-nxt-surface : reste fixée en bas sans masquer les messages) -->
   @if (typingUser(); as name) {
-    <div class="px-4 md:px-6 py-1 text-[11px] text-gray-500 italic flex items-center gap-1.5 shrink-0">
-    <span class="flex gap-0.5">
-      <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 0ms"></span>
-      <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 150ms"></span>
-      <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 300ms"></span>
-    </span>
-      {{ name }} est en train d'écrire...
+    <div class="px-3 sm:px-4 md:px-6 py-1 text-[11px] text-gray-500 italic flex items-center gap-1.5 shrink-0">
+      <span class="flex gap-0.5">
+        <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 0ms"></span>
+        <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 150ms"></span>
+        <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 300ms"></span>
+      </span>
+      <span class="truncate">{{ name }} est en train d'écrire...</span>
     </div>
   }
 
-  <div class="flex shrink-0 items-center gap-2 border-t border-gray-200 bg-nxt-surface p-3 md:p-4 z-10">
-  <textarea
-    rows="1"
-    [(ngModel)]="draft" (input)="onTyping()" (keydown.enter)="onEnter($event)"
-    class="flex-1 resize-none rounded-2xl border border-gray-200/80 bg-gray-100 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 transition-all focus:border-nxt-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-nxt-primary/20"
-    placeholder="Écrire un message...">
-  </textarea>
+  <div class="flex shrink-0 items-end gap-2 border-t border-gray-200 bg-nxt-surface p-2.5 sm:p-3 md:p-4 z-10">
+    <textarea
+      rows="1"
+      [(ngModel)]="draft" (input)="onTyping()" (keydown.enter)="onEnter($event)"
+      class="flex-1 resize-none rounded-2xl border border-gray-200/80 bg-gray-100 px-3.5 sm:px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 transition-all focus:border-nxt-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-nxt-primary/20 max-h-32">
+    </textarea>
     <button (click)="onSend()" [disabled]="!draft().trim()"
-            class="btn-nxt-primary !shrink-0 !rounded-full !p-2.5">
+            class="btn-nxt-primary !shrink-0 !rounded-full !p-2.5 sm:!p-3">
       Envoyer
     </button>
   </div>

@@ -2,8 +2,8 @@ package com.nexteam.features.Messaging.conversation;
 
 
 import com.nexteam.common.AuditableEntity;
-import com.nexteam.features.Users.User.User;
 import com.nexteam.features.Messaging.message.Message;
+import com.nexteam.features.Users.User.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,14 +32,17 @@ public class Conversation extends AuditableEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @Builder.Default
+    @ToString.Exclude
     private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("createdAt ASC")
     @Builder.Default
+    @ToString.Exclude
     private List<Message> messages = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
+    @ToString.Exclude
     private User owner;
 }

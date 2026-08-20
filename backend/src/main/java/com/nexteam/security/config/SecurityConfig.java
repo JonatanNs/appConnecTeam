@@ -57,7 +57,10 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:4200",      // dev
                 "https://nexteam.com",        // production
-                "http://127.0.0.1:5500" // websocket
+                "http://127.0.0.1:5500", // websocket
+                "http://10.50.101.16:4200/",
+                "http://169.254.190.148:4200/",
+                "http://169.254.57.215:4200/"
                 ));
 
         // Méthodes HTTP autorisées — lister explicitement, éviter "*"
@@ -94,7 +97,7 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/login").permitAll()
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 // accessDeniedHandler → quand un utilisateur connecté tente d’accéder à une ressource pour laquelle il n’a pas le droit.
                 .exceptionHandling(e -> e
                         .accessDeniedHandler(accessDeniedHandler)

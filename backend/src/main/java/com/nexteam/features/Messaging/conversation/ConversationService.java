@@ -15,9 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,35 +43,63 @@ public class ConversationService {
                 .map(convMapper::convToResponseDTO);
     }
 
+    /**
+     * Méthode en charge de crée une conversation. Le créateur devient propriétaire et participant.
+     * Pour une conversation à 2 participants, réutilise une conversation privée
+     * existante entre les mêmes utilisateurs si elle existe (évite les doublons).
+     *
+     * @throws NotFoundException        si le créateur ou un participant est introuvable
+     * @throws IllegalArgumentException si aucun participant n'est fourni
+     */
     @Transactional
     public ConvResponseDTO createConversation(ConvRequestDTO requestDTO, String creatorEmail) {
 
         User creator = userRepository.findByEmail(creatorEmail)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable."));
 
-        Set<User> participants = new HashSet<>(
-                userRepository.findAllByPublicIdIn(requestDTO.getUsersIds())
-        );
+        if (requestDTO.getUsersIds() == null || requestDTO.getUsersIds().isEmpty()) {
+            throw new IllegalArgumentException("Sélectionnez au moins un participant.");
+        }
 
+        List<UUID> filteredIds = requestDTO.getUsersIds().stream()
+                .filter(id -> !id.equals(creator.getPublicId()))
+                .distinct()
+                .toList();
+
+        if (filteredIds.isEmpty()) {
+            throw new IllegalArgumentException("Sélectionnez au moins un autre participant.");
+        }
+
+        List<User> foundUsers = userRepository.findAllByPublicIdIn(filteredIds);
+        if (foundUsers.size() != filteredIds.size()) {
+            throw new NotFoundException("Un ou plusieurs participants sont introuvables.");
+        }
+
+        Set<User> participants = new HashSet<>(foundUsers);
         participants.add(creator);
 
         String conversationName = requestDTO.getName();
 
         if (participants.size() == 2) {
-
             User otherUser = participants.stream()
                     .filter(u -> !u.getPublicId().equals(creator.getPublicId()))
                     .findFirst()
                     .orElseThrow(() -> new NotFoundException("Autre participant introuvable."));
 
-            conversationName = otherUser.getFirstname() + " " + otherUser.getLastname();
-        }
+            Optional<Conversation> existing =
+                    convRepository.findOneToOneConversation(creator.getPublicId(), otherUser.getPublicId());
 
-        // Vérification APRÈS avoir déterminé le vrai nom
-        if (convRepository.existsByNameIgnoreCase(conversationName)) {
-            throw new AlreadyExistException(
-                    "Nom de conversation déjà utilisé ou existante."
-            );
+            if (existing.isPresent()) {
+                return convMapper.convToResponseDTO(existing.get());
+            }
+
+            conversationName = otherUser.getFirstname() + " " + otherUser.getLastname();
+        } else if (conversationName == null || conversationName.isBlank()) {
+            conversationName = participants.stream()
+                    .filter(u -> !u.getPublicId().equals(creator.getPublicId()))
+                    .map(User::getFirstname)
+                    .limit(3)
+                    .collect(Collectors.joining(", "));
         }
 
         Conversation conversation = Conversation.builder()
@@ -102,15 +129,45 @@ public class ConversationService {
         Conversation conversation = convRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
 
-        if (!conversation.getName().equalsIgnoreCase(requestDTO.getName()) && convRepository.existsByNameIgnoreCase(requestDTO.getName())) {
-            throw new AlreadyExistException("Conversation déjà présente.");
+        boolean nameChanged = !conversation.getName().equalsIgnoreCase(requestDTO.getName());
+
+        if (nameChanged && convRepository.existsByNameIgnoreCaseAndOwner_PublicId(
+                requestDTO.getName(), conversation.getOwner().getPublicId())) {
+            throw new AlreadyExistException("Vous avez déjà une conversation portant ce nom.");
         }
 
         conversation.setName(requestDTO.getName());
 
-        return convMapper.convToResponseDTO(
-                convRepository.save(conversation)
-        );
+        return convMapper.convToResponseDTO(convRepository.save(conversation));
+    }
+
+    @Transactional
+    public void leaveConversation(UUID conversationId, String userEmail) {
+        Conversation conversation = convRepository.findByPublicId(conversationId)
+                .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new NotFoundException("Utilisateur introuvable."));
+
+        boolean isParticipant = conversation.getUsers().stream()
+                .anyMatch(u -> u.getPublicId().equals(user.getPublicId()));
+        if (!isParticipant) {
+            throw new AccessDeniedException("Vous n'êtes pas participant de cette conversation.");
+        }
+
+        conversation.getUsers().remove(user);
+
+        if (conversation.getUsers().isEmpty()) {
+            convRepository.delete(conversation);
+            return;
+        }
+
+        if (conversation.getOwner().getPublicId().equals(user.getPublicId())) {
+            User newOwner = conversation.getUsers().iterator().next();
+            conversation.setOwner(newOwner);
+        }
+
+        convRepository.save(conversation);
     }
 
     @Transactional
@@ -118,19 +175,5 @@ public class ConversationService {
         convRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
         convRepository.deleteByPublicId(publicId);
-    }
-
-    public void assertParticipant(UUID conversationId, String userEmail) {
-        boolean isParticipant = convRepository.existsByPublicIdAndUsers_Email(conversationId, userEmail);
-        if (!isParticipant) {
-            throw new AccessDeniedException("Vous n'êtes pas participant de cette conversation.");
-        }
-    }
-
-    public void assertOwner(UUID conversationId, String userEmail) {
-        boolean isOwner = convRepository.existsByPublicIdAndOwner_Email(conversationId, userEmail);
-        if (!isOwner) {
-            throw new AccessDeniedException("Seul le créateur de la conversation peut effectuer cette action.");
-        }
     }
 }

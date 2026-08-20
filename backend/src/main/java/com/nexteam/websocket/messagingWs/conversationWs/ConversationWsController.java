@@ -1,11 +1,8 @@
 package com.nexteam.websocket.messagingWs.conversationWs;
 
-import com.nexteam.features.Messaging.conversation.ConversationService;
-import com.nexteam.features.Messaging.message.dtos.MessageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -22,37 +19,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConversationWsController {
 
-    private final SimpMessagingTemplate messagingTemplate;
-    private final ConversationWsService wsService;
-    private final ConversationService conversationService;
+    private final ConversationWsService conversationService;
     private final ConversationPresenceService presenceService;
 
     @MessageMapping("/conversations/{conversationId}/join")
     public void join(@DestinationVariable UUID conversationId, Principal principal) {
         conversationService.assertParticipant(conversationId, principal.getName());
-
         presenceService.markOpen(principal.getName(), conversationId.toString());
-
-        MessageResponseDTO systemMessage = wsService.createSystemMessage(
-                conversationId,
-                principal.getName(),
-                "a rejoint la conversation"
-        );
-
-        messagingTemplate.convertAndSend(
-                "/topic/conversations/" + conversationId,
-                systemMessage
-        );
     }
 
     @MessageMapping("/conversations/{conversationId}/leave")
     public void leave(@DestinationVariable UUID conversationId, Principal principal) {
         conversationService.assertParticipant(conversationId, principal.getName());
-
         presenceService.markClosed(principal.getName(), conversationId.toString());
-
-        MessageResponseDTO systemMessage = wsService.createSystemMessage(
-                conversationId, principal.getName(), "a quitté la conversation");
-        messagingTemplate.convertAndSend("/topic/conversations/" + conversationId, systemMessage);
     }
 }

@@ -1,17 +1,8 @@
 package com.nexteam.websocket.messagingWs.conversationWs;
 
-import com.nexteam.exceptions.NotFoundException;
-import com.nexteam.features.Messaging.conversation.Conversation;
 import com.nexteam.features.Messaging.conversation.ConversationRepository;
-import com.nexteam.features.Users.User.User;
-import com.nexteam.features.Users.User.UserRepository;
-import com.nexteam.features.Messaging.message.Message;
-import com.nexteam.features.Messaging.message.MessageRepository;
-import com.nexteam.features.Messaging.message.dtos.MessageResponseDTO;
-import com.nexteam.features.Messaging.message.dtos.mapper.MessageMapper;
-import com.nexteam.features.Messaging.message.enums.MessageType;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -26,26 +17,19 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ConversationWsService {
-    private final MessageRepository messageRepository;
-    private final ConversationRepository conversationRepository;
-    private final UserRepository userRepository;
-    private final MessageMapper messageMapper;
+    private final ConversationRepository convRepository;
 
-    @Transactional
-    public MessageResponseDTO createSystemMessage(UUID conversationId, String userEmail, String action) {
-        Conversation conversation = conversationRepository.findByPublicId(conversationId)
-                .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
+    public void assertParticipant(UUID conversationId, String userEmail) {
+        boolean isParticipant = convRepository.existsByPublicIdAndUsers_Email(conversationId, userEmail);
+        if (!isParticipant) {
+            throw new AccessDeniedException("Vous n'êtes pas participant de cette conversation.");
+        }
+    }
 
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new NotFoundException("Utilisateur introuvable."));
-
-        Message message = Message.builder()
-                .conversation(conversation)
-                .sender(user)
-                .content(user.getFirstname() + " " + action)
-                .type(MessageType.SYSTEM)
-                .build();
-
-        return messageMapper.messageToResponseDTO(messageRepository.save(message));
+    public void assertOwner(UUID conversationId, String userEmail) {
+        boolean isOwner = convRepository.existsByPublicIdAndOwner_Email(conversationId, userEmail);
+        if (!isOwner) {
+            throw new AccessDeniedException("Seul le créateur de la conversation peut effectuer cette action.");
+        }
     }
 }

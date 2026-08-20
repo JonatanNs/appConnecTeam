@@ -82,7 +82,7 @@
       } @else if (isMine(message)) {
 
         <div class="ml-auto flex max-w-[80%] items-end justify-end gap-2 md:max-w-[65%]">
-          <div class="rounded-2xl rounded-br-xs bg-nxt-primary p-3.5 text-sm text-white shadow-xs">
+          <div class="rounded-2xl rounded-br-xs bg-nxt-primary p-2 text-xs text-white shadow-xs">
             <p class="leading-relaxed">{{ message.content }}</p>
             <span class="mt-1 block text-right text-[10px] text-white/70">
               {{ message.createdAt | date:'HH:mm' }}
@@ -93,7 +93,7 @@
       } @else {
 
         <div class="flex max-w-[80%] items-end gap-2 md:max-w-[65%]">
-          <div class="rounded-2xl rounded-bl-xs border border-gray-200/80 bg-white p-3.5 text-sm text-nxt-dark shadow-xs">
+          <div class="rounded-2xl rounded-bl-xs border border-gray-200/80 bg-white p-2 text-xs text-nxt-dark shadow-xs">
             <p class="leading-relaxed">{{ message.content }}</p>
             <span class="mt-1 block text-right text-[10px] text-gray-400">
               {{ message.createdAt | date:'HH:mm' }}
@@ -109,15 +109,26 @@
   </div>
 
   <!-- Zone de saisie (shrink-0 & bg-nxt-surface : reste fixée en bas sans masquer les messages) -->
+  @if (typingUser(); as name) {
+    <div class="px-4 md:px-6 py-1 text-[11px] text-gray-500 italic flex items-center gap-1.5 shrink-0">
+    <span class="flex gap-0.5">
+      <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 0ms"></span>
+      <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 150ms"></span>
+      <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 300ms"></span>
+    </span>
+      {{ name }} est en train d'écrire...
+    </div>
+  }
+
   <div class="flex shrink-0 items-center gap-2 border-t border-gray-200 bg-nxt-surface p-3 md:p-4 z-10">
-    <textarea
-      rows="1"
-      [(ngModel)]="draft" (keydown.enter)="onEnter($event)"
-      class="flex-1 resize-none rounded-2xl border border-gray-200/80 bg-gray-100 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 transition-all focus:border-nxt-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-nxt-primary/20"
-      placeholder="Écrire un message...">
-    </textarea>
+  <textarea
+    rows="1"
+    [(ngModel)]="draft" (input)="onTyping()" (keydown.enter)="onEnter($event)"
+    class="flex-1 resize-none rounded-2xl border border-gray-200/80 bg-gray-100 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 transition-all focus:border-nxt-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-nxt-primary/20"
+    placeholder="Écrire un message...">
+  </textarea>
     <button (click)="onSend()" [disabled]="!draft().trim()"
-      class="btn-nxt-primary !shrink-0 !rounded-full !p-2.5">
+            class="btn-nxt-primary !shrink-0 !rounded-full !p-2.5">
       Envoyer
     </button>
   </div>

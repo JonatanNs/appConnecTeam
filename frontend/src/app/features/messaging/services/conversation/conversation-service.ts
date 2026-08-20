@@ -26,21 +26,8 @@ export class ConversationService {
     );
   }
 
-  updateConversation(publicId : string, conversation : IConversation) : Observable<IApiResponse<IConversation>>{
-    return this.http.put<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`, conversation)
-  }
-
-  deleteConversation(publicId : string) : Observable<IApiResponse<IConversation>>{
-    return this.http.delete<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`)
-  }
-
   getConversation(publicId : string) : Observable<IApiResponse<IConversation>>{
     return this.http.get<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`)
-  }
-
-  searchConversation(word : string, pageable : IPageable) : Observable<IApiResponse<IPage<IConversation>>>{
-    return this.http.get<IApiResponse<IPage<IConversation>>>(
-      `${this.baseUrl}/conversations/search?${word}?page=${pageable.page}&size=${pageable.size}`)
   }
 
   getConversationByUserId(publicId : string, pageable : IPageable) : Observable<IApiResponse<IPage<IConversation>>>{
@@ -48,4 +35,16 @@ export class ConversationService {
       `${this.baseUrl}/conversations/users/${publicId}?page=${pageable.page}&size=${pageable.size}`);
   }
 
+  searchConversation(word : string, pageable : IPageable) : Observable<IApiResponse<IPage<IConversation>>>{
+    return this.http.get<IApiResponse<IPage<IConversation>>>(
+      `${this.baseUrl}/conversations/search?word=${word}?page=${pageable.page}&size=${pageable.size}`)
+  }
+
+  updateConversation(publicId : string, conversation : IConversation) : Observable<IApiResponse<IConversation>>{
+    return this.http.put<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`, conversation)
+  }
+
+  deleteConversation(publicId : string) : Observable<IApiResponse<IConversation>>{
+    return this.http.delete<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`)
+  }
 }

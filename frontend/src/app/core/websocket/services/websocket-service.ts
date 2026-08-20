@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { INotification } from '../../../features/messaging/interfaces/notification.interface';
 import {ENVIRONMENT} from '../../../environments/environement';
 import { IMessageSend } from '../../../features/messaging/interfaces/message.interface';
+import { ITyping } from '../../../features/messaging/interfaces/typing.interface';
 
 @Service()
 export class WebSocketService {
@@ -65,8 +66,8 @@ export class WebSocketService {
     this.publish(`/app/conversations/${conversationId}/send`, { content });
   }
 
-  sendTyping(conversationId: string): void {
-    this.publish(`/app/conversations/${conversationId}/typing`, {});
+  sendTyping(conversationId: string, typing: ITyping): void {
+    this.publish(`/app/conversations/${conversationId}/typing`, typing);
   }
 
   joinConversation(conversationId: string): void {

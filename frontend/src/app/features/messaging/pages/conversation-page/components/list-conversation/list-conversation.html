@@ -29,11 +29,36 @@
   <!-- Recherche -->
   <div class="shrink-0 px-3 py-3">
     <div class="relative">
-      <fa-icon [icon]="faMagnifyingGlass"
-               class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></fa-icon>
-      <input type="text"
-             class="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-8 pr-3 text-xs text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20"
-             placeholder="Rechercher une discussion...">
+      <fa-icon
+        [icon]="faMagnifyingGlass"
+        class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+      </fa-icon>
+
+      <input
+        type="text"
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event)"
+        class="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-8 pr-3 text-xs text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20"
+        placeholder="Rechercher une discussion..."
+      >
+
+      @if (searchResults().length > 0) {
+        <div
+          class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-200 bg-nxt-surface shadow-lg">
+
+          @for (conv of searchResults(); track conv.publicId) {
+            <button
+              type="button"
+              class="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-nxt-dark transition-colors hover:bg-gray-50">
+
+            <span class="font-medium">
+              {{ conv.name }}
+            </span>
+
+            </button>
+          }
+        </div>
+      }
     </div>
   </div>
 

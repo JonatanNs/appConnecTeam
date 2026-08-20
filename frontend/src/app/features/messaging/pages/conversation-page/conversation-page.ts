@@ -1,6 +1,6 @@
 import { Component, effect, ElementRef, inject, input, signal, ViewChild } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, map, merge, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, map, merge, of, Subject, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../../../../core/websocket/services/websocket-service';
 import { MessageService } from '../../services/message/message-service';
@@ -18,6 +18,7 @@ import {
   faPenToSquare,
   faVideo,
 } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'app-conversation-page',
   imports: [FormsModule, DatePipe, FaIconComponent],
@@ -29,10 +30,13 @@ export class ConversationPage {
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
   private conversationService = inject(ConversationService);
+  private typingTrigger$ = new Subject<void>();
+  private typingTimeout?: ReturnType<typeof setTimeout>;
+
 
   conversationId = input.required<string>();
   draft = signal('');
-
+  typingUser = signal<string | null>(null);
   conversation = toSignal(
     toObservable(this.conversationId).pipe(
       switchMap((id) =>
@@ -47,7 +51,6 @@ export class ConversationPage {
     ),
     { initialValue: null as IConversation | null },
   );
-
   messages = toSignal(
     toObservable(this.conversationId).pipe(
       switchMap((id) => {
@@ -83,17 +86,57 @@ export class ConversationPage {
       console.log('paramMap direct:', params.get('conversationId'));
     });
 
+    // Envoi de l'événement typing (debounce pour ne pas spammer le websocket)
+    this.typingTrigger$.pipe(debounceTime(300)).subscribe(() => {
+      this.typing();
+    });
+
+    // Scroll auto vers le bas à chaque nouveau message
     effect(() => {
-      this.messages(); // souscription aux changements
+      this.messages();
       setTimeout(() => this.scrollToBottom(), 50);
     });
 
+    // Join / leave de la conversation
     effect((onCleanup) => {
       const id = this.conversationId();
       console.log('effect join, id =', id);
       if (!id) return;
       this.wsService.joinConversation(id);
       onCleanup(() => this.wsService.leaveConversation(id));
+    });
+
+    // Réception des événements "typing" des autres utilisateurs
+    effect((onCleanup) => {
+      const id = this.conversationId();
+      if (!id) return;
+
+      const sub = this.wsService.subscribeToTyping(id).subscribe((event: any) => {
+        console.log('[TYPING] event reçu:', event); // <-- ajoute ça en premier
+        if (event.userPublicId === this.authService.currentUser()?.publicId) return;
+        this.typingUser.set(event.userName ?? "Quelqu'un");
+
+        clearTimeout(this.typingTimeout);
+        this.typingTimeout = setTimeout(() => this.typingUser.set(null), 3000);
+      });
+
+      onCleanup(() => {
+        sub.unsubscribe();
+        clearTimeout(this.typingTimeout);
+      });
+    });
+  }
+
+  onTyping(): void {
+    this.typingTrigger$.next();
+  }
+
+  typing(): void {
+    this.wsService.sendTyping(this.conversationId(), {
+      conversationId: this.conversationId(),
+      userId: this.authService.currentUser()?.publicId ?? '',
+      userName: this.authService.currentUser()?.firstname ?? '',
+      isTyping: true,
     });
   }
 
@@ -131,4 +174,3 @@ export class ConversationPage {
   protected readonly faPenToSquare = faPenToSquare;
   protected readonly faArrowLeft = faArrowLeft;
 }
-

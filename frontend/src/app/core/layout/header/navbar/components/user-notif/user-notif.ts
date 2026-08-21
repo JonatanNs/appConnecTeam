@@ -13,7 +13,8 @@ import { INotification } from '../../../../../../features/notifications/interfac
 type NotificationEvent =
   | { kind: 'new'; notification: INotification }
   | { kind: 'read'; publicId: string }
-  | { kind: 'read-all' };
+  | { kind: 'read-all' }
+  | { kind: 'read-conversation'; conversationPublicId: string };
 
 @Component({
   selector: 'app-user-notif',
@@ -28,7 +29,6 @@ export class UserNotif {
 
   private notificationService = inject(NotificationService);
   private wsService = inject(WebSocketService);
-
   isNotificationMenuOpen = signal(false);
 
   private defaultPageable = { page: 0, size: 10 };
@@ -36,22 +36,25 @@ export class UserNotif {
   private history$ = this.notificationService.getMyNotifications(this.defaultPageable).pipe(
     map((res) => res.data.content),
     catchError((err) => {
-      console.error('Erreur chargement notifications', err);
       return of([] as INotification[]);
     }),
   );
 
   private events$ = merge(
-    this.wsService
-      .subscribeToNotifications()
-      .pipe(map((notification): NotificationEvent => ({ kind: 'new', notification }))),
+    this.wsService.subscribeToNotifications().pipe(
+      map((notification): NotificationEvent => ({ kind: 'new', notification })),
+    ),
     this.notificationService.onNotificationRead.pipe(
       map((publicId): NotificationEvent => ({ kind: 'read', publicId })),
     ),
     this.notificationService.onAllNotificationsRead.pipe(
       map((): NotificationEvent => ({ kind: 'read-all' })),
     ),
+    this.notificationService.onConversationNotificationsRead$.pipe(
+      map((conversationPublicId): NotificationEvent => ({ kind: 'read-conversation', conversationPublicId })),
+    ),
   );
+
 
   notifications = toSignal(
     this.history$.pipe(
@@ -65,6 +68,10 @@ export class UserNotif {
                 return acc.map((n) => (n.publicId === event.publicId ? { ...n, read: true } : n));
               case 'read-all':
                 return acc.map((n) => ({ ...n, read: true }));
+              case 'read-conversation':
+                return acc.map((n) =>
+                  n.conversationPublicId === event.conversationPublicId ? { ...n, read: true } : n,
+                );
             }
           }, history),
         ),

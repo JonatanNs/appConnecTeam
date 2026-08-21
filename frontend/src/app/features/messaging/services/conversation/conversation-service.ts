@@ -27,42 +27,27 @@ export class ConversationService {
     return this.http.get<IApiResponse<IConversation>>(`${this.baseUrl}/conversations/${publicId}`);
   }
 
-  getConversationByUserId(
-    publicId: string,
-    pageable: IPageable,
-  ): Observable<IApiResponse<IPage<IConversation>>> {
+  getConversationByUserId(publicId: string, pageable: IPageable,): Observable<IApiResponse<IPage<IConversation>>> {
     return this.http.get<IApiResponse<IPage<IConversation>>>(
       `${this.baseUrl}/conversations/users/${publicId}?page=${pageable.page}&size=${pageable.size}`,
     );
   }
 
-  searchConversation(
-    word: string,
-    pageable: IPageable,
-  ): Observable<IApiResponse<IPage<IConversation>>> {
+  searchConversation(word: string, pageable: IPageable,): Observable<IApiResponse<IPage<IConversation>>> {
     const params = new HttpParams()
       .set('word', word)
       .set('page', pageable.page.toString())
       .set('size', pageable.size.toString());
 
-    return this.http.get<IApiResponse<IPage<IConversation>>>(
-      `${this.baseUrl}/conversations/search`,
-      { params },
-    );
+    return this.http.get<IApiResponse<IPage<IConversation>>>(`${this.baseUrl}/conversations/search`, { params },);
   }
 
   private conversationUpdated$ = new Subject<void>();
   readonly onConversationUpdated = this.conversationUpdated$.asObservable();
 
-  updateConversation(
-    publicId: string,
-    conversation: ICreateConversation,
-  ): Observable<IApiResponse<ICreateConversation>> {
+  updateConversation(publicId: string, conversation: ICreateConversation,): Observable<IApiResponse<ICreateConversation>> {
     return this.http
-      .put<IApiResponse<ICreateConversation>>(
-        `${this.baseUrl}/conversations/${publicId}`,
-        conversation,
-      )
+      .put<IApiResponse<ICreateConversation>>(`${this.baseUrl}/conversations/${publicId}`, conversation,)
       .pipe(tap(() => this.conversationUpdated$.next()));
   }
 

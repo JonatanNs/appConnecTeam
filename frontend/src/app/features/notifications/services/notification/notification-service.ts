@@ -6,6 +6,7 @@ import { Observable, Subject, tap } from 'rxjs';
 import { IApiResponse } from '../../../../shared/interfaces/api-response.interface';
 import { IPage } from '../../../../shared/interfaces/pageable/page.interface';
 import { INotification } from '../../interfaces/notification.interface';
+import {WebSocketService} from '../../../../core/websocket/services/websocket-service';
 
 @Service()
 export class NotificationService {
@@ -17,6 +18,26 @@ export class NotificationService {
 
   private allNotificationsRead$ = new Subject<void>();
   readonly onAllNotificationsRead = this.allNotificationsRead$.asObservable();
+
+  private myNewNotifications$ = new Subject<INotification>();
+  readonly onMyNewNotifications$ = this.myNewNotifications$.asObservable();
+
+  private wsService = inject(WebSocketService);
+
+  constructor() {
+    this.wsService.subscribeToNotifications().subscribe((notif) => {
+      this.myNewNotifications$.next(notif);
+    });
+  }
+
+  private conversationNotificationsRead$ = new Subject<string>();
+  readonly onConversationNotificationsRead$ = this.conversationNotificationsRead$.asObservable();
+
+  markConversationAsRead(conversationPublicId: string): Observable<IApiResponse<void>> {
+    return this.http
+      .patch<IApiResponse<void>>(`${this.baseUrl}/notifications/conversation/${conversationPublicId}/read`, null)
+      .pipe(tap(() => this.conversationNotificationsRead$.next(conversationPublicId)));
+  }
 
   getMyNotifications(pageable: IPageable): Observable<IApiResponse<IPage<INotification>>> {
     return this.http.get<IApiResponse<IPage<INotification>>>(

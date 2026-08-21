@@ -75,6 +75,9 @@
                     [class.text-nxt-dark]="conv.publicId !== selectedConversationId()">
                 {{ conv.name }}
               </span>
+              @if (hasUnread(conv)) {
+                <span class="h-2 w-2 shrink-0 rounded-full bg-nxt-primary"></span>
+              }
 
               @if (lastMessage(conv); as last) {
                 <span class="shrink-0 text-[10px] text-gray-400">{{ last.createdAt | date: 'short' }}</span>

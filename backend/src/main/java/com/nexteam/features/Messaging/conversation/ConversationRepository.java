@@ -16,7 +16,17 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
     Optional<Conversation> findByPublicId(UUID publicId);
 
     @EntityGraph(attributePaths = "users")
-    Page<Conversation> findByNameContainingIgnoreCase(String word, Pageable pageable);
+    @Query("""
+        SELECT c FROM Conversation c
+        JOIN c.users u
+        WHERE u.email = :userEmail
+          AND LOWER(c.name) LIKE LOWER(CONCAT('%', :word, '%'))
+        """)
+    Page<Conversation> findByNameContainingIgnoreCaseAndUser(
+            @Param("word") String word,
+            @Param("userEmail") String userEmail,
+            Pageable pageable
+    );
 
     Page<Conversation> findByUsersPublicId(UUID publicId, Pageable pageable);
 

@@ -7,7 +7,6 @@ import com.nexteam.features.Messaging.conversation.dtos.ConvRequestDTO;
 import com.nexteam.features.Messaging.conversation.dtos.ConvResponseDTO;
 import com.nexteam.features.Users.User.UserService;
 import com.nexteam.features.Users.User.dtos.UserResponseDTO;
-import com.nexteam.websocket.messagingWs.conversationWs.ConversationWsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,14 +31,13 @@ import java.util.UUID;
 @RequestMapping("api/v1/conversations")
 public class ConversationController {
     private final ConversationService conversationService;
-    private final ConversationWsService conversationWsService;
     private final UserService userService;
     private final PageMapper pageMapper;
 
     @GetMapping("/{publicId}")
     public ResponseEntity<ApiResponse<ConvResponseDTO>> getConvByPublicId(
             @PathVariable UUID publicId, @AuthenticationPrincipal UserDetails principal) {
-        conversationWsService.assertParticipant(publicId, principal.getUsername());
+        conversationService.assertParticipant(publicId, principal.getUsername());
         return ResponseEntity.ok().body(
                 ApiResponse.of(HttpStatus.OK.value(), "Conversation trouvé avec succès.",
                         conversationService.getByPublicId(publicId))
@@ -49,12 +47,13 @@ public class ConversationController {
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<PageResponseDTO<ConvResponseDTO>>> getConvByNameContaining(
             @RequestParam("word") String word,
-            Pageable pageable) {
+            Pageable pageable,
+            @AuthenticationPrincipal UserDetails principal) {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Conversations trouvé avec succès.",
-                        pageMapper.toPageResponse(conversationService.getByNameContaining(word, pageable))
+                        pageMapper.toPageResponse(conversationService.getByNameContaining(word, principal.getUsername(), pageable))
                 )
         );
     }
@@ -90,7 +89,7 @@ public class ConversationController {
             @PathVariable UUID publicId,
             @Valid @RequestBody ConvRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetails principal) {
-        conversationWsService.assertOwner(publicId, principal.getUsername());
+        conversationService.assertOwner(publicId, principal.getUsername());
         return ResponseEntity.ok().body(
                 ApiResponse.of(HttpStatus.OK.value(), "Conversation modifiée avec succès.",
                         conversationService.updateConversation(publicId, requestDTO))
@@ -100,7 +99,7 @@ public class ConversationController {
     @DeleteMapping("/{publicId}")
     public ResponseEntity<ApiResponse<Void>> deleteConversation(
             @PathVariable UUID publicId, @AuthenticationPrincipal UserDetails principal) {
-        conversationWsService.assertOwner(publicId, principal.getUsername());
+        conversationService.assertOwner(publicId, principal.getUsername());
         conversationService.deleteConversation(publicId);
         return ResponseEntity.ok().body(
                 ApiResponse.of(HttpStatus.OK.value(), "Conversation supprimée avec succès.", null)

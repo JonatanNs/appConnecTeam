@@ -2,9 +2,9 @@ package com.nexteam.features.Messaging.message;
 
 import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.Messaging.conversation.ConversationRepository;
+import com.nexteam.features.Messaging.conversation.ConversationService;
 import com.nexteam.features.Messaging.message.dtos.MessageResponseDTO;
 import com.nexteam.features.Messaging.message.dtos.mapper.MessageMapper;
-import com.nexteam.websocket.messagingWs.conversationWs.ConversationWsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,13 +20,13 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
     private final ConversationRepository conversationRepository;
-    private final ConversationWsService conversationWsService;
+    private final ConversationService conversationService;
 
     public List<MessageResponseDTO> getMessages(UUID conversationId, Instant before, int limit, String requesterEmail) {
         conversationRepository.findByPublicId(conversationId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
 
-        conversationWsService.assertParticipant(conversationId, requesterEmail);
+        conversationService.assertParticipant(conversationId, requesterEmail);
 
         Instant cursor = (before != null) ? before : Instant.now();
         Pageable pageable = PageRequest.of(0, limit);

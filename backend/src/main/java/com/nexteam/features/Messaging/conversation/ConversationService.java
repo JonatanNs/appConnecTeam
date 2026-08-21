@@ -5,6 +5,11 @@ import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.Messaging.conversation.dtos.ConvRequestDTO;
 import com.nexteam.features.Messaging.conversation.dtos.ConvResponseDTO;
 import com.nexteam.features.Messaging.conversation.dtos.mapper.ConvMapper;
+import com.nexteam.features.Messaging.message.Message;
+import com.nexteam.features.Messaging.message.MessageRepository;
+import com.nexteam.features.Messaging.message.dtos.mapper.MessageMapper;
+import com.nexteam.features.Messaging.message.enums.MessageType;
+import com.nexteam.features.Messaging.notification.NotificationRepository;
 import com.nexteam.features.Messaging.notification.NotificationService;
 import com.nexteam.features.Users.User.User;
 import com.nexteam.features.Users.User.UserRepository;
@@ -12,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +29,12 @@ import java.util.stream.Collectors;
 public class ConversationService {
     private final ConversationRepository convRepository;
     private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
     private final ConvMapper convMapper;
+    private final MessageMapper messageMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public ConvResponseDTO getByPublicId(UUID publicId) {
         return convMapper.convToResponseDTO(
@@ -33,8 +43,8 @@ public class ConversationService {
         );
     }
 
-    public Page<ConvResponseDTO> getByNameContaining(String word, Pageable pageable) {
-        Page<Conversation> conversations = convRepository.findByNameContainingIgnoreCase(word, pageable);
+    public Page<ConvResponseDTO> getByNameContaining(String word, String userEmail, Pageable pageable) {
+        Page<Conversation> conversations = convRepository.findByNameContainingIgnoreCaseAndUser(word, userEmail, pageable);
         return conversations.map(convMapper::convToResponseDTO);
     }
 
@@ -129,14 +139,43 @@ public class ConversationService {
         Conversation conversation = convRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
 
-        boolean nameChanged = !conversation.getName().equalsIgnoreCase(requestDTO.getName());
+        // Renommage (uniquement si un nouveau nom différent est fourni)
+        if (requestDTO.getName() != null && !requestDTO.getName().isBlank()
+                && !conversation.getName().equalsIgnoreCase(requestDTO.getName())) {
 
-        if (nameChanged && convRepository.existsByNameIgnoreCaseAndOwner_PublicId(
-                requestDTO.getName(), conversation.getOwner().getPublicId())) {
-            throw new AlreadyExistException("Vous avez déjà une conversation portant ce nom.");
+            if (convRepository.existsByNameIgnoreCaseAndOwner_PublicId(
+                    requestDTO.getName(), conversation.getOwner().getPublicId())) {
+                throw new AlreadyExistException("Vous avez déjà une conversation portant ce nom.");
+            }
+
+            conversation.setName(requestDTO.getName());
         }
 
-        conversation.setName(requestDTO.getName());
+        // Ajout de participants (jamais de suppression via cet endpoint)
+        if (requestDTO.getUsersIds() != null && !requestDTO.getUsersIds().isEmpty()) {
+
+            Set<UUID> existingIds = conversation.getUsers().stream()
+                    .map(User::getPublicId)
+                    .collect(Collectors.toSet());
+
+            List<UUID> newIds = requestDTO.getUsersIds().stream()
+                    .filter(id -> !existingIds.contains(id))
+                    .distinct()
+                    .toList();
+
+            if (!newIds.isEmpty()) {
+                List<User> newUsers = userRepository.findAllByPublicIdIn(newIds);
+                if (newUsers.size() != newIds.size()) {
+                    throw new NotFoundException("Un ou plusieurs participants sont introuvables.");
+                }
+
+                conversation.getUsers().addAll(newUsers);
+
+                String actorName = conversation.getOwner().getFirstname() + " " + conversation.getOwner().getLastname();
+                newUsers.forEach(u ->
+                        notificationService.notifyAddedToConversation(u, conversation.getPublicId(), actorName));
+            }
+        }
 
         return convMapper.convToResponseDTO(convRepository.save(conversation));
     }
@@ -158,6 +197,7 @@ public class ConversationService {
         conversation.getUsers().remove(user);
 
         if (conversation.getUsers().isEmpty()) {
+            notificationRepository.deleteByConversation_PublicId(conversationId);
             convRepository.delete(conversation);
             return;
         }
@@ -167,13 +207,43 @@ public class ConversationService {
             conversation.setOwner(newOwner);
         }
 
-        convRepository.save(conversation);
+        Conversation saved = convRepository.save(conversation);
+
+        Message systemMessage = Message.builder()
+                .conversation(saved)
+                .sender(user)
+                .content(user.getFirstname() + " a quitté la conversation")
+                .type(MessageType.SYSTEM)
+                .build();
+
+        Message savedMessage = messageRepository.save(systemMessage);
+
+        messagingTemplate.convertAndSend(
+                "/topic/conversations/" + conversationId,
+                messageMapper.messageToResponseDTO(savedMessage)
+        );
     }
 
     @Transactional
     public void deleteConversation(UUID publicId) {
         convRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
+
+        notificationRepository.deleteByConversation_PublicId(publicId);
         convRepository.deleteByPublicId(publicId);
+    }
+
+    public void assertParticipant(UUID conversationId, String userEmail) {
+        boolean isParticipant = convRepository.existsByPublicIdAndUsers_Email(conversationId, userEmail);
+        if (!isParticipant) {
+            throw new AccessDeniedException("Vous n'êtes pas participant de cette conversation.");
+        }
+    }
+
+    public void assertOwner(UUID conversationId, String userEmail) {
+        boolean isOwner = convRepository.existsByPublicIdAndOwner_Email(conversationId, userEmail);
+        if (!isOwner) {
+            throw new AccessDeniedException("Seul le créateur de la conversation peut effectuer cette action.");
+        }
     }
 }

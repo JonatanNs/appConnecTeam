@@ -18,6 +18,7 @@ public class ConvResponseDTO {
     private UUID publicId;
     private Set<UserResponseDTO> users;
     private String name;
+    private UserResponseDTO owner;
     private Instant createdAt;
     private List<MessageResponseDTO> messages;
 }

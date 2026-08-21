@@ -1,5 +1,6 @@
 package com.nexteam.websocket.messagingWs.conversationWs;
 
+import com.nexteam.features.Messaging.conversation.ConversationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConversationWsController {
 
-    private final ConversationWsService conversationService;
+    private final ConversationService conversationService;
     private final ConversationPresenceService presenceService;
 
     @MessageMapping("/conversations/{conversationId}/join")

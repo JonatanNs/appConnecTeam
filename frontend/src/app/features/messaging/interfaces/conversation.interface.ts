@@ -5,6 +5,7 @@ export interface IConversation {
   publicId: string;
   users: IUser[];
   name: string;
+  owner : IUser;
   createdAt: Date;
   messages : IMessageSend[] ;
 }

@@ -1,127 +1,412 @@
-<section class="flex flex-col h-full min-h-0 w-full overflow-hidden bg-gray-50 text-nxt-dark font-sans">
-  <!-- En-tête de la conversation -->
-  <div class="flex shrink-0 items-center justify-between border-b border-gray-200 bg-nxt-surface px-3 py-2.5 sm:px-4 md:px-6 md:py-3 shadow-xs z-10">
+<section
+  class="drawer drawer-end relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-gray-50 font-sans text-nxt-dark">
 
-    <!-- Info Groupe & Navigation -->
-    <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+  <!-- ====================================================== -->
+  <!-- CONTENU DE LA CONVERSATION -->
+  <!-- ====================================================== -->
+  <div class="drawer-content flex min-h-0 flex-1 flex-col">
+    @if ( conversation()) {
+    <!-- En-tête de la conversation -->
+    <div class="z-10 flex shrink-0 items-center justify-between border-b border-gray-200 bg-nxt-surface px-3 py-2.5 shadow-xs sm:px-4 md:px-6 md:py-3">
 
-      <!-- Bouton retour mobile -->
-      <button
-        class="text-lg text-gray-500 hover:text-nxt-primary md:hidden shrink-0 transition-colors p-1 -ml-1"
-        aria-label="Retour">
-        <fa-icon [icon]="faArrowLeft"></fa-icon>
-      </button>
+      <!-- Info Groupe & Navigation -->
+      <div class="flex min-w-0 items-center gap-2 sm:gap-3">
 
-      <!-- Avatar -->
-      <div class="relative shrink-0">
-        <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-nxt-primary/10 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary font-bold text-sm shadow-xs overflow-hidden">
-          <img class="h-full w-full object-cover"
-               [src]="'https://ui-avatars.com/api/?name=' + (conversation()?.name ?? '?')"
-               [alt]="conversation()?.name">
+        <!-- Bouton retour mobile -->
+        <button class="-ml-1 shrink-0 p-1 text-lg text-gray-500 transition-colors hover:text-nxt-primary md:hidden"
+                aria-label="Retour"
+                type="button">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </button>
+
+        <!-- Avatar -->
+        <div class="relative shrink-0">
+          <div class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-nxt-primary/20 bg-nxt-primary/10 text-sm font-bold text-nxt-primary shadow-xs sm:h-10 sm:w-10">
+
+            <img class="h-full w-full object-cover"
+                 [src]="'https://ui-avatars.com/api/?name=' + (conversation()?.name ?? '?')"
+                 [alt]="conversation()?.name">
+          </div>
+
+          @if (isGroup()) {
+            <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-nxt-primary text-[9px] font-bold text-white">
+              {{ conversation()?.users?.length }}
+            </span>
+          }
         </div>
-        @if (isGroup()) {
-          <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-nxt-primary text-[9px] font-bold text-white border-2 border-white">
-            {{ conversation()?.users?.length }}
-          </span>
-        }
+
+        <!-- Titre & Sous-titre -->
+        <div class="min-w-0 flex-1">
+
+          <h3 class="truncate text-sm font-bold leading-tight text-gray-900">
+            {{ conversation()?.name ?? 'Conversation' }}
+          </h3>
+
+          @if (isGroup()) {
+            <p class="truncate text-[11px] font-medium text-gray-500">
+              {{ conversation()?.users?.length }} membres
+            </p>
+          } @else {
+            <p class="truncate text-[11px] font-medium text-gray-400">
+              Conversation privée
+            </p>
+          }
+
+        </div>
       </div>
 
-      <!-- Titre & Sous-titre -->
-      <div class="min-w-0 flex-1">
-        <h3 class="text-sm font-bold leading-tight text-gray-900 truncate">
-          {{ conversation()?.name ?? 'Conversation' }}
-        </h3>
+      <!-- ====================================================== -->
+      <!-- ACTIONS -->
+      <!-- ====================================================== -->
+      <div class="flex shrink-0 items-center gap-1 sm:gap-1.5 md:gap-2">
 
-        @if (isGroup()) {
-          <p class="text-[11px] font-medium text-gray-500 truncate">
-            {{ conversation()?.users?.length }} membres
-          </p>
-        } @else {
-          <p class="text-[11px] font-medium text-gray-400 truncate">
-            Conversation privée
-          </p>
-        }
+        <!-- Modifier -->
+        <button onclick="edit_conversation_modal.showModal()"
+          class="hidden items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-all hover:border-nxt-primary/30 hover:bg-nxt-primary/10 hover:text-nxt-primary sm:flex">
+          <fa-icon [icon]="faPenToSquare" class="text-xs text-nxt-primary"></fa-icon>
+          <span>Modifier</span>
+        </button>
+
+        <!-- Participants -->
+        <label for="conversation-drawer"
+               class="hidden cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-all hover:border-nxt-primary/30 hover:bg-nxt-primary/10 hover:text-nxt-primary sm:flex">
+          <fa-icon [icon]="faUsers" class="text-xs text-nxt-primary"></fa-icon>
+          <span>Participants</span>
+        </label>
+
+        <!-- Séparateur -->
+        <div class="mx-1 hidden h-4 w-px bg-gray-200 sm:block"></div>
+
       </div>
     </div>
-
-    <!-- Actions -->
-    <div class="flex items-center gap-1 sm:gap-1.5 md:gap-2 shrink-0">
-
-      <button
-        type="button"
-        disabled
-        title="Bientôt disponible"
-        class="hidden sm:flex items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-400 cursor-not-allowed opacity-60">
-        <fa-icon [icon]="faPenToSquare" class="text-xs"></fa-icon>
-        <span>Modifier</span>
-      </button>
-
-      <div class="h-4 w-px bg-gray-200 mx-1 hidden sm:block"></div>
-    </div>
-  </div>
-
-  <div #messagesContainer class="flex-1 min-h-0 space-y-3 sm:space-y-4 overflow-y-auto bg-gray-50 p-3 sm:p-4 md:p-6">
-
-    @for (message of messages(); track message.publicId) {
-
-      @if (message.type === 'SYSTEM') {
-
-        <div class="flex items-center justify-center my-2">
-          <span class="bg-gray-200/70 text-gray-600 text-[11px] font-medium px-3 py-1 rounded-full">
-            {{ message.content }}
-          </span>
-        </div>
-
-      } @else if (isMine(message)) {
-
-        <div class="ml-auto flex max-w-[85%] sm:max-w-[80%] items-end justify-end gap-2 md:max-w-[65%]">
-          <div class="rounded-2xl rounded-br-xs bg-nxt-primary p-2 text-xs text-white shadow-xs break-words">
-            <p class="leading-relaxed">{{ message.content }}</p>
-            <span class="mt-1 block text-right text-[10px] text-white/70">
-              {{ message.createdAt | date:'HH:mm' }}
-            </span>
-          </div>
-        </div>
-
-      } @else {
-
-        <div class="flex max-w-[85%] sm:max-w-[80%] items-end gap-2 md:max-w-[65%]">
-          <div class="rounded-2xl rounded-bl-xs border border-gray-200/80 bg-white p-2 text-xs text-nxt-dark shadow-xs break-words">
-            <p class="leading-relaxed">{{ message.content }}</p>
-            <span class="mt-1 block text-right text-[10px] text-gray-400">
-              {{ message.createdAt | date:'HH:mm' }}
-            </span>
-          </div>
-        </div>
-      }
-
-    } @empty {
-      <p class="text-center text-sm text-gray-400 mt-8">Aucun message pour l'instant.</p>
     }
 
-  </div>
+    <!-- ====================================================== -->
+    <!-- MESSAGES -->
+    <!-- ====================================================== -->
+    <div
+      #messagesContainer
+      class="min-h-0 flex-1 space-y-3 overflow-y-auto bg-gray-50 p-3 sm:space-y-4 sm:p-4 md:p-6">
 
-  @if (typingUser(); as name) {
-    <div class="px-3 sm:px-4 md:px-6 py-1 text-[11px] text-gray-500 italic flex items-center gap-1.5 shrink-0">
-      <span class="flex gap-0.5">
-        <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 0ms"></span>
-        <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 150ms"></span>
-        <span class="w-1 h-1 rounded-full bg-nxt-primary animate-bounce" style="animation-delay: 300ms"></span>
-      </span>
-      <span class="truncate">{{ name }} est en train d'écrire...</span>
+      @for (message of messages(); track message.publicId) {
+
+        @if (message.type === 'SYSTEM') {
+
+          <!-- Message système -->
+          <div class="my-2 flex items-center justify-center">
+            <span
+              class="rounded-full bg-gray-200/70 px-3 py-1 text-[11px] font-medium text-gray-600">
+              {{ message.content }}
+            </span>
+          </div>
+
+        } @else if (isMine(message)) {
+
+          <!-- Message envoyé -->
+          <div
+            class="ml-auto flex max-w-[85%] items-end justify-end gap-2 sm:max-w-[80%] md:max-w-[65%]">
+
+            <div
+              class="break-words rounded-2xl rounded-br-xs bg-nxt-primary p-2 text-xs text-white shadow-xs">
+
+              <p class="leading-relaxed">
+                {{ message.content }}
+              </p>
+
+              <span class="mt-1 block text-right text-[10px] text-white/70">
+                {{ message.createdAt | date:'HH:mm' }}
+              </span>
+
+            </div>
+          </div>
+
+        } @else {
+
+          <!-- Message reçu -->
+          <div class="flex max-w-[85%] items-end gap-2 sm:max-w-[80%] md:max-w-[65%]">
+
+            <div class="break-words rounded-2xl rounded-bl-xs border border-gray-200/80 bg-white p-2 text-xs text-nxt-dark shadow-xs">
+
+              <p class="leading-relaxed">
+                {{ message.content }}
+              </p>
+
+              <span class="mt-1 block text-right text-[10px] text-gray-400">
+                {{ message.createdAt | date:'HH:mm' }}
+              </span>
+
+            </div>
+          </div>
+        }
+      }
+
+      @empty {
+        <p class="mt-8 text-center text-sm text-gray-400">
+          Aucun message pour l'instant.
+        </p>
+      }
     </div>
-  }
 
-  <div class="flex shrink-0 items-end gap-2 border-t border-gray-200 bg-nxt-surface p-2.5 sm:p-3 md:p-4 z-10">
-    <textarea
-      rows="1"
-      [(ngModel)]="draft" (input)="onTyping()" (keydown.enter)="onEnter($event)"
-      class="flex-1 resize-none rounded-2xl border border-gray-200/80 bg-gray-100 px-3.5 sm:px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 transition-all focus:border-nxt-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-nxt-primary/20 max-h-32">
-    </textarea>
-    <button (click)="onSend()" [disabled]="!draft().trim()"
-            class="btn-nxt-primary !shrink-0 !rounded-full !p-2.5 sm:!p-3">
-      Envoyer
-    </button>
+    <!-- ====================================================== -->
+    <!-- UTILISATEUR EN TRAIN D'ÉCRIRE -->
+    <!-- ====================================================== -->
+    @if (typingUser(); as name) {
+      <div class="flex shrink-0 items-center gap-1.5 px-3 py-1 text-[11px] italic text-gray-500 sm:px-4 md:px-6">
+        <span class="flex gap-0.5">
+          <span class="h-1 w-1 animate-bounce rounded-full bg-nxt-primary" style="animation-delay: 0ms"></span>
+          <span class="h-1 w-1 animate-bounce rounded-full bg-nxt-primary" style="animation-delay: 150ms"></span>
+          <span class="h-1 w-1 animate-bounce rounded-full bg-nxt-primary" style="animation-delay: 300ms"></span>
+        </span>
+        <span class="truncate">{{ name }} est en train d'écrire...</span>
+      </div>
+    }
+
+    <!-- ====================================================== -->
+    <!-- ZONE D'ENVOI -->
+    <!-- ====================================================== -->
+    <div class="z-10 flex shrink-0 items-end gap-2 border-t border-gray-200 bg-nxt-surface p-2.5 sm:p-3 md:p-4">
+
+      <textarea rows="1"
+                [(ngModel)]="draft"
+                (input)="onTyping()"
+                (keydown.enter)="onEnter($event)"
+        class="max-h-32 flex-1 resize-none rounded-2xl border border-gray-200/80 bg-gray-100 px-3.5 py-2.5 text-sm text-nxt-dark placeholder-gray-400 transition-all focus:border-nxt-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-nxt-primary/20 sm:px-4">
+      </textarea>
+
+      <button (click)="onSend()"
+              [disabled]="!draft().trim()"
+              class="btn-nxt-primary !shrink-0 !rounded-full !p-2.5 sm:!p-3">
+        Envoyer
+      </button>
+
+    </div>
+
   </div>
 
+  <!-- ====================================================== -->
+  <!-- DRAWER PARTICIPANTS -->
+  <!-- ====================================================== -->
+
+  <!-- État ouvert/fermé du drawer -->
+  <input id="conversation-drawer" type="checkbox" class="drawer-toggle" />
+
+  <!-- Panneau latéral -->
+  <div class="drawer-side z-20">
+
+    <!-- Overlay -->
+    <label for="conversation-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+
+    <!-- Contenu participants -->
+    <div class="min-h-full w-80 bg-nxt-surface p-4 shadow-xl">
+
+      <!-- Header -->
+      <div class="mb-5 flex items-center justify-between">
+
+        <div>
+          <h2 class="text-lg font-bold text-gray-900">
+            Participants
+          </h2>
+
+          <p class="text-xs text-gray-400">
+            {{ conversation()?.users?.length ?? 0 }} membres
+          </p>
+        </div>
+
+        <!-- Fermer -->
+        <label for="conversation-drawer" class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </label>
+
+      </div>
+
+      <!-- Liste des participants -->
+      <div class="space-y-1">
+        @for (user of conversation()?.users; track user.publicId) {
+          <div class="flex items-center gap-3 rounded-lg p-2.5 transition-colors hover:bg-gray-50">
+
+            <!-- Avatar -->
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-nxt-primary/10 text-xs font-bold text-nxt-primary">
+
+              <img class="h-full w-full object-cover"
+                   [src]="'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname"
+                   [alt]="user.firstname + ' ' + user.lastname">
+
+            </div>
+
+            <!-- Informations -->
+            <div class="min-w-0 flex-1">
+
+              <p class="truncate text-sm font-medium text-gray-900">
+                {{ user.firstname }} {{ user.lastname }}
+              </p>
+
+              <p class="truncate text-xs text-gray-400">
+                {{ user.email }}
+              </p>
+
+            </div>
+
+          </div>
+
+        } @empty {
+          <p class="py-8 text-center text-sm text-gray-400">
+            Aucun participant.
+          </p>
+        }
+      </div>
+    </div>
+  </div>
 </section>
+
+<!-- ====================================================== -->
+<!-- MODALE MODIFICATION CONVERSATION -->
+<!-- ====================================================== -->
+
+<dialog id="edit_conversation_modal" class="modal modal-bottom sm:modal-middle">
+
+  <div class="modal-box rounded-nxt-lg border border-nxt-muted bg-nxt-surface">
+
+    <h3 class="text-xl text-gray-900">
+      Modifier la conversation
+    </h3>
+
+    <!-- Onglets -->
+    <div class="mt-4 flex gap-1 border-b border-gray-200">
+      <!-- Renommer -->
+      <button (click)="editTab.set('rename')"
+              class="px-3 py-2 text-sm font-medium transition-colors"
+              [class.text-nxt-primary]="editTab() === 'rename'"
+              [class.border-b-2]="editTab() === 'rename'"
+              [class.border-nxt-primary]="editTab() === 'rename'"
+              [class.text-gray-500]="editTab() !== 'rename'">
+        Renommer
+      </button>
+
+      <!-- Ajouter participants -->
+      @if (isGroup()) {
+        <button (click)="editTab.set('participants')"
+                class="px-3 py-2 text-sm font-medium transition-colors"
+                [class.text-nxt-primary]="editTab() === 'participants'"
+                [class.border-b-2]="editTab() === 'participants'"
+                [class.border-nxt-primary]="editTab() === 'participants'"
+                [class.text-gray-500]="editTab() !== 'participants'">
+          Ajouter des participants
+        </button>
+      }
+    </div>
+
+    <!-- ====================================================== -->
+    <!-- FORMULAIRE RENOMMER -->
+    <!-- ====================================================== -->
+
+    @if (editTab() === 'rename') {
+      <form class="mt-5">
+        <label for="edit-name" class="mb-2 block text-sm font-semibold text-nxt-dark">
+          Nom de la conversation
+        </label>
+
+        <input type="text" id="edit-name"
+              [ngModel]="editName()"
+              (ngModelChange)="editName.set($event)"
+              name="edit-name"
+              placeholder="Nom de la conversation"
+          class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+      </form>
+
+      <div class="modal-action">
+        <form method="dialog" class="flex gap-2">
+          <button class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100">
+            Annuler
+          </button>
+
+          <button type="button"
+                  [disabled]="!editName().trim()" (click)="onRenameConversation()"
+                  class="btn-nxt-primary disabled:cursor-not-allowed disabled:opacity-50">
+            Enregistrer
+          </button>
+        </form>
+      </div>
+    }
+
+    <!-- ====================================================== -->
+    <!-- FORMULAIRE AJOUT PARTICIPANTS -->
+    <!-- ====================================================== -->
+
+    @if (editTab() === 'participants') {
+      <form class="mt-5">
+        <label class="mb-2 block text-sm font-semibold text-nxt-dark">
+          Nouveaux participants
+        </label>
+
+        <!-- Utilisateurs sélectionnés -->
+        @if (selectedNewUsers().length > 0) {
+          <div class="mb-2 flex flex-wrap gap-2">
+            @for (user of selectedNewUsers(); track user.publicId) {
+              <span class="flex items-center gap-1.5 rounded-full bg-nxt-primary/10 px-3 py-1 text-xs font-medium text-nxt-primary">
+                {{ user.firstname }} {{ user.lastname }}
+                <button (click)="removeNewUser(user)" class="text-nxt-primary/70 hover:text-nxt-primary">
+                  <fa-icon [icon]="faTimes" class="text-xs"></fa-icon>
+                </button>
+              </span>
+            }
+          </div>
+        }
+
+        <!-- Recherche utilisateur -->
+        <div class="relative">
+
+          <input type="text"
+                [ngModel]="addUserQuery()" (ngModelChange)="addUserQuery.set($event)"
+                name="add-user-search"
+                placeholder="Rechercher un utilisateur..."
+                class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+
+          @if (addUserResults().length > 0) {
+
+            <div class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-200 bg-nxt-surface shadow-lg">
+              @for (user of addUserResults(); track user.publicId) {
+                <button type="button" (click)="selectNewUser(user)"
+                        class="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-nxt-dark transition-colors hover:bg-gray-50">
+
+                  <span class="font-medium">             {{ user.firstname }} {{ user.lastname }} </span>
+                  <span class="text-xs text-gray-400"> {{ user.email }}                         </span>
+
+                </button>
+              }
+            </div>
+
+          }
+
+        </div>
+
+      </form>
+
+
+      <div class="modal-action">
+
+        <form method="dialog" class="flex gap-2">
+
+          <button
+            class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100">
+
+            Annuler
+
+          </button>
+
+          <button
+            type="button"
+            [disabled]="selectedNewUsers().length === 0"
+            (click)="onAddParticipants()"
+            class="btn-nxt-primary disabled:cursor-not-allowed disabled:opacity-50">
+
+            Ajouter
+
+          </button>
+
+        </form>
+
+      </div>
+    }
+  </div>
+
+</dialog>

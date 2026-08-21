@@ -1,6 +1,27 @@
-import {Component, computed, effect, ElementRef, inject, input, signal, ViewChild} from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, debounceTime, map, merge, of, Subject, switchMap } from 'rxjs';
+import {
+  Component,
+  computed,
+  debounced,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  resource,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  catchError,
+  combineLatest,
+  debounceTime,
+  firstValueFrom,
+  map,
+  merge,
+  of,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../../../../core/websocket/services/websocket-service';
 import { MessageService } from '../../services/message/message-service';
@@ -8,27 +29,27 @@ import { AuthService } from '../../../auth/service/auth-service';
 import { DatePipe } from '@angular/common';
 import { scan } from 'rxjs';
 import { IMessageSend } from '../../interfaces/message.interface';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConversationService } from '../../services/conversation/conversation-service';
 import { IConversation } from '../../interfaces/conversation.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {
-  faArrowLeft,
-  faCircleInfo,
-  faPenToSquare,
-  faVideo,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPenToSquare, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { IUser } from '../../../../shared/interfaces/user.interface';
+import { UserService } from '../../../../core/services/user/user-service';
+import { NoConversationSelected } from './components/no-conversation-selected/no-conversation-selected';
 
 @Component({
   selector: 'app-conversation-page',
-  imports: [FormsModule, DatePipe, FaIconComponent],
+  imports: [FormsModule, DatePipe, FaIconComponent, NoConversationSelected],
   templateUrl: './conversation-page.html',
   styleUrl: './conversation-page.css',
 })
 export class ConversationPage {
+  private router = inject(Router);
   private wsService = inject(WebSocketService);
   private messageService = inject(MessageService);
   private authService = inject(AuthService);
+  private userService = inject(UserService);
   private conversationService = inject(ConversationService);
   private typingTrigger$ = new Subject<void>();
   private typingTimeout?: ReturnType<typeof setTimeout>;
@@ -38,26 +59,37 @@ export class ConversationPage {
   conversationId = input.required<string>();
   draft = signal('');
   typingUser = signal<string | null>(null);
+
+  conversationRefreshTrigger = signal(0);
+
   conversation = toSignal(
-    toObservable(this.conversationId).pipe(
-      switchMap((id) =>
+    combineLatest([
+      toObservable(this.conversationId),
+      toObservable(this.conversationRefreshTrigger),
+    ]).pipe(
+      switchMap(([id]) =>
         this.conversationService.getConversation(id).pipe(
           map((response) => response.data),
           catchError((err) => {
-            console.error('Erreur chargement conversation', err);
-            return of(null as IConversation | null);
+            if (err.status === 403 || err.status === 404) {
+              this.router.navigate(['/messageries']);
+            }
+            return of(null);
           }),
         ),
       ),
     ),
     { initialValue: null as IConversation | null },
   );
+
   messages = toSignal(
     toObservable(this.conversationId).pipe(
       switchMap((id) => {
         return this.messageService.getMessageHistory(id).pipe(
           catchError((err) => {
-            console.error('Erreur chargement historique', err);
+            if (err.status === 403 || err.status === 404) {
+              this.router.navigate(['/messageries']);
+            }
             return of([] as IMessageSend[]);
           }),
           switchMap((history) =>
@@ -70,7 +102,6 @@ export class ConversationPage {
                 ),
             ).pipe(
               catchError((err) => {
-                console.error('Erreur flux WebSocket', err);
                 return of(history);
               }),
             ),
@@ -82,10 +113,26 @@ export class ConversationPage {
   );
 
   constructor() {
-    const route = inject(ActivatedRoute);
-    route.paramMap.subscribe((params) => {
-      console.log('paramMap direct:', params.get('conversationId'));
+    this.conversationService.onConversationUpdated.subscribe(() => {
+      this.conversationRefreshTrigger.update((n) => n + 1);
     });
+
+    this.conversationService.onConversationLeftOrDeleted
+      .pipe(takeUntilDestroyed())
+      .subscribe((deletedId) => {
+        console.log(
+          'EVENT reçu, deletedId:',
+          deletedId,
+          '| conversationId():',
+          this.conversationId(),
+        );
+        if (deletedId === this.conversationId()) {
+          console.log('→ navigation vers /messageries');
+          this.router.navigate(['/messageries']);
+        } else {
+          console.log('→ IDs différents, pas de navigation');
+        }
+      });
 
     // Envoi de l'événement typing (debounce pour ne pas spammer le websocket)
     this.typingTrigger$.pipe(debounceTime(300)).subscribe(() => {
@@ -101,7 +148,6 @@ export class ConversationPage {
     // Join / leave de la conversation
     effect((onCleanup) => {
       const id = this.conversationId();
-      console.log('effect join, id =', id);
       if (!id) return;
       this.wsService.joinConversation(id);
       onCleanup(() => this.wsService.leaveConversation(id));
@@ -124,6 +170,13 @@ export class ConversationPage {
         sub.unsubscribe();
         clearTimeout(this.typingTimeout);
       });
+    });
+
+    effect(() => {
+      const conv = this.conversation();
+      if (conv) {
+        this.editName.set(conv.name);
+      }
     });
   }
 
@@ -169,8 +222,73 @@ export class ConversationPage {
     }
   }
 
-  protected readonly faCircleInfo = faCircleInfo;
-  protected readonly faVideo = faVideo;
+  editTab = signal<'rename' | 'participants'>('rename');
+  editName = signal('');
+
+  selectedNewUsers = signal<IUser[]>([]);
+  addUserQuery = signal('');
+  debouncedAddUserQuery = debounced(this.addUserQuery, 300);
+
+  addUserSearchResource = resource({
+    params: () => this.debouncedAddUserQuery.value(),
+    loader: async ({ params: q }) => {
+      if (!q || !q.trim()) return [];
+      const res = await firstValueFrom(this.userService.searchUser(q, { page: 0, size: 20 }));
+      return res.data.content;
+    },
+  });
+
+  addUserResults = computed(() => {
+    const results = this.addUserSearchResource.value() ?? [];
+    const existingIds = new Set(this.conversation()?.users?.map((u) => u.publicId) ?? []);
+    const selectedIds = new Set(this.selectedNewUsers().map((u) => u.publicId));
+    const currentUserId = this.authService.currentUser()?.publicId;
+    return results.filter(
+      (u) =>
+        !existingIds.has(u.publicId) &&
+        !selectedIds.has(u.publicId) &&
+        u.publicId !== currentUserId,
+    );
+  });
+
+  selectNewUser(user: IUser): void {
+    this.selectedNewUsers.update((users) => [...users, user]);
+    this.addUserQuery.set('');
+  }
+
+  removeNewUser(user: IUser): void {
+    this.selectedNewUsers.update((users) => users.filter((u) => u.publicId !== user.publicId));
+  }
+
+  onRenameConversation(): void {
+    const conversationId = this.conversationId();
+    const name = this.editName().trim();
+    if (!name) return;
+
+    this.conversationService.updateConversation(conversationId, { name, usersIds: [] }).subscribe({
+      next: () => {
+        (document.getElementById('edit_conversation_modal') as HTMLDialogElement)?.close();
+      },
+      error: (err) => err,
+    });
+  }
+
+  onAddParticipants(): void {
+    const conversationId = this.conversationId();
+    const usersIds = this.selectedNewUsers().map((u) => u.publicId);
+
+    this.conversationService.updateConversation(conversationId, { name: '', usersIds }).subscribe({
+      next: () => {
+        this.selectedNewUsers.set([]);
+        this.addUserQuery.set('');
+        (document.getElementById('edit_conversation_modal') as HTMLDialogElement)?.close();
+      },
+      error: (err) => err,
+    });
+  }
+
   protected readonly faPenToSquare = faPenToSquare;
   protected readonly faArrowLeft = faArrowLeft;
+  protected readonly faTimes = faTimes;
+  protected readonly faUsers = faUsers;
 }

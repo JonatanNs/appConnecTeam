@@ -76,4 +76,10 @@ export class FormCreateConversation {
       error: (err) =>  err,
     });
   }
+
+  resetForm(): void {
+    this.selectedUsers.set([]);
+    this.query.set('');
+    this.conversationName.set('');
+  }
 }

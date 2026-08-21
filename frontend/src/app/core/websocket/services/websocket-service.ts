@@ -21,7 +21,7 @@ export class WebSocketService {
     this.client = new Client({
       brokerURL: ENVIRONMENT.wsUrl,
       reconnectDelay: 5000,
-      debug: (str) => console.log('[STOMP]', str),
+      debug: (str) =>  str,
       onConnect: () => this.connected$.next(true),
       onStompError: (frame) => {
         const errorMsg = frame.headers['message'] ?? 'Erreur STOMP inconnue';
@@ -50,16 +50,16 @@ export class WebSocketService {
     return this.connected$.asObservable();
   }
 
+  subscribeToNotifications(): Observable<INotification> {
+    return this.createTopicObservable<INotification>('/user/queue/notifications');
+  }
+
   subscribeToConversation(conversationId: string): Observable<IMessageSend> {
     return this.createTopicObservable<IMessageSend>(`/topic/conversations/${conversationId}`);
   }
 
   subscribeToTyping(conversationId: string): Observable<ITyping> {
     return this.createTopicObservable<ITyping>(`/user/queue/conversations/${conversationId}/typing`);
-  }
-
-  subscribeToNotifications(): Observable<INotification> {
-    return this.createTopicObservable<INotification>('/user/queue/notifications');
   }
 
   sendMessage(conversationId: string, content: string): void {
@@ -88,7 +88,6 @@ export class WebSocketService {
           return;
         }
         stompSub = this.client.subscribe(destination, (frame: StompMessage) => {
-          console.log('[TOPIC]', destination, frame.body);
           subscriber.next(JSON.parse(frame.body));
         });
       };
@@ -116,7 +115,6 @@ export class WebSocketService {
       return;
     }
 
-    console.warn(`En attente de connexion pour envoyer sur ${destination}...`);
     const sub = this.connected$.subscribe((isConnected) => {
       if (isConnected) {
         this.client!.publish({

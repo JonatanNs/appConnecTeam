@@ -29,10 +29,7 @@
   <!-- Recherche -->
   <div class="shrink-0 px-3 py-3">
     <div class="relative">
-      <fa-icon
-        [icon]="faMagnifyingGlass"
-        class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-      </fa-icon>
+      <fa-icon [icon]="faMagnifyingGlass" class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"></fa-icon>
 
       <input
         type="text"
@@ -41,31 +38,13 @@
         class="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-8 pr-3 text-xs text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20"
         placeholder="Rechercher une discussion..."
       >
-
-      @if (searchResults().length > 0) {
-        <div
-          class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-200 bg-nxt-surface shadow-lg">
-
-          @for (conv of searchResults(); track conv.publicId) {
-            <button
-              type="button"
-              class="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-nxt-dark transition-colors hover:bg-gray-50">
-
-            <span class="font-medium">
-              {{ conv.name }}
-            </span>
-
-            </button>
-          }
-        </div>
-      }
     </div>
   </div>
 
-  <!-- Liste des conversations -->
+  <!-- Liste des conversations (normale OU résultats de recherche) -->
   <div class="min-h-0 flex-1 overflow-y-auto px-2 pb-2 no-scrollbar">
 
-    @for (conv of conversations(); track conv.publicId) {
+    @for (conv of displayedConversations(); track conv.publicId) {
 
       <a [routerLink]="['conversation', conv.publicId]">
         <div class="group relative flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2.5 transition-colors"
@@ -114,7 +93,6 @@
             </div>
           </div>
 
-          <!-- Actions -->
           <div class="dropdown dropdown-end shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
             <button tabindex="0" type="button" class="btn-nxt-outline">
               <fa-icon [icon]="faEllipsisVertical" class="text-xs"></fa-icon>
@@ -123,59 +101,71 @@
             <ul tabindex="0"
                 class="dropdown-content z-50 mt-1 w-52 rounded-xl border border-gray-200 bg-nxt-surface p-1 shadow-xl">
 
-              <li>
-                <button
-                  type="button"
-                  class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-dark transition-colors hover:bg-gray-100">
+              @if (conv.users.length > 2) {
+                <li>
+                  <button
+                    type="button"
+                    (click)="onLeave(conv.publicId, $event)"
+                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-dark transition-colors hover:bg-gray-100">
+                    <fa-icon [icon]="faArrowRightFromBracket" class="w-4 text-xs text-gray-500"></fa-icon>
+                    <span>Quitter la conversation</span>
+                  </button>
+                </li>
 
-                  <fa-icon [icon]="faThumbtack" class="w-4 text-xs text-gray-500"></fa-icon>
-                  <span>Épingler</span>
+                <li class="my-1 border-t border-gray-100"></li>
 
-                </button>
-              </li>
-
-              <li>
-                <button
-                  type="button"
-                  class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-dark transition-colors hover:bg-gray-100">
-
-                  <fa-icon [icon]="faArrowRightFromBracket" class="w-4 text-xs text-gray-500"></fa-icon>
-                  <span>Quitter la conversation</span>
-
-                </button>
-              </li>
-
-              <li class="my-1 border-t border-gray-100"></li>
-
-              <li>
-                <button
-                  type="button"
-                  class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-error transition-colors hover:bg-nxt-error/10">
-
-                  <fa-icon [icon]="faTrash" class="w-4 text-xs"></fa-icon>
-                  <span>Supprimer</span>
-
-                </button>
-              </li>
-
+                @if (conv.owner.publicId === currentUserId()) {
+                  <li>
+                    <button
+                      type="button"
+                      (click)="onDelete(conv.publicId, $event)"
+                      class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-error transition-colors hover:bg-nxt-error/10">
+                      <fa-icon [icon]="faTrash" class="w-4 text-xs"></fa-icon>
+                      <span>Supprimer le groupe</span>
+                    </button>
+                  </li>
+                }
+              } @else {
+                <li class="my-1 border-t border-gray-100"></li>
+                <li>
+                  <button
+                    type="button"
+                    (click)="onLeave(conv.publicId, $event)"
+                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nxt-error transition-colors hover:bg-nxt-error/10">
+                    <fa-icon [icon]="faTrash" class="w-4 text-xs"></fa-icon>
+                    <span>Supprimer la conversation</span>
+                  </button>
+                </li>
+              }
             </ul>
           </div>
-
         </div>
       </a>
-
     } @empty {
 
-      <div class="flex h-full flex-col items-center justify-center px-5 text-center">
-        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-nxt-secondary/15">
-          <fa-icon [icon]="faComments" class="text-lg text-nxt-secondary"></fa-icon>
+      @if (query().trim()) {
+        <div class="flex h-full flex-col items-center justify-center px-5 text-center">
+          <p class="mt-3 text-sm font-semibold text-nxt-dark">
+            Aucun résultat
+          </p>
+          <p class="mt-1 text-xs text-gray-400">
+            Aucune conversation ne correspond à "{{ query() }}".
+          </p>
         </div>
-        <p class="mt-3 text-sm font-semibold text-nxt-dark">Aucune conversation</p>
-        <p class="mt-1 text-xs text-gray-400">Commencez une nouvelle discussion.</p>
-      </div>
-
+      } @else {
+        <div class="flex h-full flex-col items-center justify-center px-5 text-center">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-nxt-secondary/15">
+            <fa-icon [icon]="faComments" class="text-lg text-nxt-secondary"></fa-icon>
+          </div>
+          <p class="mt-3 text-sm font-semibold text-nxt-dark">
+            Aucune conversation
+          </p>
+          <p class="mt-1 text-xs text-gray-400">
+            Commencez une nouvelle discussion.
+          </p>
+        </div>
+      }
     }
-
   </div>
 
 </aside>

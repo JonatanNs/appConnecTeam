@@ -1,64 +1,67 @@
-<div class="mb-6">
-  <a routerLink="/admin" class="link-nxt">
-    <fa-icon [icon]="faArrowLeft" class="text-xs"></fa-icon>
-    Retour à l'administration
-  </a>
-</div>
-
-@if (users(); as response) {
-
-  <!-- En-tête de page moderne et épuré -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 pb-6 border-b border-gray-200/70">
-    <div>
-      <h1>Gestion des utilisateurs</h1>
-      <p class="text-xs text-gray-500">Administrez les comptes et les accès des membres de l'équipe</p>
-    </div>
-
-    <a routerLink="ajouter-utilisateur"
-       class="link-nxt-action">
-      <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
-      Ajouter un utilisateur
+<section class="p-6">
+  <div class="mb-6">
+    <a routerLink="/admin" class="link-nxt">
+      <fa-icon [icon]="faArrowLeft" class="text-xs"></fa-icon>
+      Retour à l'administration
     </a>
   </div>
 
-  <!-- Barre de recherche / filtres intégrée dans un conteneur carte soigné -->
-  <div class="mb-6 bg-nxt-surface border border-gray-200/80 rounded-2xl p-4 shadow-xs">
-    <app-search-filter/>
-  </div>
+  @if (users(); as response) {
 
-  <!-- Pagination du haut -->
-  @if (response.data.totalPages > 1) {
-    <div class="mb-6">
-      <app-paginate
-        [totalPages]="response.data.totalPages"
-        [number]="response.data.number"
-        [first]="response.data.first"
-        [last]="response.data.last"
-        [pageSize]="response.data.size"
-        (pageChange)="goToPage($event)"
-        (pageSizeChange)="changePageSize($event)">
-      </app-paginate>
+    <!-- En-tête de page moderne et épuré -->
+    <div
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 pb-6 border-b border-gray-200/70">
+      <div>
+        <h1>Gestion des utilisateurs</h1>
+        <p class="text-xs text-gray-500">Administrez les comptes et les accès des membres de l'équipe</p>
+      </div>
+
+      <a routerLink="ajouter-utilisateur"
+         class="link-nxt-action">
+        <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
+        Ajouter un utilisateur
+      </a>
     </div>
-  }
 
-  <!-- Conteneur principal de la liste sous forme de carte propre -->
-    <app-table-list-user [users]="response" (userAction)="onUserAction($event)"/>
-
-  <!-- Pagination du bas -->
-  @if (response.data.totalPages > 1) {
-    <div class="mt-6">
-      <app-paginate
-        [totalPages]="response.data.totalPages"
-        [number]="response.data.number"
-        [first]="response.data.first"
-        [last]="response.data.last"
-        [pageSize]="response.data.size"
-        (pageChange)="goToPage($event)"
-        (pageSizeChange)="changePageSize($event)">
-      </app-paginate>
+    <!-- Barre de recherche / filtres intégrée dans un conteneur carte soigné -->
+    <div class="mb-6 bg-nxt-surface border border-gray-200/80 rounded-2xl p-4 shadow-xs">
+      <app-search-filter />
     </div>
-  }
 
-} @else {
-  <p>Aucun employée...</p>
-}
+    <!-- Pagination du haut -->
+    @if (response.data.totalPages > 1) {
+      <div class="mb-6">
+        <app-paginate
+          [totalPages]="response.data.totalPages"
+          [number]="response.data.number"
+          [first]="response.data.first"
+          [last]="response.data.last"
+          [pageSize]="response.data.size"
+          (pageChange)="goToPage($event)"
+          (pageSizeChange)="changePageSize($event)">
+        </app-paginate>
+      </div>
+    }
+
+    <!-- Conteneur principal de la liste sous forme de carte propre -->
+    <app-table-list-user [users]="response" (userAction)="onUserAction($event)" />
+
+    <!-- Pagination du bas -->
+    @if (response.data.totalPages > 1) {
+      <div class="mt-6">
+        <app-paginate
+          [totalPages]="response.data.totalPages"
+          [number]="response.data.number"
+          [first]="response.data.first"
+          [last]="response.data.last"
+          [pageSize]="response.data.size"
+          (pageChange)="goToPage($event)"
+          (pageSizeChange)="changePageSize($event)">
+        </app-paginate>
+      </div>
+    }
+
+  } @else {
+    <p>Aucun employée...</p>
+  }
+</section>

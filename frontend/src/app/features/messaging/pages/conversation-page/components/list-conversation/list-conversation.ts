@@ -6,7 +6,7 @@ import { AuthService } from '../../../../../auth/service/auth-service';
 import { IConversation } from '../../../../interfaces/conversation.interface';
 import { IMessageSend } from '../../../../interfaces/message.interface';
 import { DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   faPlus,
   faEllipsisVertical,
@@ -35,9 +35,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './list-conversation.css',
 })
 export class ListConversation {
+
   private conversationService = inject(ConversationService);
+  private router = inject(Router);
   private authService = inject(AuthService);
-  private userId = computed(() => this.authService.currentUser()?.publicId);
+  protected currentUserId = computed(() => this.authService.currentUser()?.publicId);
   private defaultPageable = { size: 20, page: 0 };
 
   selectedConversationId = signal<string | null>(null);
@@ -45,7 +47,7 @@ export class ListConversation {
   refreshTrigger = signal(0);
 
   conversations = toSignal(
-    combineLatest([toObservable(this.userId), toObservable(this.refreshTrigger)]).pipe(
+    combineLatest([toObservable(this.currentUserId), toObservable(this.refreshTrigger)]).pipe(
       switchMap(([publicId]) =>
         publicId
           ? this.conversationService
@@ -57,11 +59,17 @@ export class ListConversation {
     { initialValue: [] as IConversation[] },
   );
 
+  displayedConversations = computed(() => {
+    return this.query().trim() ? this.searchResults() : this.conversations();
+  });
+
   query = signal('');
   debouncedQuery = debounced(this.query, 300);
 
   constructor() {
     this.conversationService.onConversationCreated.subscribe(() => this.refresh());
+    this.conversationService.onConversationCreated.subscribe(() => this.refresh());
+    this.conversationService.onConversationUpdated.subscribe(() => this.refresh());
   }
 
   searchResource = resource({
@@ -101,6 +109,27 @@ export class ListConversation {
   selectConversation(publicId: string): void {
     this.selectedConversationId.set(publicId);
   }
+
+  onLeave(conversationId: string, event: Event): void {
+    event.stopPropagation();
+    this.conversationService.leaveConversation(conversationId).subscribe({
+      next: () => {
+        this.refresh();
+      },
+      error: (err) =>  err.error.message,
+    });
+  }
+
+  onDelete(conversationId: string, event: Event): void {
+    event.stopPropagation();
+    this.conversationService.deleteConversation(conversationId).subscribe({
+      next: () => {
+        this.refresh();
+      },
+      error: (err) => err.error.message,
+    });
+  }
+
   protected readonly faTrash = faTrash;
   protected readonly faThumbtack = faThumbtack;
   protected readonly faEllipsisVertical = faEllipsisVertical;

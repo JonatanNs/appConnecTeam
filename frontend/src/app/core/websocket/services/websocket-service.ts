@@ -1,7 +1,7 @@
 import {  Service } from '@angular/core';
 import { Client, IMessage, IMessage as StompMessage, StompSubscription } from '@stomp/stompjs';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { INotification } from '../../../features/messaging/interfaces/notification.interface';
+import { INotification } from '../../../features/notifications/interfaces/notification.interface';
 import {ENVIRONMENT} from '../../../environments/environement';
 import { IMessageSend } from '../../../features/messaging/interfaces/message.interface';
 import { ITyping } from '../../../features/messaging/interfaces/typing.interface';

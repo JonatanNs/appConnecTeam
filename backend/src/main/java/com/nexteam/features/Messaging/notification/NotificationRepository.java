@@ -16,8 +16,7 @@ import java.util.UUID;
  * @version 1.0
  * @since 17/08/2026 22:14
  */
-public interface
-NotificationRepository extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     Optional<Notification> findByPublicId(UUID publicId);
 

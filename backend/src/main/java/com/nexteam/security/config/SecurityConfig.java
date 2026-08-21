@@ -65,7 +65,7 @@ public class SecurityConfig {
 
         // Méthodes HTTP autorisées — lister explicitement, éviter "*"
         config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
         ));
 
         // Headers autorisés dans les requêtes

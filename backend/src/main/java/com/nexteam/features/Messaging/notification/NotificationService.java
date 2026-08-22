@@ -74,11 +74,18 @@ public class NotificationService {
         Conversation conversation = conversationRepository.findByPublicId(conversationPublicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
 
+        String content = "";
+        if (conversation.getUsers().size() == 2) {
+            content = actorName + " a créer une conversation avec vous.";
+        } else {
+            content = actorName + " vous a ajouté à la conversation " + conversation.getName();
+        }
+
         Notification notification = Notification.builder()
                 .recipient(recipient)
                 .conversation(conversation)
                 .type(NotificationType.ADDED_TO_CONVERSATION)
-                .content(actorName + " vous a ajouté à la conversation " + conversation.getName())
+                .content(content)
                 .read(false)
                 .build();
 

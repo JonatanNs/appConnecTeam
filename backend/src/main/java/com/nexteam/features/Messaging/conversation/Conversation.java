@@ -22,7 +22,6 @@ import java.util.Set;
 @Entity
 public class Conversation extends AuditableEntity {
 
-    @Column(nullable = false)
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)

@@ -36,21 +36,37 @@ public class ConversationService {
     private final MessageMapper messageMapper;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public ConvResponseDTO getByPublicId(UUID publicId) {
-        return convMapper.convToResponseDTO(
+    private ConvResponseDTO toResponseDTOFor(Conversation conversation, UUID currentUserPublicId) {
+        ConvResponseDTO dto = convMapper.convToResponseDTO(conversation);
+
+        if (conversation.getName() == null && conversation.getUsers().size() == 2) {
+            String displayName = conversation.getUsers().stream()
+                    .filter(u -> !u.getPublicId().equals(currentUserPublicId))
+                    .findFirst()
+                    .map(u -> u.getFirstname() + " " + u.getLastname())
+                    .orElse("Conversation");
+            dto.setName(displayName);
+        }
+
+        return dto;
+    }
+
+    public ConvResponseDTO getByPublicId(UUID publicId, UUID currentUserPublicId) {
+        return toResponseDTOFor(
                 convRepository.findByPublicId(publicId)
-                        .orElseThrow(() -> new NotFoundException("Aucune conversation trouvée."))
+                        .orElseThrow(() -> new NotFoundException("Aucune conversation trouvée.")),
+                currentUserPublicId
         );
     }
 
-    public Page<ConvResponseDTO> getByNameContaining(String word, String userEmail, Pageable pageable) {
+    public Page<ConvResponseDTO> getByNameContaining(String word, String userEmail, Pageable pageable, UUID currentUserPublicId) {
         Page<Conversation> conversations = convRepository.findByNameContainingIgnoreCaseAndUser(word, userEmail, pageable);
-        return conversations.map(convMapper::convToResponseDTO);
+        return conversations.map(conv -> toResponseDTOFor(conv, currentUserPublicId));
     }
 
     public Page<ConvResponseDTO> getByUsersPublicId(UUID userPublicId, Pageable pageable) {
         return convRepository.findByUsersPublicId(userPublicId, pageable)
-                .map(convMapper::convToResponseDTO);
+                .map(conv -> toResponseDTOFor(conv, userPublicId));
     }
 
     /**
@@ -100,10 +116,10 @@ public class ConversationService {
                     convRepository.findOneToOneConversation(creator.getPublicId(), otherUser.getPublicId());
 
             if (existing.isPresent()) {
-                return convMapper.convToResponseDTO(existing.get());
+                return toResponseDTOFor(existing.get(), creator.getPublicId());
             }
 
-            conversationName = otherUser.getFirstname() + " " + otherUser.getLastname();
+            conversationName = null; // calculé dynamiquement selon qui regarde
         } else if (conversationName == null || conversationName.isBlank()) {
             conversationName = participants.stream()
                     .filter(u -> !u.getPublicId().equals(creator.getPublicId()))
@@ -130,18 +146,17 @@ public class ConversationService {
                         )
                 );
 
-        return convMapper.convToResponseDTO(saved);
+        return toResponseDTOFor(saved, creator.getPublicId());
     }
 
     @Transactional
-    public ConvResponseDTO updateConversation(UUID publicId, ConvRequestDTO requestDTO) {
+    public ConvResponseDTO updateConversation(UUID publicId, ConvRequestDTO requestDTO, UUID currentUserPublicId) {
 
         Conversation conversation = convRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
 
-        // Renommage (uniquement si un nouveau nom différent est fourni)
         if (requestDTO.getName() != null && !requestDTO.getName().isBlank()
-                && !conversation.getName().equalsIgnoreCase(requestDTO.getName())) {
+                && (conversation.getName() == null || !conversation.getName().equalsIgnoreCase(requestDTO.getName()))) {
 
             if (convRepository.existsByNameIgnoreCaseAndOwner_PublicId(
                     requestDTO.getName(), conversation.getOwner().getPublicId())) {
@@ -151,7 +166,6 @@ public class ConversationService {
             conversation.setName(requestDTO.getName());
         }
 
-        // Ajout de participants (jamais de suppression via cet endpoint)
         if (requestDTO.getUsersIds() != null && !requestDTO.getUsersIds().isEmpty()) {
 
             Set<UUID> existingIds = conversation.getUsers().stream()
@@ -177,7 +191,7 @@ public class ConversationService {
             }
         }
 
-        return convMapper.convToResponseDTO(convRepository.save(conversation));
+        return toResponseDTOFor(convRepository.save(conversation), currentUserPublicId);
     }
 
     @Transactional

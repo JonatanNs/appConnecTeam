@@ -30,6 +30,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/conversations")
 public class ConversationController {
+
     private final ConversationService conversationService;
     private final UserService userService;
     private final PageMapper pageMapper;
@@ -38,9 +39,10 @@ public class ConversationController {
     public ResponseEntity<ApiResponse<ConvResponseDTO>> getConvByPublicId(
             @PathVariable UUID publicId, @AuthenticationPrincipal UserDetails principal) {
         conversationService.assertParticipant(publicId, principal.getUsername());
+        UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         return ResponseEntity.ok().body(
                 ApiResponse.of(HttpStatus.OK.value(), "Conversation trouvé avec succès.",
-                        conversationService.getByPublicId(publicId))
+                        conversationService.getByPublicId(publicId, requester.getPublicId()))
         );
     }
 
@@ -49,11 +51,14 @@ public class ConversationController {
             @RequestParam("word") String word,
             Pageable pageable,
             @AuthenticationPrincipal UserDetails principal) {
+        UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
                         "Conversations trouvé avec succès.",
-                        pageMapper.toPageResponse(conversationService.getByNameContaining(word, principal.getUsername(), pageable))
+                        pageMapper.toPageResponse(
+                                conversationService.getByNameContaining(word, principal.getUsername(), pageable, requester.getPublicId())
+                        )
                 )
         );
     }
@@ -90,9 +95,10 @@ public class ConversationController {
             @Valid @RequestBody ConvRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetails principal) {
         conversationService.assertOwner(publicId, principal.getUsername());
+        UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         return ResponseEntity.ok().body(
                 ApiResponse.of(HttpStatus.OK.value(), "Conversation modifiée avec succès.",
-                        conversationService.updateConversation(publicId, requestDTO))
+                        conversationService.updateConversation(publicId, requestDTO, requester.getPublicId()))
         );
     }
 

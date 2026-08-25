@@ -1,46 +1,85 @@
-<nav class="flex items-center justify-between ml-5 px-4 py-2">
+<!-- Bouton Burger & Menu Déroulant (Mobile uniquement, placé à gauche via order-first) -->
+<div class="relative lg:hidden order-1">
+  <button type="button"
+          (click)="isMobileMenuOpen = !isMobileMenuOpen"
+          class="p-2 text-gray-600 hover:text-nxt-dark hover:bg-gray-100 rounded-lg transition-colors focus:outline-none"
+          aria-label="Ouvrir le menu">
+    <fa-icon [icon]="isMobileMenuOpen ? faXmark : faBars" class="text-xl"></fa-icon>
+  </button>
 
-  <!-- Navigation principale -->
-  <div class="flex items-center gap-2">
-    <div class="flex items-center gap-2">
-      <a routerLink="/accueil" routerLinkActive="linkActive" class="link-header-navbar">
-        Accueil
-      </a>
-      <a routerLink="/actualites" routerLinkActive="linkActive" class="link-header-navbar">
-        Actualités
-      </a>
-      <a routerLink="/messageries" routerLinkActive="linkActive" class="link-header-navbar">
-        Messageries
-      </a>
-      <a routerLink="/annuaires" routerLinkActive="linkActive" class="link-header-navbar">
-        Annuaires
-      </a>
-      <a routerLink="/rh" routerLinkActive="linkActive" class="link-header-navbar">
-        RH
-      </a>
-      <a routerLink="/admin" routerLinkActive="linkActive" class="link-header-navbar">
-        Administration
-      </a>
+  <!-- Menu Déroulant Mobile -->
+  @if (isMobileMenuOpen) {
+    <div class="absolute top-full left-0 z-50 mt-2 w-56 rounded-xl bg-nxt-surface p-2 shadow-xl border border-gray-200/80">
+      <div class="flex flex-col gap-1">
+        <a routerLink="/accueil" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Accueil
+        </a>
+        <a routerLink="/actualites" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Actualités
+        </a>
+        <a routerLink="/messageries" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Messageries
+        </a>
+        <a routerLink="/annuaires" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Annuaires
+        </a>
+        <a routerLink="/rh" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          RH
+        </a>
+        <a routerLink="/admin" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Administration
+        </a>
+
+        <a routerLink="/profil" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Voir mon profil
+        </a>
+
+        <a routerLink="/parametres" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Paramètres
+        </a>
+
+        <a routerLink="/aide" routerLinkActive="linkActive" (click)="isMobileMenuOpen = false" class="link-header-navbar px-3 py-2 rounded-lg hover:bg-gray-100">
+          Aide & Support
+        </a>
+      </div>
+
+      <div class="p-1.5 bg-gray-50/50 border-t border-gray-100">
+        <button class="w-full btn-nxt-error text-nxt-surface" (click)="logout()" >
+          Déconnexion
+        </button>
+      </div>
     </div>
+  }
+</div>
+
+<!-- Barre d'actions & Liens Desktop -->
+<nav class="flex items-center justify-end lg:justify-between flex-1 order-3 lg:order-2">
+
+  <!-- Navigation principale Desktop -->
+  <div class="hidden lg:flex items-center gap-2">
+    <a routerLink="/accueil" routerLinkActive="linkActive" class="link-header-navbar">Accueil</a>
+    <a routerLink="/actualites" routerLinkActive="linkActive" class="link-header-navbar">Actualités</a>
+    <a routerLink="/messageries" routerLinkActive="linkActive" class="link-header-navbar">Messageries</a>
+    <a routerLink="/annuaires" routerLinkActive="linkActive" class="link-header-navbar">Annuaires</a>
+    <a routerLink="/rh" routerLinkActive="linkActive" class="link-header-navbar">RH</a>
+    <a routerLink="/admin" routerLinkActive="linkActive" class="link-header-navbar">Administration</a>
   </div>
 
-  <div class="flex items-center gap-4">
+  <!-- Actions (Recherche + Notifications + Profil) -->
+  <div class="flex items-center gap-2 sm:gap-4">
 
     <div class="relative hidden lg:block">
       <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
         <fa-icon [icon]="faMagnifyingGlass" class="text-sm"></fa-icon>
       </span>
-      <input
-        type="text"
-        class="pl-10"
-        placeholder="Rechercher sur NexTeam...">
+      <input type="text" class="pl-10 pr-4 py-1.5 text-sm rounded-xl border border-gray-200 focus:outline-none focus:border-nxt-primary" placeholder="Rechercher sur NexTeam...">
     </div>
 
     <!-- Dropdown Notifications -->
-    <app-user-notif/>
+    <app-user-notif />
 
     <!-- Dropdown Profil -->
-    <app-user-profil/>
+    <app-user-profil class="hidden md:block" />
 
   </div>
 </nav>

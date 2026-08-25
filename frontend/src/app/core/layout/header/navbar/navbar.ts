@@ -1,17 +1,16 @@
-import {Component} from '@angular/core';
-import {RouterLink, RouterLinkActive} from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {faBell} from '@fortawesome/free-regular-svg-icons';
 import {
   faCalendar,
   faChevronRight,
   faCircleQuestion,
-  faGear, faMagnifyingGlass,
-  faUser,
+  faGear, faMagnifyingGlass, faRightFromBracket, faShieldHalved,
+  faUser, faXmark, faBars
 } from '@fortawesome/free-solid-svg-icons';
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { UserProfil } from './components/user-profil/user-profil';
 import { UserNotif } from './components/user-notif/user-notif';
+import {AuthService} from '../../../../features/auth/service/auth-service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,4 +21,22 @@ import { UserNotif } from './components/user-notif/user-notif';
 export class Navbar {
 
   protected readonly faMagnifyingGlass = faMagnifyingGlass;
+  protected readonly faBars = faBars;
+  protected readonly faXmark = faXmark;
+  protected readonly faShieldHalved = faShieldHalved;
+  protected readonly faRightFromBracket = faRightFromBracket;
+  protected readonly faCircleQuestion = faCircleQuestion;
+  protected readonly faGear = faGear;
+  protected readonly faUser = faUser;
+
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  public isMobileMenuOpen = false;
+
+  logout(): void {
+    this.authService.logout()
+    this.router.navigate(['/']);
+  }
+
 }

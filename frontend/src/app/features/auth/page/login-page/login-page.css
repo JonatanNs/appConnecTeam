@@ -1,13 +1,29 @@
-.mask-gradient-edges {
-  -webkit-mask-image:
-    radial-gradient(circle at 0% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%),
-    radial-gradient(circle at 100% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%);
-  mask-image:
-    radial-gradient(circle at 0% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%),
-    radial-gradient(circle at 100% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%);
-}
-
-/* Relief de chaque tuile */
+/* Relief de chaque tuile (Inchangé) */
 .mosaic-tile {
   background-image: linear-gradient(135deg, rgba(221, 221, 221, 0.36) 0%, rgba(0, 0, 0, 0.22) 100%);
+}
+
+/* --- MOBILE FIRST (Dégradés Haut / Bas) --- */
+/* Masque Haut : Mosaïque visible en haut (0%), fondu vers le bas */
+.mask-gradient-top {
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, transparent 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, transparent 100%);
+}
+
+/* Masque Bas : Mosaïque visible en bas (100%), fondu vers le haut */
+.mask-gradient-bottom {
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 20%, transparent 100%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 20%, transparent 100%);
+}
+
+/* --- DESKTOP (Ton CSS d'origine STRICTEMENT restauré) --- */
+@media (min-width: 1024px) {
+  .mask-gradient-edges {
+    -webkit-mask-image:
+      radial-gradient(circle at 0% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%),
+      radial-gradient(circle at 100% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%);
+    mask-image:
+      radial-gradient(circle at 0% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%),
+      radial-gradient(circle at 100% 50%, rgba(0, 0, 0, 1) 15%, transparent 35%);
+  }
 }

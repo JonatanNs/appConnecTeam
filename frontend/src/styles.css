@@ -37,10 +37,6 @@
     background-color: var(--color-nxt-secondary);
   }
 
-  header{
-    @apply relative flex items-center bg-nxt-surface px-6 shadow-sm border-b border-gray-200
-  }
-
   h1 {
     @apply text-3xl font-extrabold text-gray-900 tracking-tight mb-2
   }

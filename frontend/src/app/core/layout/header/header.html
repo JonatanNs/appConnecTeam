@@ -1,10 +1,10 @@
-<header>
-  <!-- Logo -->
-  <div class="flex-shrink-0">
-    <img src="logo_nexteam.png" alt="Logo Nexteam" class="h-10 w-auto"/>
+<header class="relative flex items-center justify-between bg-nxt-surface px-4 lg:px-6 py-2 shadow-sm border-b border-gray-200">
+
+  <div class="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 flex items-center justify-center shrink-0 order-2 lg:order-1">
+    <img ngSrc="logo_nexteam.png" alt="Logo Nexteam" class="h-10 w-auto" height="20" width="80" priority />
   </div>
 
-  <!-- Navbar -->
-  <app-navbar class="ml-6 flex-1"></app-navbar>
+  <!-- Navbar (Contient le Burger sur Mobile, le Menu + Profil sur Desktop) -->
+  <app-navbar class="contents lg:block lg:flex-1 lg:ml-12"></app-navbar>
 
 </header>

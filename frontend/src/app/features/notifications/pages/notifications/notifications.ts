@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { NotificationService } from '../../services/notification/notification-service';
 import { INotification } from '../../interfaces/notification.interface';
 import { DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faUserPlus,
@@ -16,7 +15,7 @@ type NotificationFilter = 'all' | 'unread';
 
 @Component({
   selector: 'app-notifications',
-  imports: [DatePipe, RouterLink, FaIconComponent],
+  imports: [DatePipe, FaIconComponent],
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })

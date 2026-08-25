@@ -1,15 +1,26 @@
-<div class="relative min-h-screen bg-[#e2e8f0] text-nxt-dark antialiased overflow-x-hidden flex items-center justify-center">
+<div class="relative min-h-screen bg-[#e2e8f0] text-nxt-dark antialiased overflow-x-hidden flex flex-col justify-between lg:justify-center items-center">
 
-  <!-- FOND MOSAÏQUE (Gauche + Droite) -->
-  <div class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden mask-gradient-edges">
-    <div class="w-full grid grid-cols-6 sm:grid-cols-10 lg:grid-cols-16">
+  <!-- MOSAÏQUE HAUT (Mobile) / PLEIN ÉCRAN GAUCHE-DROITE (Desktop) -->
+  <!-- MOBILE (Du haut) : Caché sur Desktop -->
+  <div class="relative w-full h-40 sm:h-52 lg:hidden z-0 pointer-events-none overflow-hidden mask-gradient-top">
+    <div class="w-full grid grid-cols-6 sm:grid-cols-10">
       @for (color of mosaicColors(); track $index) {
         <div class="aspect-square w-full mosaic-tile" [style.background-color]="color"></div>
       }
     </div>
   </div>
 
-  <div class="relative z-10 w-full max-w-[560px] p-6 sm:p-10">
+  <!-- DESKTOP (Du bas) : Visible uniquement sur Desktop -->
+  <div class="hidden lg:block lg:absolute top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden mask-gradient-edges">
+    <div class="w-full grid grid-cols-16">
+      @for (color of mosaicColors(); track $index) {
+        <div class="aspect-square w-full mosaic-tile" [style.background-color]="color"></div>
+      }
+    </div>
+  </div>
+
+  <!-- CARTE FORMULAIRE (Inchangée) -->
+  <div class="relative z-10 w-full max-w-[560px] p-6 sm:p-10 my-auto lg:my-0">
     <div class="bg-nxt-surface p-10 sm:p-12 rounded-2xl border border-gray-200/80 shadow-xl">
 
       <div class="flex justify-center mb-8">
@@ -24,6 +35,15 @@
       <!-- Formulaire -->
       <app-form-login></app-form-login>
 
+    </div>
+  </div>
+
+  <!-- MOSAÏQUE BAS (Mobile uniquement) -->
+  <div class="relative w-full h-40 sm:h-52 lg:hidden z-0 pointer-events-none overflow-hidden mask-gradient-bottom">
+    <div class="w-full grid grid-cols-6 sm:grid-cols-10">
+      @for (color of mosaicColors(); track $index) {
+        <div class="aspect-square w-full mosaic-tile" [style.background-color]="color"></div>
+      }
     </div>
   </div>
 

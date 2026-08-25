@@ -1,4 +1,4 @@
-# Cahier des charges NexTeam
+# Cahier des charges
 
 
 ## 1 - Présentation du projet
@@ -151,7 +151,7 @@ Le wireframe représente la structure générale d'une interface sans se concent
 - Valider l'emplacement des fonctionnalités.
 - Se concentrer sur l'expérience utilisateur avant le design.
 
-![maquette-wireframe.png](/nexteam-docs/static/img/maquettes/maquette-wireframe.png)
+![maquette-wireframe.png](/img/maquettes/maquette-wireframe.png)
 
 ---
 
@@ -166,7 +166,7 @@ Le mockup est une version plus avancée du wireframe intégrant l'identité visu
 - Valider la cohérence de la charte graphique.
 - Faciliter les retours des utilisateurs et des clients.
 
-![maquette-mockup.png](/nexteam-docs/static/img/maquettes/maquette-mockup.png)
+![maquette-mockup.png](/img/maquettes/maquette-mockup.png)
 
 ### Maquette complète
 
@@ -263,7 +263,7 @@ Développement
 
 ### Use Case
 
-![useCase-nexteam.png](/nexteam-docs/static/img/use-case/useCase-nexteam.png)
+![useCase-nexteam.png](/img/use-case/useCase-nexteam.png)
 
 
 | **Employé & Fonctionnalités** |
@@ -336,21 +336,6 @@ Développement
 
 ## 9 - Plan de tests
 
-**Objectif** :
-
-- le bon fonctionnement des règles métier
-- la robustesse du système face aux cas nominaux et cas d’erreurs
-- l’intégration correcte entre les couches (API → Service → Repository → DB)
-
-Les tests sont divisés en deux niveaux :
-
-- **Tests unitaires** : validation isolée de la logique métier (Mockito, sans Spring context complet)
-- **Tests d’intégration** : validation du comportement global (API REST + Spring Boot + DB)
-
-
-
-# Plan de tests
-
 L’objectif des tests est de valider :
 
 - le bon fonctionnement des règles métier
@@ -364,11 +349,8 @@ Les tests sont divisés en deux niveaux :
 
 ---
 
-## 1. Tests unitaires (Service Layer)
+### Tests unitaires (Service Layer)
 
-### 1.1 Utilisateurs
-
-UT-USR-00 à UT-USR-11 réalisés (à l'exception de UT-USR-06 à corriger — teste actuellement `getUser` au lieu de `createUser`)
 ### 1.1 Utilisateurs
 
 #### Cas nominaux
@@ -455,7 +437,7 @@ UT-USR-00 à UT-USR-11 réalisés (à l'exception de UT-USR-06 à corriger — t
 
 ---
 
-## 2. Tests d'intégration (Spring Boot)
+### Tests d'intégration (Spring Boot)
 
 ### 2.2 Authentification
 | ID         | Cas de test     | Résultat attendu   |

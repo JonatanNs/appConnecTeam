@@ -38,7 +38,7 @@
   }
 
   h1 {
-    @apply text-3xl font-extrabold text-gray-900 tracking-tight mb-2
+    @apply font-extrabold text-gray-900 tracking-tight mb-2 text-lg lg:text-3xl
   }
 
   input {

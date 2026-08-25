@@ -1,104 +1,127 @@
-# Cahier des charges
+# Cahier des charges NexTeam
 
-## 1 -Présentation du projet
 
-Plateforme intranet permettant la communication et la gestion interne des employés. NexTeam répond à un besoin majeur rencontré dans de nombreuses entreprises : le manque de communication et de centralisation des échanges entre les employés, les ressources humaines, les responsables et les managers.
+## 1 - Présentation du projet
 
-L’application NexTeam permet de pallier cette problématique grâce à un système de messagerie intégré favorisant les échanges rapides et directs entre les différents acteurs de l’entreprise. La plateforme permet également de centraliser plusieurs outils internes au sein d’une seule application afin de simplifier l’organisation et améliorer la productivité des équipes.
+**NexTeam est une plateforme intranet qui centralise la communication et la gestion RH d'une entreprise en un seul outil là où la plupart des entreprises jonglent aujourd'hui entre plusieurs abonnements SaaS (Slack ou Teams pour la messagerie, un outil RH séparé pour les fiches de paie, un intranet distinct pour les actualités).**
 
-NexTeam propose notamment :
+Cette dispersion a un coût réel : plusieurs abonnements à gérer, des informations éparpillées entre plusieurs outils, et des équipes qui perdent du temps à chercher la bonne information au bon endroit.
 
-- une messagerie interne en temps réel.
-- un système de gestion des tâches quotidiennes.
-- un espace d’actualités et de communication interne.
-- une gestion des rôles et permissions utilisateurs.
-- une carte employé numérique accessible depuis l’application.
-- Recevoir ses fiches de paye et ses avantages.
+NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la communication interne et les besoins administratifs RH un positionnement que les outils de messagerie généralistes (Slack, Teams) ne couvrent pas nativement.
 
-L’objectif du projet est de créer une solution moderne, intuitive et sécurisée permettant d’améliorer la collaboration, la circulation des informations et le suivi des activités au sein d’une entreprise.
+**Bénéfices pour l'entreprise :**
+- Un seul outil à déployer et administrer, au lieu de plusieurs abonnements SaaS.
+- Une communication centralisée : messagerie temps réel, actualités, tâches, RH au même endroit.
+- Une gestion fine des rôles et permissions, adaptée à la hiérarchie de l'entreprise.
+- Une expérience employé simplifiée : carte employé numérique, fiches de paie et avantages accessibles directement depuis l'outil de communication quotidien.
+
+### Fonctionnalités principales
+
+- Messagerie interne en temps réel
+- Gestion des tâches quotidiennes
+- Espace d'actualités et de communication interne
+- Gestion des rôles et permissions utilisateurs
+- Carte employé numérique
+- Accès aux fiches de paie et avantages
 
 ---
 
 ### Problématique
 
-De nombreuses entreprises utilisent plusieurs outils distincts pour gérer la communication interne, les tâches des employés et les échanges avec les ressources humaines. Cette dispersion des outils peut compliquer l’organisation, ralentir les échanges et réduire la productivité des équipes.
+La plupart des entreprises utilisent aujourd'hui plusieurs outils distincts pour la communication interne, la gestion des tâches et les échanges RH (Slack, Teams, un intranet RH séparé...). Cette dispersion multiplie les coûts d'abonnement, complique l'administration, et ralentit la circulation de l'information au sein des équipes.
 
-NexTeam a pour objectif de centraliser ces fonctionnalités au sein d’une plateforme unique, moderne et accessible.
+NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée, qui couvre à la fois la communication et les besoins administratifs — un positionnement que les outils généralistes ne couvrent pas.
 
 ---
 
-### Public cible
+### Marché cible
 
-- employés
+**Entreprises visées :** PME et ESN qui souhaitent réduire le nombre d'outils SaaS utilisés au quotidien et centraliser communication + RH dans une seule plateforme, notamment celles gérant un volume important de collaborateurs en alternance ou intérim, où le suivi RH et l'onboarding rapide sont critiques.
+
+**Utilisateurs finaux au sein de ces entreprises :**
+- Employés
 - RH
-- administrateurs
-- managers
+- Administrateurs
+- Managers
 
----
 
-## 2 - Fonctionnalités principales
+
+## 2 - Détail des fonctionnalités principales
 
 ### Authentification
 
-- connexion
-- inscription
-- JWT
-- rôles
+- Connexion sécurisée par identifiants
+- Authentification par token JWT (access token + refresh token)
+- Gestion des rôles utilisateurs (Employé, Manager, RH, Administrateur)
 
 ---
 
 ### Messagerie
 
-- chat temps réel
-- conversations
-- notifications
+- Chat en temps réel via WebSocket (STOMP)
+- Conversations privées et de groupe
+- Historique des messages avec chargement paginé
+- Indicateur "en train d'écrire" en temps réel
+- Indicateur de conversation lue / non lue
+- Notifications de nouveaux messages, en temps réel et persistées
+
+---
+
+### Notifications
+
+- Notifications en temps réel (nouveau message, ajout à une conversation)
+- Compteur de notifications non lues
+- Marquage individuel ou global comme lu
 
 ---
 
 ### Gestion des tâches
 
-- création tâches
-- suivi statut
-- tâches quotidiennes
+- Création de projet
+- Création et attribution de tâches
+- Suivi de statut des tâches
+- Suivi des tâches quotidiennes
 
 ---
 
 ### Actualités entreprise
 
-- publication news
+- Publication d'actualités par l'entreprise
+- Espace centralisé de communication interne
 
 ---
 
 ### Badge employé
 
-- carte employé numérique
+- Carte employé numérique
+- Accès aux fiches de paie et avantages
 
----
 
-## 3 - Contraintes technique
+## 3 - Contraintes techniques
 
-- Frontend → Angular
-- Backend → Spring Boot
-- Base de donnée → PostgreSQL
+- Frontend → Angular 22, TailwindCSS
+- Backend → Spring Boot 4.1.0, Spring Security, MapStruct
+- Communication temps réel → WebSocket (STOMP)
+- Authentification → JWT (access token + refresh token)
+- Base de données → PostgreSQL 16
 - Conteneurisation → Docker
-- Versionning → GitHub
+- Gestion des fichiers → MinIO
+- Versioning → GitHub
+- CI/CD → GitHub Actions
+- Gestion de projet → GitHub Projects
 
----
 
 ### Architecture globale
 
 ```markdown
-app-NexTeam/
-
-├── backend/
-├── frontend/
-├── docs/
-├── README.md
-├── .gitignore
-└── docker-compose.yml
+└── appNexTeam
+    ├── LICENSE
+    ├── README.md
+    ├── nexteam-docs
+    ├── frontend
+    ├── backend
 ```
 
----
 
 ## 4 - Maquettes
 
@@ -128,7 +151,7 @@ Le wireframe représente la structure générale d'une interface sans se concent
 - Valider l'emplacement des fonctionnalités.
 - Se concentrer sur l'expérience utilisateur avant le design.
 
-![maquette-wireframe.png](/img/maquettes/maquette-wireframe.png)
+![maquette-wireframe.png](/nexteam-docs/static/img/maquettes/maquette-wireframe.png)
 
 ---
 
@@ -143,7 +166,7 @@ Le mockup est une version plus avancée du wireframe intégrant l'identité visu
 - Valider la cohérence de la charte graphique.
 - Faciliter les retours des utilisateurs et des clients.
 
-![maquette-mockup.png](/img/maquettes/maquette-mockup.png)
+![maquette-mockup.png](/nexteam-docs/static/img/maquettes/maquette-mockup.png)
 
 ### Maquette complète
 
@@ -180,33 +203,67 @@ Prototype
 Développement
 ```
 
----
-
 ## 5 - Sécurité
 
-- JWT
-- rôles utilisateurs
-- validation formulaires
-- hash mot de passe
-- protection API
-- protection identifient et Clé secret dans fichier externe
-- Spring Security
+### Authentification
 
----
+| Mesure | Ce qu'elle apporte |
+|---|---|
+| **Token JWT** | Authentification sans état (stateless) : le serveur n'a pas besoin de stocker de session, ce qui facilite la scalabilité de l'application. |
+| **Refresh Token** | Permet de renouveler l'accès sans redemander les identifiants à l'utilisateur, tout en gardant une durée de vie courte pour le token d'accès (limite l'impact en cas de vol). |
+| **Stockage du token en cookie HttpOnly** | Empêche le token d'être lu ou volé via JavaScript côté client, ce qui protège contre les attaques XSS (Cross-Site Scripting). |
+| **Hash du mot de passe (BCrypt)** | Les mots de passe ne sont jamais stockés en clair en base de données, même en cas de fuite de données, ils restent illisibles. |
+| **Exigence de mot de passe fort** | Réduit le risque d'attaque par force brute ou credential stuffing en imposant une complexité minimale (longueur, majuscules, chiffres, caractères spéciaux). |
 
-## 6 - Base de données
+### Autorisation
 
-- Person
-- Task (tache à faire)
+| Mesure | Ce qu'elle apporte |
+|---|---|
+| **Rôles utilisateurs** | Définit précisément ce que chaque type d'utilisateur (employé, RH, manager, admin) peut voir et faire dans l'application. |
+| **Spring Security** | Framework de référence pour gérer l'authentification, les autorisations et la protection des routes de l'API. |
+| **Protection des routes API** | Toutes les routes sensibles nécessitent une authentification valide et vérifient les autorisations avant de traiter la requête. |
+
+### Protection des données
+
+| Mesure | Ce qu'elle apporte |
+|---|---|
+| **DTOs (Request/Response) avec Mapper** | Sépare les objets exposés à l'API des entités de base de données : évite d'exposer des champs sensibles ou internes, et découple le modèle de données du contrat d'API. |
+| **Identifiant public (publicId) distinct de l'ID base de données** | Empêche de deviner ou d'énumérer les enregistrements via leur identifiant technique (protection contre les attaques par énumération d'ID, type IDOR). |
+| **Validation des formulaires** | Vérifie et filtre les données envoyées par l'utilisateur avant traitement, pour éviter les données invalides ou malveillantes. |
+
+### Protection de l'API
+
+| Mesure | Ce qu'elle apporte |
+|---|---|
+| **Rate Limiting** | Limite le nombre de requêtes qu'un utilisateur ou une IP peut effectuer sur une période donnée, protégeant l'API contre les attaques par déni de service (DoS) et le brute-force. |
+| **Configuration CORS** | Restreint les origines autorisées à appeler l'API, empêchant des sites tiers non approuvés d'effectuer des requêtes malveillantes depuis le navigateur d'un utilisateur. |
+| **Gestion centralisée des erreurs (ApiResponse)**|	Retourne des réponses HTTP standardisées (code status, heure, message, structure commune) pour éviter d'exposer des informations sensibles côté client tout en facilitant le débogage.|
+| **Route Guards (Angular)** |	Empêche l'accès à certaines pages côté frontend si l'utilisateur n'est pas authentifié ou n'a pas le rôle requis, en complément du contrôle backend.
+### Configuration & infrastructure
+
+| Mesure | Ce qu'elle apporte |
+|---|---|
+| **Protection des identifiants et clés secrètes** | Les identifiants sensibles (clés API, secrets JWT, identifiants de base de données) sont stockés en dehors du code source, dans un fichier externe non versionné. |
+| **Utilisation d'un fichier `.env`** | Centralise les variables sensibles de configuration (URL base de données, secrets, clés) sans les exposer dans le code, et facilite la gestion de plusieurs environnements (dev, prod). |
+
+
+## 6 - Tables en base de données
+
+- Person (Utilisateur)
+- Conversation
 - Message
+- Notification
+- Task (tâche à faire)
 - News (actualités)
 - File (fichier)
 - Company
-- Notification
 
----
 
 ## 7 - Besoins fonctionnels
+
+### Use Case
+
+![useCase-nexteam.png](/nexteam-docs/static/img/use-case/useCase-nexteam.png)
 
 
 | **Employé & Fonctionnalités** |
@@ -268,21 +325,31 @@ Développement
 • Superviser l’ensemble de la plateforme  
 • Accéder à toutes les fonctionnalités du système |
 
----
 
 ## 8 - Besoins non fonctionnels
 
-- responsive
-- sécurité
-- performance
-- accessibilité
-- maintenabilité
-
----
+- Site responsive
+- Sécurité
+- Performance
+- Accessibilité
+- Maintenabilité
 
 ## 9 - Plan de tests
 
 **Objectif** :
+
+- le bon fonctionnement des règles métier
+- la robustesse du système face aux cas nominaux et cas d’erreurs
+- l’intégration correcte entre les couches (API → Service → Repository → DB)
+
+Les tests sont divisés en deux niveaux :
+
+- **Tests unitaires** : validation isolée de la logique métier (Mockito, sans Spring context complet)
+- **Tests d’intégration** : validation du comportement global (API REST + Spring Boot + DB)
+
+
+
+# Plan de tests
 
 L’objectif des tests est de valider :
 
@@ -297,151 +364,157 @@ Les tests sont divisés en deux niveaux :
 
 ---
 
-### 1. Tests unitaires (Service Layer)
+## 1. Tests unitaires (Service Layer)
 
-> Objectif : tester la logique métier isolée avec dépendances mockées.
+### 1.1 Utilisateurs
 
-**1.1 - Utilisateurs**
+UT-USR-00 à UT-USR-11 réalisés (à l'exception de UT-USR-06 à corriger — teste actuellement `getUser` au lieu de `createUser`)
+### 1.1 Utilisateurs
 
-**Cas nominaux**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-USR-01 | Création utilisateur valide | Utilisateur créé |
-| UT-USR-02 | Récupération utilisateur existant | Utilisateur retourné |
-| UT-USR-03 | Mise à jour utilisateur valide | Données mises à jour |
-
-**Cas limites**
+#### Cas nominaux
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
-| UT-USR-04 | Email déjà existant à la création | AlreadyExistException |
-| UT-USR-05 | Email déjà utilisé lors update | AlreadyExistException |
+| UT-USR-00 | Création utilisateur valide | Utilisateur créé |
+| UT-USR-01 | Récupération d'une liste d'utilisatateurs | Utilisateur créé |
+| UT-USR-02 | Récupération utilisateur existant par id | Utilisateur retourné |
+| UT-USR-03 | Récupération utilisateur par email | Données mises à jour |
+| UT-USR-04 | Mise à jour utilisateur valide | Données mises à jour |
+| UT-USR-05 | Suppression utilisateur par l'id | Utilisateur supprimé |
 
-**Cas d’erreurs**
+#### Cas limites
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
-| UT-USR-06 | Utilisateur introuvable | NotFoundException |
-| UT-USR-07 | Suppression utilisateur inexistant | NotFoundException |
+| UT-USR-06 | Email déjà existant à la création | AlreadyExistException |
+| UT-USR-07 | Email déjà utilisé lors de la modification | AlreadyExistException |
+
+#### Cas d’erreurs
+
+| ID | Cas de test | Résultat attendu |
+|----|-------------|-----------------|
+| UT-USR-08 | Utilisateur introuvable par l'email lors de la modification | NotFoundException |
+| UT-USR-09 | Utilisateur introuvable par l'id lors de la modification | NotFoundException |
+| UT-USR-10 | Utilisateur introuvable par l'id lors d'une requete | NotFoundException |
+| UT-USR-11 | Suppression utilisateur inexistant par l'id | NotFoundException |
+
+
+### 1.2 Authentification
+| ID | Cas de test | Résultat attendu |
+|----|-------------|-----------------|
+| UT-AUTH-01 | Login valide → JWT généré |
+| UT-AUTH-02 | Mauvais mot de passe / email inexistant → Refus d'accès |
+
+### 1.3 Messagerie
+| ID        | Cas de test                                       | Résultat attendu        |
+| --------- | ------------------------------------------------- | ----------------------- |
+| UT-MSG-01 | Envoi d'un message                                | Message enregistré      |
+| UT-MSG-02 | Suppression d'un message par son auteur           | Message supprimé        |
+| UT-MSG-03 | Suppression d'un message par un autre utilisateur | `AccessDeniedException` |
+
+
+### 1.4 Conversations 
+| ID         | Cas de test                                            | Résultat attendu        |
+| ---------- | ------------------------------------------------------ | ----------------------- |
+| UT-CONV-01 | Création d'une conversation valide                     | Conversation créée      |
+| UT-CONV-02 | Récupération des conversations d'un utilisateur        | Liste paginée retournée |
+| UT-CONV-03 | Recherche d'une conversation par mot-clé               | Résultats filtrés       |
+| UT-CONV-04 | Quitter une conversation par un participant            | Utilisateur retiré      |
+| UT-CONV-05 | Suppression d'une conversation par le propriétaire     | Conversation supprimée  |
+| UT-CONV-06 | Suppression d'une conversation par un non-propriétaire | `AccessDeniedException` |
+| UT-CONV-07 | Conversation introuvable                               | `NotFoundException`     |
+
+
+### 1.5 Notifications
+| ID          | Cas de test                                               | Résultat attendu                                                       |
+| ----------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
+| UT-NOTIF-01 | Création d'une notification lors d'un nouveau message     | Notification enregistrée et poussée à l'utilisateur                    |
+| UT-NOTIF-02 | Marquer une notification comme lue                        | `read = true`                                                          |
+| UT-NOTIF-03 | Marquer toutes les notifications comme lues               | Toutes les notifications passent à `read = true`                       |
+| UT-NOTIF-04 | Marquer les notifications d'une conversation comme lues   | Seules les notifications de cette conversation passent à `read = true` |
+| UT-NOTIF-05 | Marquer comme lue une notification d'un autre utilisateur | `AccessDeniedException`                                                |
+| UT-NOTIF-06 | Comptage des notifications non lues                       | Nombre correct retourné                                                |
+
+
+### 1.6 Tâches
+| ID         | Cas de test                                       | Résultat attendu        |
+| ---------- | ------------------------------------------------- | ----------------------- |
+| UT-TASK-01 | Création d'une tâche valide                       | Tâche enregistrée       |
+| UT-TASK-02 | Modification du statut d'une tâche                | Statut mis à jour       |
+| UT-TASK-03 | Accès à une tâche par un utilisateur non autorisé | `AccessDeniedException` |
+| UT-TASK-04 | Tâche introuvable                                 | `NotFoundException`     |
+
+
+### 1.7 Fichiers 
+| ID         | Cas de test                | Résultat attendu             |
+| ---------- | -------------------------- | ---------------------------- |
+| UT-FILE-01 | Upload d'un fichier valide | Fichier stocké et enregistré |
+| UT-FILE-02 | Type de fichier invalide   | Exception levée              |
+| UT-FILE-03 | Fichier trop volumineux    | Exception levée              |
+
 
 ---
 
-**1.2 - Authentification**
+## 2. Tests d'intégration (Spring Boot)
 
-**Cas nominaux**
+### 2.2 Authentification
+| ID         | Cas de test     | Résultat attendu   |
+| ---------- | --------------- | ------------------ |
+| IT-AUTH-01 | Login correct   | `200 OK` + JWT     |
+| IT-AUTH-02 | Login incorrect | `401 Unauthorized` |
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-AUTH-01 | Login valide | JWT généré |
 
-**Cas d’erreurs**
+### 2.3 Messagerie
+| ID        | Cas de test                            | Résultat attendu |
+| --------- | -------------------------------------- | ---------------- |
+| IT-MSG-01 | Envoyer un message                     | `201 Created`    |
+| IT-MSG-02 | Lire les messages — historique paginé  | `200 OK`         |
+| IT-MSG-03 | Suppression d'un message non autorisée | `403 Forbidden`  |
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-AUTH-02 | Mauvais mot de passe | Refus d’accès |
-| UT-AUTH-03 | Email inexistant | NotFoundException |
 
----
+### 2.4 WebSocket / Temps réel  
+| ID       | Cas de test                                     | Résultat attendu                                      |
+| -------- | ----------------------------------------------- | ----------------------------------------------------- |
+| IT-WS-01 | Connexion WebSocket avec JWT valide             | Handshake accepté                                     |
+| IT-WS-02 | Connexion WebSocket avec JWT invalide ou absent | Handshake refusé                                      |
+| IT-WS-03 | Envoi d'un message via STOMP                    | Broadcast reçu sur `/topic/conversations/{id}`        |
+| IT-WS-04 | Envoi d'un événement typing                     | Broadcast reçu sur `/topic/conversations/{id}/typing` |
+| IT-WS-05 | Join / Leave d'une conversation                 | Message système diffusé                               |
 
-**1.3 - Messagerie**
 
-**Cas nominaux**
+### 2.5 Tâches
+| ID         | Cas de test                        | Résultat attendu |
+| ---------- | ---------------------------------- | ---------------- |
+| IT-TASK-01 | Création d'une tâche               | `201 Created`    |
+| IT-TASK-02 | Modification du statut d'une tâche | `200 OK`         |
+| IT-TASK-03 | Accès à une tâche non autorisé     | `403 Forbidden`  |
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-MSG-01 | Envoi message | Message enregistré |
-| UT-MSG-02 | Suppression message auteur | Message supprimé |
 
-**Cas d’erreurs**
+### 2.6 Notifications
+| ID          | Cas de test                                             | Résultat attendu                                |
+| ----------- | ------------------------------------------------------- | ----------------------------------------------- |
+| IT-NOTIF-01 | Création d'une notification                             | Notification créée                              |
+| IT-NOTIF-02 | Lecture d'une notification                              | `read = true`                                   |
+| IT-NOTIF-03 | Marquer les notifications d'une conversation comme lues | `200 OK`, notifications concernées mises à jour |
+| IT-NOTIF-04 | Accès à une notification d'un autre utilisateur         | `403 Forbidden`                                 |
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-MSG-03 | Suppression message autre utilisateur | AccessDeniedException |
+### 2.7 Upload fichiers
+| ID       | Cas de test                          | Résultat attendu        |
+| -------- | ------------------------------------ | ----------------------- |
+| IT-UP-01 | Upload d'un fichier valide           | Fichier stocké          |
+| IT-UP-02 | Upload d'un type de fichier invalide | `400 Bad Request`       |
+| IT-UP-03 | Upload d'un fichier trop volumineux  | `413 Payload Too Large` |
 
----
 
-**1.4 - Règles transverses**
+### 2.8 CORS & Sécurité 
+| ID        | Cas de test                                 | Résultat attendu         |
+| --------- | ------------------------------------------- | ------------------------ |
+| IT-SEC-01 | Requête depuis une origine non autorisée    | Requête bloquée par CORS |
+| IT-SEC-02 | Requête avec une méthode HTTP non autorisée | Requête bloquée          |
+| IT-SEC-03 | Accès à une route protégée sans token       | `401 Unauthorized`       |
+| IT-SEC-04 | Dépassement de la limite de requêtes        | `429 Too Many Requests`  |
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-GEN-01 | Champ obligatoire vide | ValidationException |
-| UT-GEN-02 | Email invalide | ValidationException |
 
----
-
-### 2. Tests d’intégration (Spring Boot)
-
-> Objectif : tester le système complet (API + Service + DB)
-
----
-
-**2.1 - Utilisateurs (API REST)**
-
-**Cas nominaux**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-USR-01 | POST /users | 201 Created |
-| IT-USR-02 | GET /users/publicId | 200 OK |
-| IT-USR-03 | PUT /users/publicId | 200 OK |
-
-**Cas d’erreurs**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-USR-04 | Utilisateur inexistant | 404 Not Found |
-| IT-USR-05 | Email déjà utilisé | 409 Conflict |
-
----
-
-**2.2 - Authentification**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-AUTH-01 | Login correct | 200 OK + JWT |
-| IT-AUTH-02 | Login incorrect | 401 Unauthorized |
-
----
-
-**2.3 - Messagerie**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-MSG-01 | Envoyer message | 201 Created |
-| IT-MSG-02 | Lire messages | 200 OK |
-| IT-MSG-03 | Suppression non autorisée | 403 Forbidden |
-
----
-
-**2.4 - Tâches**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-TASK-01 | Création tâche | 201 Created |
-| IT-TASK-02 | Modification statut | 200 OK |
-| IT-TASK-03 | Accès interdit | 403 Forbidden |
-
----
-
-**2.5 - Notifications**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-NOTIF-01 | Création notification | Notification créée |
-| IT-NOTIF-02 | Lecture notification | lu = true |
-
----
-
-**2.6 - Upload fichiers**
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-UP-01 | Upload valide | Fichier stocké |
-| IT-UP-02 | Type invalide | 400 Bad Request |
-| IT-UP-03 | Fichier trop volumineux | 413 Payload Too Large |
-
----
 
 ### 3. ⚠️ Cas d’erreurs globaux
 
@@ -459,31 +532,33 @@ Ces cas doivent être testés sur l’ensemble des API.
 | 409 | Conflict | Conflit métier (ex: email déjà utilisé) | Erreur de conflit |
 | 500 | Internal Server Error | Erreur serveur inattendue | Erreur technique loggée |
 
----
+
 
 ## 10 - Outils utilisés
 
 | Outil | Rôle | Utilisation dans NexTeam |
 | --- | --- | --- |
-| [WebStorm](https://www.jetbrains.com/webstorm/?utm_source=chatgpt.com) | IDE spécialisé développement web | Développement du frontend Angular, création des composants, gestion du TypeScript, HTML et CSS |
-| [IntelliJ IDEA](https://www.jetbrains.com/idea/?utm_source=chatgpt.com) | IDE Java professionnel | Développement du backend Spring Boot, création des API REST, gestion de la sécurité et de la logique métier |
-| [GitHub](https://github.com/?utm_source=chatgpt.com) | Plateforme de gestion de code source | Hébergement du projet Git, gestion des versions, suivi des tâches, pull requests et organisation du projet |
-| [Figma](https://www.figma.com/?utm_source=chatgpt.com) | Outil de maquettage UI/UX | Création des wireframes, maquettes et design de l’interface utilisateur de NexTeam |
-| [Docker](https://www.docker.com/?utm_source=chatgpt.com) | Plateforme de conteneurisation | Déploiement et exécution de l’application dans des conteneurs afin de garantir un environnement stable et reproductible |
-| [Notion](https://www.notion.so/?utm_source=chatgpt.com) | Outil d’organisation et documentation | Rédaction du cahier des charges, organisation des tâches, documentation technique et suivi du projet |
-| Drawio | Outil de modélisation et de création de diagrammes | Réalisation des diagrammes UML (cas d’utilisation,), modélisation de l’architecture système et conception technique du projet |
-| PlantUML | **PlantUML** est un outil très polyvalent qui facilite la création rapide et directe d'un large éventail de diagrammes. | Réalisation des diagrammes UML (séquence), modélisation de l’architecture système et conception technique du projet |
-| Dbdiagram | **dbdiagram.io** est un outil en ligne **gratuit** et simple conçu pour dessiner des **diagrammes de relations de bases de données** | Réalisation du Modèle Conceptuel de Donnée (MCD), Modèle Logique de Données (MLD) |
-| ChatGPT | IA | Création de visuel, textes du site |
+| [WebStorm](https://www.jetbrains.com/webstorm/) | IDE spécialisé développement web | Développement du frontend Angular, création des composants, gestion du TypeScript, HTML et CSS |
+| [IntelliJ IDEA](https://www.jetbrains.com/idea/) | IDE Java professionnel | Développement du backend Spring Boot, création des API REST, gestion de la sécurité et de la logique métier |
+| [GitHub](https://github.com/) | Plateforme de gestion de code source | Hébergement du projet Git, gestion des versions, suivi des tâches, pull requests et organisation du projet |
+| [Figma](https://www.figma.com/) | Outil de maquettage UI/UX | Création des wireframes, maquettes et design de l'interface utilisateur de NexTeam |
+| [Docker](https://www.docker.com/) | Plateforme de conteneurisation | Déploiement et exécution de l'application dans des conteneurs afin de garantir un environnement stable et reproductible |
+| [Postman](https://www.postman.com/) | Client API | Test et validation manuelle des endpoints REST du backend pendant le développement |
+| [Notion](https://www.notion.so/) | Outil d'organisation et documentation | Rédaction du cahier des charges, organisation des tâches, documentation technique et suivi du projet |
+| [Drawio](https://www.drawio.com/) | Outil de modélisation et de création de diagrammes | Réalisation des diagrammes UML (cas d'utilisation), modélisation de l'architecture système et conception technique du projet |
+| [PlantUML](https://www.plantuml.com/) | Outil de génération de diagrammes à partir de texte | Réalisation des diagrammes UML (séquence), modélisation de l'architecture système et conception technique du projet |
+| [Dbdiagram](https://dbdiagram.io/home/)  | Outil en ligne de modélisation de bases de données | Réalisation du Modèle Conceptuel de Données (MCD), Modèle Logique de Données (MLD) |
+| [PostgreSQL](https://www.postgresql.org/) (BDD finale) / [MySQL](https://www.mysql.com/) (BDD de dev) | Système de gestion de base de données | Stockage et persistance des données de l'application |
+| [Claude](https://www.claude.com/)  | Assistant IA de développement | Aide au débogage (frontend Angular, backend Spring Boot, WebSocket/STOMP), revue et correction de code, rédaction et structuration de la documentation technique |
+| [ChatGPT](https://www.chatgpt.com/)  | IA | Création de visuels, textes du site |
 
----
 
 ## 11 - Conclusion
 
-Ce projet a pour objectif de concevoir une plateforme collaborative interne permettant d’améliorer la communication, l’organisation et la gestion des tâches au sein de l’entreprise.
+NexTeam répond à un besoin réel des entreprises : centraliser communication interne et gestion RH dans un seul outil, plutôt que de multiplier les abonnements SaaS dispersés (messagerie, intranet, gestion RH séparés).
 
-Grâce aux différentes fonctionnalités mises en place selon les rôles des utilisateurs (Employé, Manager, RH et Administrateur), la plateforme permet de centraliser les échanges, le suivi des tâches ainsi que la diffusion des informations importantes de l’entreprise.
+Grâce aux différentes fonctionnalités mises en place selon les rôles des utilisateurs (Employé, Manager, RH et Administrateur), la plateforme centralise les échanges en temps réel, le suivi des tâches, la diffusion des actualités et l'accès aux informations RH essentielles (carte employé, fiches de paie).
 
-L’analyse des besoins fonctionnels et la modélisation UML réalisées dans ce cahier des charges constituent une base solide pour le développement de l’application, aussi bien sur la partie frontend que backend.
+L'analyse des besoins fonctionnels, la modélisation UML et les choix d'architecture (sécurité par token JWT, séparation DTO/entités, protection des routes API) réalisés dans ce document constituent une base solide et professionnelle pour le développement de l'application, aussi bien sur la partie frontend que backend.
 
-L’objectif final est de proposer une solution moderne, sécurisée et intuitive, capable de faciliter la collaboration entre les différents acteurs de l’entreprise tout en assurant une gestion efficace des données et des accès.
+L'objectif final est de proposer une solution moderne, sécurisée et intuitive, prête à être déployée pour faciliter la collaboration entre les différents acteurs de l'entreprise, tout en garantissant une gestion rigoureuse des données et des accès.

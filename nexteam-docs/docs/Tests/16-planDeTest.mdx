@@ -15,8 +15,9 @@ Les tests sont divisés en deux niveaux :
 
 ## 1. Tests unitaires (Service Layer)
 
-> Objectif : tester la logique métier isolée avec dépendances mockées.
+### 1.1 Utilisateurs
 
+UT-USR-00 à UT-USR-11 réalisés (à l'exception de UT-USR-06 à corriger — teste actuellement `getUser` au lieu de `createUser`)
 ### 1.1 Utilisateurs
 
 #### Cas nominaux
@@ -46,116 +47,126 @@ Les tests sont divisés en deux niveaux :
 | UT-USR-10 | Utilisateur introuvable par l'id lors d'une requete | NotFoundException |
 | UT-USR-11 | Suppression utilisateur inexistant par l'id | NotFoundException |
 
----
 
 ### 1.2 Authentification
-
-#### Cas nominaux
-
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
-| UT-AUTH-01 | Login valide | JWT généré |
-
-#### Cas d’erreurs
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-AUTH-02 | Mauvais mot de passe ou Email inexistant | Refus d’accès |
-
----
+| UT-AUTH-01 | Login valide → JWT généré |
+| UT-AUTH-02 | Mauvais mot de passe / email inexistant → Refus d'accès |
 
 ### 1.3 Messagerie
+| ID        | Cas de test                                       | Résultat attendu        |
+| --------- | ------------------------------------------------- | ----------------------- |
+| UT-MSG-01 | Envoi d'un message                                | Message enregistré      |
+| UT-MSG-02 | Suppression d'un message par son auteur           | Message supprimé        |
+| UT-MSG-03 | Suppression d'un message par un autre utilisateur | `AccessDeniedException` |
 
-#### Cas nominaux
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-MSG-01 | Envoi message | Message enregistré |
-| UT-MSG-02 | Suppression message auteur | Message supprimé |
+### 1.4 Conversations 
+| ID         | Cas de test                                            | Résultat attendu        |
+| ---------- | ------------------------------------------------------ | ----------------------- |
+| UT-CONV-01 | Création d'une conversation valide                     | Conversation créée      |
+| UT-CONV-02 | Récupération des conversations d'un utilisateur        | Liste paginée retournée |
+| UT-CONV-03 | Recherche d'une conversation par mot-clé               | Résultats filtrés       |
+| UT-CONV-04 | Quitter une conversation par un participant            | Utilisateur retiré      |
+| UT-CONV-05 | Suppression d'une conversation par le propriétaire     | Conversation supprimée  |
+| UT-CONV-06 | Suppression d'une conversation par un non-propriétaire | `AccessDeniedException` |
+| UT-CONV-07 | Conversation introuvable                               | `NotFoundException`     |
 
-#### Cas d’erreurs
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| UT-MSG-03 | Suppression message autre utilisateur | AccessDeniedException |
+### 1.5 Notifications
+| ID          | Cas de test                                               | Résultat attendu                                                       |
+| ----------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
+| UT-NOTIF-01 | Création d'une notification lors d'un nouveau message     | Notification enregistrée et poussée à l'utilisateur                    |
+| UT-NOTIF-02 | Marquer une notification comme lue                        | `read = true`                                                          |
+| UT-NOTIF-03 | Marquer toutes les notifications comme lues               | Toutes les notifications passent à `read = true`                       |
+| UT-NOTIF-04 | Marquer les notifications d'une conversation comme lues   | Seules les notifications de cette conversation passent à `read = true` |
+| UT-NOTIF-05 | Marquer comme lue une notification d'un autre utilisateur | `AccessDeniedException`                                                |
+| UT-NOTIF-06 | Comptage des notifications non lues                       | Nombre correct retourné                                                |
+
+
+### 1.6 Tâches
+| ID         | Cas de test                                       | Résultat attendu        |
+| ---------- | ------------------------------------------------- | ----------------------- |
+| UT-TASK-01 | Création d'une tâche valide                       | Tâche enregistrée       |
+| UT-TASK-02 | Modification du statut d'une tâche                | Statut mis à jour       |
+| UT-TASK-03 | Accès à une tâche par un utilisateur non autorisé | `AccessDeniedException` |
+| UT-TASK-04 | Tâche introuvable                                 | `NotFoundException`     |
+
+
+### 1.7 Fichiers 
+| ID         | Cas de test                | Résultat attendu             |
+| ---------- | -------------------------- | ---------------------------- |
+| UT-FILE-01 | Upload d'un fichier valide | Fichier stocké et enregistré |
+| UT-FILE-02 | Type de fichier invalide   | Exception levée              |
+| UT-FILE-03 | Fichier trop volumineux    | Exception levée              |
+
 
 ---
 
-## 2. Tests d’intégration (Spring Boot)
-
-> Objectif : tester le système complet (API + Service + DB)
-
----
-
-### 2.1 Utilisateurs (API REST)
-
-#### Cas nominaux
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-USR-00 | Création d'un utilisateur | 201 Created |
-| IT-USR-01 | List des utilisateurs | 200 OK |
-| IT-USR-02 | Retourne un utilisateur | 200 OK |
-| IT-USR-03 | Modifie un utilisateur | 200 OK |
-
-#### Cas d’erreurs
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-USR-04 | Utilisateur inexistant | 404 Not Found |
-| IT-USR-05 | Email déjà utilisé | 409 Conflict |
-
----
+## 2. Tests d'intégration (Spring Boot)
 
 ### 2.2 Authentification
+| ID         | Cas de test     | Résultat attendu   |
+| ---------- | --------------- | ------------------ |
+| IT-AUTH-01 | Login correct   | `200 OK` + JWT     |
+| IT-AUTH-02 | Login incorrect | `401 Unauthorized` |
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-AUTH-01 | Login correct | 200 OK + JWT |
-| IT-AUTH-02 | Login incorrect | 401 Unauthorized |
-
----
 
 ### 2.3 Messagerie
+| ID        | Cas de test                            | Résultat attendu |
+| --------- | -------------------------------------- | ---------------- |
+| IT-MSG-01 | Envoyer un message                     | `201 Created`    |
+| IT-MSG-02 | Lire les messages — historique paginé  | `200 OK`         |
+| IT-MSG-03 | Suppression d'un message non autorisée | `403 Forbidden`  |
 
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-MSG-01 | Envoyer message | 201 Created |
-| IT-MSG-02 | Lire messages | 200 OK |
-| IT-MSG-03 | Suppression non autorisée | 403 Forbidden |
+
+### 2.4 WebSocket / Temps réel  
+| ID       | Cas de test                                     | Résultat attendu                                      |
+| -------- | ----------------------------------------------- | ----------------------------------------------------- |
+| IT-WS-01 | Connexion WebSocket avec JWT valide             | Handshake accepté                                     |
+| IT-WS-02 | Connexion WebSocket avec JWT invalide ou absent | Handshake refusé                                      |
+| IT-WS-03 | Envoi d'un message via STOMP                    | Broadcast reçu sur `/topic/conversations/{id}`        |
+| IT-WS-04 | Envoi d'un événement typing                     | Broadcast reçu sur `/topic/conversations/{id}/typing` |
+| IT-WS-05 | Join / Leave d'une conversation                 | Message système diffusé                               |
+
+
+### 2.5 Tâches
+| ID         | Cas de test                        | Résultat attendu |
+| ---------- | ---------------------------------- | ---------------- |
+| IT-TASK-01 | Création d'une tâche               | `201 Created`    |
+| IT-TASK-02 | Modification du statut d'une tâche | `200 OK`         |
+| IT-TASK-03 | Accès à une tâche non autorisé     | `403 Forbidden`  |
+
+
+### 2.6 Notifications
+| ID          | Cas de test                                             | Résultat attendu                                |
+| ----------- | ------------------------------------------------------- | ----------------------------------------------- |
+| IT-NOTIF-01 | Création d'une notification                             | Notification créée                              |
+| IT-NOTIF-02 | Lecture d'une notification                              | `read = true`                                   |
+| IT-NOTIF-03 | Marquer les notifications d'une conversation comme lues | `200 OK`, notifications concernées mises à jour |
+| IT-NOTIF-04 | Accès à une notification d'un autre utilisateur         | `403 Forbidden`                                 |
+
+### 2.7 Upload fichiers
+| ID       | Cas de test                          | Résultat attendu        |
+| -------- | ------------------------------------ | ----------------------- |
+| IT-UP-01 | Upload d'un fichier valide           | Fichier stocké          |
+| IT-UP-02 | Upload d'un type de fichier invalide | `400 Bad Request`       |
+| IT-UP-03 | Upload d'un fichier trop volumineux  | `413 Payload Too Large` |
+
+
+### 2.8 CORS & Sécurité 
+| ID        | Cas de test                                 | Résultat attendu         |
+| --------- | ------------------------------------------- | ------------------------ |
+| IT-SEC-01 | Requête depuis une origine non autorisée    | Requête bloquée par CORS |
+| IT-SEC-02 | Requête avec une méthode HTTP non autorisée | Requête bloquée          |
+| IT-SEC-03 | Accès à une route protégée sans token       | `401 Unauthorized`       |
+| IT-SEC-04 | Dépassement de la limite de requêtes        | `429 Too Many Requests`  |
+
 
 ---
 
-### 2.4 Tâches
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-TASK-01 | Création tâche | 201 Created |
-| IT-TASK-02 | Modification statut | 200 OK |
-| IT-TASK-03 | Accès interdit | 403 Forbidden |
-
----
-
-### 2.5 Notifications
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-NOTIF-01 | Création notification | Notification créée |
-| IT-NOTIF-02 | Lecture notification | lu = true |
-
----
-
-### 2.6 Upload fichiers
-
-| ID | Cas de test | Résultat attendu |
-|----|-------------|-----------------|
-| IT-UP-01 | Upload valide | Fichier stocké |
-| IT-UP-02 | Type invalide | 400 Bad Request |
-| IT-UP-03 | Fichier trop volumineux | 413 Payload Too Large |
-
----
-
-# 3. ⚠️ Cas d’erreurs globaux
+### 3. ⚠️ Cas d’erreurs globaux
 
 Ces cas doivent être testés sur l’ensemble des API.
 

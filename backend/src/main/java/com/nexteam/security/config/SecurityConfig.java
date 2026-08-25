@@ -57,10 +57,10 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:4200",      // dev
                 "https://nexteam.com",        // production
-                "http://127.0.0.1:5500", // websocket
-                "http://10.50.101.16:4200/",
-                "http://169.254.190.148:4200/",
-                "http://169.254.57.215:4200/"
+                "http://localhost:5500", // websocket
+                "http://10.50.101.16:4200/", // --host
+                "http://169.254.190.148:4200/", // --host
+                "http://169.254.57.215:4200/" // --host
                 ));
 
         // Méthodes HTTP autorisées — lister explicitement, éviter "*"

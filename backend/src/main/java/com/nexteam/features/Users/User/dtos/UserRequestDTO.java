@@ -21,6 +21,7 @@ public class UserRequestDTO {
     private String firstname;
     private String lastname;
     private String email;
+    private String password;
     private Set<RoleResponseDTO> roles;
     private AddressRequestDTO address;
 }

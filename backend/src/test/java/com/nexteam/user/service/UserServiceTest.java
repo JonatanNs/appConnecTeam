@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -37,6 +38,9 @@ public class UserServiceTest {
     private UserMapper userMapper;
 
     @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
     private UserRepository repository;
 
     private User user1;
@@ -48,7 +52,7 @@ public class UserServiceTest {
         user1 = User.builder()
                 .firstname("Jean")
                 .lastname("Dupont")
-                .email("jean.dupont@example.com")
+                .email("jean.dupont@nexteam.com")
                 .password("MotDePasse123!")
                 .active(true)
                 .build();
@@ -75,14 +79,14 @@ public class UserServiceTest {
                 .firstname("Pierre")
                 .lastname("Feuille")
                 .email("pierre.feuille@nexteam.com")
-                //.password("Password123!")
+                .password("Password123!")
                 .build();
 
         User user = User.builder()
                 .firstname("Pierre")
                 .lastname("Feuille")
                 .email("pierre.feuille@nexteam.com")
-                .password("Password123!")
+                //.password(password)
                 .active(true)
                 .build();
 
@@ -92,7 +96,6 @@ public class UserServiceTest {
                 .email("pierre.feuille@nexteam.com")
                 .active(true)
                 .build();
-
 
         when(repository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.empty());
@@ -105,7 +108,6 @@ public class UserServiceTest {
 
         when(userMapper.userToResponseDTO(user))
                 .thenReturn(response);
-
 
         UserResponseDTO result = service.createUser(request);
 
@@ -162,7 +164,7 @@ public class UserServiceTest {
         UserResponseDTO response = UserResponseDTO.builder()
                 .firstname("Jean")
                 .lastname("Dupont")
-                .email("jean.dupont@example.com")
+                .email("jean.dupont@nexteam.com")
                 .build();
 
 
@@ -273,20 +275,21 @@ public class UserServiceTest {
     @DisplayName("UT-USR-06 - Email déjà existant à la création")
     @Test
     void createUser_emailExisting() {
-        when(repository.findByPublicId(user1.getPublicId()))
-                .thenReturn(Optional.of(user1));
 
-        UserResponseDTO response = UserResponseDTO.builder()
+        UserRequestDTO request = UserRequestDTO.builder()
                 .firstname("Jean")
                 .lastname("Dupont")
-                .email("jean.dupont@example.com")
                 .build();
 
-        when(userMapper.userToResponseDTO(user1))
-                .thenReturn(response);
+        when(repository.findByEmail(user1.getEmail()))
+                .thenReturn(Optional.of(user1));
 
+        assertThrows(
+                AlreadyExistException.class, () -> service.createUser(request)
+        );
 
-        assertEquals("Jean", service.getUser(user1.getPublicId()).getFirstname());
+        verify(repository).findByEmail(user1.getEmail());
+        verify(repository, never()).save(any());
     }
 
     @DisplayName("UT-USR-07 - Email déjà utilisé lors de la modification")

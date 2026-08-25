@@ -4,13 +4,13 @@ import com.nexteam.exceptions.NotFoundException;
 import com.nexteam.features.Messaging.conversation.Conversation;
 import com.nexteam.features.Messaging.conversation.ConversationRepository;
 import com.nexteam.features.Messaging.conversation.dtos.mapper.ConvMapper;
-import com.nexteam.features.Users.User.User;
-import com.nexteam.features.Users.User.UserRepository;
+import com.nexteam.features.Messaging.message.Message;
+import com.nexteam.features.Messaging.message.MessageRepository;
 import com.nexteam.features.Messaging.notification.dtos.NotificationResponseDTO;
 import com.nexteam.features.Messaging.notification.dtos.mapper.NotificationMapper;
 import com.nexteam.features.Messaging.notification.enums.NotificationType;
-import com.nexteam.features.Messaging.message.Message;
-import com.nexteam.features.Messaging.message.MessageRepository;
+import com.nexteam.features.Users.User.User;
+import com.nexteam.features.Users.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,12 +49,19 @@ public class NotificationService {
         Message message = messageRepository.findByPublicId(messagePublicId)
                 .orElseThrow(() -> new NotFoundException("Message non trouvé."));
 
+        String content = "";
+        if (conversation.getUsers().size() == 2) {
+            content = senderName + " vous a envoyé un message";
+        } else {
+            content = senderName + " vous a envoyé un message dans " + conversation.getName();
+        }
+
         Notification notification = Notification.builder()
                 .recipient(recipient)
                 .conversation(conversation)
                 .message(message)
                 .type(NotificationType.NEW_MESSAGE)
-                .content(senderName + " vous a envoyé un message dans " + conversation.getName())
+                .content(content)
                 .read(false)
                 .build();
 
@@ -67,11 +74,18 @@ public class NotificationService {
         Conversation conversation = conversationRepository.findByPublicId(conversationPublicId)
                 .orElseThrow(() -> new NotFoundException("Conversation non trouvée."));
 
+        String content = "";
+        if (conversation.getUsers().size() == 2) {
+            content = actorName + " a créer une conversation avec vous.";
+        } else {
+            content = actorName + " vous a ajouté à la conversation " + conversation.getName();
+        }
+
         Notification notification = Notification.builder()
                 .recipient(recipient)
                 .conversation(conversation)
                 .type(NotificationType.ADDED_TO_CONVERSATION)
-                .content(actorName + " vous a ajouté à la conversation " + conversation.getName())
+                .content(content)
                 .read(false)
                 .build();
 
@@ -114,5 +128,10 @@ public class NotificationService {
     @Transactional
     public void markAllAsRead(UUID recipientPublicId) {
         notificationRepository.markAllAsRead(recipientPublicId);
+    }
+
+    @Transactional
+    public void markConversationAsRead(UUID conversationPublicId, UUID recipientPublicId) {
+        notificationRepository.markConversationAsRead(recipientPublicId, conversationPublicId);
     }
 }

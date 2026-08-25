@@ -1,27 +1,6 @@
-import {
-  Component,
-  computed,
-  debounced,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  resource,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import {Component, computed, debounced, effect, ElementRef, inject, input, resource, signal, ViewChild,} from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import {
-  catchError,
-  combineLatest,
-  debounceTime,
-  firstValueFrom,
-  map,
-  merge,
-  of,
-  Subject,
-  switchMap,
-} from 'rxjs';
+import {catchError, combineLatest, debounceTime, firstValueFrom, map, merge, of, Subject, switchMap,} from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../../../../core/websocket/services/websocket-service';
 import { MessageService } from '../../services/message/message-service';
@@ -36,11 +15,11 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft, faPenToSquare, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from '../../../../shared/interfaces/user.interface';
 import { UserService } from '../../../../core/services/user/user-service';
-import { NoConversationSelected } from './components/no-conversation-selected/no-conversation-selected';
+import {NotificationService} from '../../../notifications/services/notification/notification-service';
 
 @Component({
   selector: 'app-conversation-page',
-  imports: [FormsModule, DatePipe, FaIconComponent, NoConversationSelected],
+  imports: [FormsModule, DatePipe, FaIconComponent],
   templateUrl: './conversation-page.html',
   styleUrl: './conversation-page.css',
 })
@@ -48,6 +27,7 @@ export class ConversationPage {
   private router = inject(Router);
   private wsService = inject(WebSocketService);
   private messageService = inject(MessageService);
+  private notificationService = inject(NotificationService);
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private conversationService = inject(ConversationService);
@@ -120,23 +100,20 @@ export class ConversationPage {
     this.conversationService.onConversationLeftOrDeleted
       .pipe(takeUntilDestroyed())
       .subscribe((deletedId) => {
-        console.log(
-          'EVENT reçu, deletedId:',
-          deletedId,
-          '| conversationId():',
-          this.conversationId(),
-        );
         if (deletedId === this.conversationId()) {
-          console.log('→ navigation vers /messageries');
           this.router.navigate(['/messageries']);
-        } else {
-          console.log('→ IDs différents, pas de navigation');
         }
       });
 
     // Envoi de l'événement typing (debounce pour ne pas spammer le websocket)
     this.typingTrigger$.pipe(debounceTime(300)).subscribe(() => {
       this.typing();
+    });
+
+    effect(() => {
+      const id = this.conversationId();
+      if (!id) return;
+      this.notificationService.markConversationAsRead(id).subscribe();
     });
 
     // Scroll auto vers le bas à chaque nouveau message

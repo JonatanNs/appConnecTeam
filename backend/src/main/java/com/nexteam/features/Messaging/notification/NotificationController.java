@@ -3,9 +3,9 @@ package com.nexteam.features.Messaging.notification;
 import com.nexteam.common.ApiResponse;
 import com.nexteam.common.dto.PageResponseDTO;
 import com.nexteam.common.dto.mapper.PageMapper;
+import com.nexteam.features.Messaging.notification.dtos.NotificationResponseDTO;
 import com.nexteam.features.Users.User.UserService;
 import com.nexteam.features.Users.User.dtos.UserResponseDTO;
-import com.nexteam.features.Messaging.notification.dtos.NotificationResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -71,5 +71,14 @@ public class NotificationController {
         UUID recipientPublicId = user.getPublicId();
         notificationService.markAllAsRead(recipientPublicId);
         return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK.value(), "Tout marqué comme lu.", null));
+    }
+
+    @PatchMapping("/conversation/{conversationPublicId}/read")
+    public ResponseEntity<ApiResponse<Void>> markConversationNotificationsAsRead(
+            @PathVariable UUID conversationPublicId,
+            @AuthenticationPrincipal UserDetails principal) {
+        UserResponseDTO user = userService.getUserByEmail(principal.getUsername());
+        notificationService.markConversationAsRead(conversationPublicId, user.getPublicId());
+        return ResponseEntity.ok().body(ApiResponse.of(HttpStatus.OK.value(), "Notifications de la conversation marquées comme lues.", null));
     }
 }

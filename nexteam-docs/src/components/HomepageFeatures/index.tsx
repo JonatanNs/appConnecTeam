@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './styles.module.css';
-import { faUsers, faCode, faLaptopCode, faServer, faDatabase, faShieldHalved, faListCheck, faComments, faBullseye, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faCode, faLaptopCode, faServer, faDatabase, faShieldHalved, faListCheck, faComments, faBullseye, faUser, faIdCard, faArchive, faStoreAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 
 export default function Home(): React.ReactNode {
   return (
@@ -18,9 +19,16 @@ export default function Home(): React.ReactNode {
 
             <div className={styles.card}>
               <p>
-                NexTeam est une plateforme intranet moderne permettant de centraliser
-                la communication, les informations et les outils internes de
-                l'entreprise.
+                NexTeam est une plateforme intranet qui centralise la communication et la gestion RH 
+                d'une entreprise en un seul outil là où la plupart des entreprises jonglent aujourd'hui entre 
+                plusieurs abonnements SaaS (Slack ou Teams pour la messagerie, un outil RH séparé pour 
+                les fiches de paie, un intranet distinct pour les actualités).
+                Cette dispersion a un coût réel : plusieurs abonnements à gérer, 
+                des informations éparpillées entre plusieurs outils, et des équipes qui perdent du temps 
+                à chercher la bonne information au bon endroit.
+                NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la communication interne et 
+                les besoins administratifs RH un positionnement que les outils de messagerie généralistes (Slack, Teams) 
+                ne couvrent pas nativement.
               </p>
             </div>
 
@@ -39,23 +47,30 @@ export default function Home(): React.ReactNode {
 
               <div className={styles.techCard}>
                 <FontAwesomeIcon icon={faLaptopCode} />
-                <span>Angular 21</span>
+                <span>Angular 22</span>
               </div>
 
               <div className={styles.techCard}>
                 <FontAwesomeIcon icon={faServer} />
-                <span>Spring Boot 3</span>
+                <span>Spring Boot 4.1.0</span>
               </div>
 
               <div className={styles.techCard}>
                 <FontAwesomeIcon icon={faDatabase} />
-                <span>PostgreSQL</span>
+                <span>PostgreSQL 16</span>
               </div>
 
               <div className={styles.techCard}>
-                <FontAwesomeIcon icon={faShieldHalved} />
-                <span>JWT Security</span>
+                <FontAwesomeIcon icon={faArchive} />
+                <span>Docker</span>
               </div>
+
+              <div className={styles.techCard}>
+                <FontAwesomeIcon icon={faFile} />
+                <span>GitHub</span>
+              </div>
+
+              
 
             </div>
 
@@ -75,7 +90,7 @@ export default function Home(): React.ReactNode {
               <div className={styles.featureCard}>
                 <FontAwesomeIcon icon={faComments} />
                 <h3>Communication</h3>
-                <p>Messagerie temps réel et fil d'actualité.</p>
+                <p>Messagerie temps réel avec WebSocket et fil d'actualité.</p>
               </div>
 
               <div className={styles.featureCard}>
@@ -88,6 +103,18 @@ export default function Home(): React.ReactNode {
                 <FontAwesomeIcon icon={faShieldHalved} />
                 <h3>Sécurité</h3>
                 <p>JWT, rôles utilisateurs et BCrypt.</p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <FontAwesomeIcon icon={faIdCard} />
+                <h3>Carte</h3>
+                <p>Carte employé numérique.</p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <FontAwesomeIcon icon={faFile} />
+                <h3>Document contractuel</h3>
+                <p>Accès aux fiches de paie et avantages.</p>
               </div>
 
             </div>
@@ -104,10 +131,10 @@ export default function Home(): React.ReactNode {
             </div>
 
             <div className={styles.card}>
-              <p>
-                Réduire la fragmentation des outils internes et améliorer la
-                collaboration grâce à une plateforme centralisée.
-              </p>
+              <p>Un seul outil à déployer et administrer, au lieu de plusieurs abonnements SaaS.</p>
+              <p>Une communication centralisée : messagerie temps réel, actualités, tâches, RH au même endroit.</p>
+              <p>Une gestion fine des rôles et permissions, adaptée à la hiérarchie de l'entreprise.</p>
+              <p>Une expérience employé simplifiée : carte employé numérique, fiches de paie et avantages accessibles directement depuis l'outil de communication quotidien.</p>
             </div>
 
           </div>
@@ -123,8 +150,8 @@ export default function Home(): React.ReactNode {
 
             <div className={styles.card}>
               <p>
-                <strong>Jonatan NS</strong><br />
-                Développeur Fullstack Java / Angular
+                <strong>Jonatan Ns</strong><br />
+                Développeur Full Stack 
               </p>
             </div>
 

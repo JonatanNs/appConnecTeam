@@ -8,7 +8,6 @@ import com.nexteam.features.Users.Address.dtos.AddressRequestDTO;
 import com.nexteam.features.Users.Role.Role;
 import com.nexteam.features.Users.Role.RoleService;
 import com.nexteam.features.Users.Role.dtos.RoleRequestDTO;
-import com.nexteam.features.Users.Role.dtos.mapper.RoleMapper;
 import com.nexteam.features.Users.User.dtos.UserRequestDTO;
 import com.nexteam.features.Users.User.dtos.UserResponseDTO;
 import com.nexteam.features.Users.User.dtos.mapper.UserMapper;
@@ -39,7 +38,6 @@ public class UserService {
     private final UserMapper userMapper;
     private final AddressService addressService;
     private final RoleService roleService;
-    private final RoleMapper roleMapper;
 
     /**
      *
@@ -62,7 +60,7 @@ public class UserService {
     public UserResponseDTO getUser(UUID publicId) {
 
         User user = userRepository.findByPublicId(publicId)
-                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+                .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé."));
 
         return userMapper.userToResponseDTO(user);
     }
@@ -75,7 +73,7 @@ public class UserService {
      */
     public UserResponseDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+                .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé."));
 
         return userMapper.userToResponseDTO(user);
     }
@@ -91,7 +89,7 @@ public class UserService {
     public UserResponseDTO updateUser(UUID publicId, UserRequestDTO userRequestDTO) {
 
         User existingUser = userRepository.findByPublicId(publicId)
-                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+                .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé."));
 
         userRepository.findByEmail(userRequestDTO.getEmail())
                 .filter(user -> !user.getPublicId().equals(publicId))
@@ -159,23 +157,33 @@ public class UserService {
      * @param publicId
      */
     @Transactional
-
     public void deleteUser(UUID publicId) {
-        userRepository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+        userRepository.findByPublicId(publicId).orElseThrow(() -> new NotFoundException("Utilisateur non trouvé."));
         userRepository.deleteByPublicId(publicId);
     }
 
+    /**
+     *
+     * Méthode en charge d'activer un utilisateur
+     *
+     * @param publicId
+     */
     @Transactional
     public void activateUser(UUID publicId) {
         User user = userRepository.findByPublicId(publicId)
-                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+                .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé."));
         user.setActive(true);
     }
 
+    /**
+     *
+     * Méthode en charge de désactiver un utilisateur
+     * @param publicId
+     */
     @Transactional
     public void deactivateUser(UUID publicId) {
         User user = userRepository.findByPublicId(publicId)
-                .orElseThrow(() -> new NotFoundException("Élément non trouvé."));
+                .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé."));
         user.setActive(false);
     }
 
@@ -196,6 +204,11 @@ public class UserService {
         return userMapper.userToResponseDTO(userRepository.save(user));
     }
 
+    /**
+     *
+     * Méthode en charge de supprimer l'adresse d'un utilisateur qui elle devient null si l'id de l'adresse est trouvé.
+     * @param userPublicId
+     */
     @Transactional
     public void deleteAddress(UUID userPublicId) {
 
@@ -230,10 +243,4 @@ public class UserService {
 
         return userMapper.userToResponseDTO(userRepository.save(user));
     }
-//
-//    public Page<UserResponseDTO> getUsersIsOnline(Pageable pageable){
-//        return userRepository.findByIsOnlineTrue(pageable)
-//                .map(userMapper::userToResponseDTO);
-//    }
-
 }

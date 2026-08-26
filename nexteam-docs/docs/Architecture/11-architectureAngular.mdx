@@ -1,3 +1,96 @@
 # Architecture Angular
 
-Pas encore disponible...
+## Dépendances principales
+
+| Dépendance | Utilité |
+| --- | --- |
+| @angular/core | Framework Angular (composants, signals, injection de dépendances) |
+| @angular/common | Directives et pipes communs (`DatePipe`, `NgOptimizedImage`, etc.) |
+| @angular/compiler | Compilation des templates Angular |
+| @angular/forms | Gestion des formulaires (`ngModel`, `ReactiveFormsModule`) |
+| @angular/platform-browser | Rendu de l'application dans le navigateur |
+| @angular/router | Système de routing et navigation entre les pages |
+| rxjs | Programmation réactive, gestion des flux de données asynchrones |
+| tslib | Bibliothèque d'utilitaires TypeScript, requise par Angular |
+
+---
+
+## Communication temps réel
+
+| Dépendance | Utilité |
+| --- | --- |
+| @stomp/stompjs | Client STOMP pour la communication WebSocket avec le backend (messagerie, notifications, typing) |
+
+---
+
+## Interface utilisateur
+
+| Dépendance | Utilité |
+| --- | --- |
+| @fortawesome/angular-fontawesome | Composant `fa-icon` pour intégrer les icônes FontAwesome dans les templates |
+| @fortawesome/fontawesome-svg-core | Cœur de la bibliothèque FontAwesome |
+| @fortawesome/free-solid-svg-icons | Icônes FontAwesome de style solide |
+| @fortawesome/free-regular-svg-icons | Icônes FontAwesome de style regular |
+| @fortawesome/free-brands-svg-icons | Icônes FontAwesome de marques |
+| TailwindCSS | Framework CSS utility-first pour le style de l'application |
+| DaisyUI | Bibliothèque de composants prêts à l'emploi basée sur TailwindCSS |
+| @tailwindcss/postcss | Intégration de TailwindCSS via PostCSS |
+| postcss | Outil de transformation CSS utilisé par TailwindCSS |
+
+---
+
+## Outillage de développement
+
+| Dépendance | Utilité |
+| --- | --- |
+| @angular/cli | Outils en ligne de commande pour générer, servir et builder l'application |
+| @angular/build | Système de build Angular |
+| @angular/compiler-cli | Compilation AOT (Ahead-of-Time) pour la production |
+| typescript | Langage utilisé pour le développement de l'application |
+| prettier | Formatage automatique du code |
+
+---
+
+## Tests
+
+| Dépendance | Utilité |
+| --- | --- |
+| vitest | Framework de tests unitaires |
+| jsdom | Environnement DOM simulé pour l'exécution des tests hors navigateur |
+
+---
+
+## Organisation du code : architecture par fonctionnalités (feature-based)
+
+Le frontend est organisé par fonctionnalité métier (*feature*) plutôt que par type de fichier. Chaque module (ex: `messaging`, `notifications`, `auth`) regroupe ses propres composants, services et interfaces.
+
+Cette organisation permet :
+
+- une meilleure lisibilité et navigation dans le code ;
+- un couplage plus faible entre les fonctionnalités ;
+- une évolution plus simple du projet (ajout, modification ou suppression d'une fonctionnalité sans impacter les autres) ;
+- une cohérence avec l'architecture backend, elle aussi organisée par fonctionnalités.
+
+---
+
+## Réactivité avec les Signals
+
+L'application utilise les Signals d'Angular (`signal`, `computed`, `effect`, `toSignal`) comme mécanisme principal de gestion d'état et de réactivité, plutôt qu'une gestion manuelle avec des `Subject`/`BehaviorSubject` exposés directement dans les composants.
+
+Cette approche permet :
+
+- une détection de changement plus fine et performante (zoneless-ready) ;
+- un code plus lisible et déclaratif ;
+- une intégration native avec RxJS via `toSignal`/`toObservable` pour combiner flux HTTP et WebSocket ;
+- une meilleure gestion du cycle de vie des abonnements (nettoyage automatique).
+
+---
+
+## Communication HTTP et temps réel
+
+L'application combine deux modes de communication avec le backend :
+
+- **HTTP (REST)** via `HttpClient`, pour les opérations classiques (récupération de données, création, modification, suppression) ;
+- **WebSocket (STOMP)** via `@stomp/stompjs`, pour la communication en temps réel (messagerie instantanée, indicateur de saisie, notifications).
+
+Les données provenant de ces deux sources sont fusionnées via RxJS (`merge`, `scan`) puis exposées sous forme de Signals aux composants, assurant une source de vérité unique et réactive.

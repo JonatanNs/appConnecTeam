@@ -8,13 +8,13 @@ Ces règles représentent la logique métier de l’application et déterminent 
 
 ---
 
-## Utilisateurs
+## 🔹Utilisateurs
 
 Les utilisateurs représentent les différents membres de l’entreprise utilisant la plateforme.
 
 Les règles suivantes doivent être respectées :
 
-- chaque utilisateur doit posséder un rôle ;
+- chaque utilisateur doit posséder au moins un rôle ;
 - une adresse email doit être unique ;
 - un utilisateur ne peut posséder qu’un seul compte ;
 - les mots de passe doivent être sécurisés et chiffrés ;
@@ -41,19 +41,33 @@ Les règles métier associées sont :
 
 ---
 
-## 🔹Messages
+## 🔹Conversation & Messages 
 
 Le système de messagerie permet la communication entre les utilisateurs de la plateforme.
 
 Les règles métier sont :
 
-- seuls les utilisateurs authentifiés peuvent envoyer des messages ;
-- un message doit posséder un contenu ;
-- chaque message possède une date d’envoi ;
-- les conversations sont sauvegardées ;
-- seuls les utilisateurs concernés peuvent consulter leurs messages ;
-- un utilisateur ne peut supprimer que ses propres messages selon les règles définies par l’application ;
-- les messages peuvent contenir des pièces jointes.
+## 🔹Conversation & Messages
+
+Le système de messagerie permet la communication entre les utilisateurs de la plateforme.
+
+Les règles métier sont :
+
+- un utilisateur peut avoir des conversations privées avec un autre utilisateur 
+- un utilisateur peut être dans un groupe avec d'autres utilisateurs 
+- un utilisateur peut quitter un groupe dans lequel il a été ajouté 
+- seul le propriétaire (owner) d'un groupe peut le supprimer définitivement pour tous les participants 
+- si le propriétaire quitte le groupe, la propriété est automatiquement transférée à un autre participant 
+- si le dernier participant restant quitte une conversation, celle-ci est automatiquement supprimée 
+- seuls les utilisateurs d'une conversation peuvent voir les messages de cette conversation 
+- un utilisateur peut voir les participants d'une conversation 
+- seuls les utilisateurs authentifiés peuvent créer un groupe et envoyer des messages 
+- un message doit posséder un contenu 
+- chaque message possède une date d'envoi 
+- les conversations sont sauvegardées 
+- seuls les utilisateurs concernés peuvent consulter leurs messages.
+- un utilisateur d'un groupe vois quand un autre utilisateur est en trzin d'écrire un message
+- les messages peuvent contenir des pièces jointes
 
 ---
 
@@ -63,12 +77,12 @@ Le module d’actualités permet la diffusion d’informations internes à l’e
 
 Les règles métier sont :
 
-- seules les RH et les administrateurs peuvent publier des actualités ;
-- une actualité doit posséder un titre ;
-- une actualité doit contenir un contenu ;
-- chaque actualité possède une date de publication ;
-- les modifications des actualités sont historisées ;
-- les actualités sont visibles par les utilisateurs autorisés.
+- seules les RH et les administrateurs peuvent publier des actualités 
+- une actualité doit posséder un titre 
+- une actualité doit contenir un contenu 
+- chaque actualité possède une date de publication 
+- les modifications des actualités sont historisées 
+- les actualités sont visibles par les utilisateurs autorisés
 
 ---
 
@@ -78,10 +92,12 @@ Les notifications permettent d’informer les utilisateurs des événements impo
 
 Les règles métier sont :
 
-- une notification appartient à un utilisateur ;
-- une notification peut être marquée comme lue ;
-- les notifications sont générées automatiquement selon certains événements ;
-- les notifications possèdent une date de création.
+- une notification appartient à un utilisateur 
+- une notification peut être marquée comme lue 
+- les notifications sont générées automatiquement selon certains événements 
+- les notifications possèdent une date de création
+- un utilisateur ne peut marquer comme lue que ses propres notifications
+- les notifications sont poussées en temps réel via WebSocket en plus d'être persistées en base
 
 ---
 
@@ -91,12 +107,12 @@ Le système d’upload permet la gestion des fichiers de l’application.
 
 Les règles métier sont :
 
-- chaque fichier uploadé possède un chemin de stockage ;
-- un type de fichier doit être défini ;
-- seuls certains formats de fichiers sont autorisés ;
-- les fichiers doivent respecter une taille maximale ;
-- chaque fichier uploadé possède une date de création ;
-- les accès aux fichiers dépendent des permissions utilisateur.
+- chaque fichier uploadé possède un chemin de stockage 
+- un type de fichier doit être défini 
+- seuls certains formats de fichiers sont autorisés 
+- les fichiers doivent respecter une taille maximale 
+- chaque fichier uploadé possède une date de création 
+- les accès aux fichiers dépendent des permissions utilisateur
 
 ---
 
@@ -106,11 +122,11 @@ Le système applique une gestion des permissions basée sur les rôles.
 
 Les règles principales sont :
 
-- un employé ne peut pas accéder aux fonctionnalités d’administration ;
-- un manager possède des droits de gestion des tâches ;
-- les RH peuvent gérer les utilisateurs et les actualités ;
-- les administrateurs possèdent un accès complet à la plateforme ;
-- certaines routes API nécessitent une authentification ;
-- les accès aux ressources sont contrôlés côté backend ;
-- les échanges sensibles doivent être sécurisés ;
-- les tokens d’authentification doivent être valides pour accéder aux fonctionnalités protégées.
+- un employé ne peut pas accéder aux fonctionnalités d’administration 
+- un manager possède des droits de gestion des tâches 
+- les RH peuvent gérer les utilisateurs et les actualités 
+- les administrateurs possèdent un accès complet à la plateforme
+- certaines routes API nécessitent une authentification 
+- les accès aux ressources sont contrôlés côté backend 
+- les échanges sensibles doivent être sécurisés 
+- les tokens d’authentification doivent être valides pour accéder aux fonctionnalités protégées

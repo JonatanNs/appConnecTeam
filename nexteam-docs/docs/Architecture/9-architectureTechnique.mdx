@@ -14,11 +14,10 @@ Le frontend communiquera avec le backend via une API REST sécurisée.
 
 ## Technologies frontend utilisées
 
-- Angular
+- Angular 22
 - TypeScript
 - HTML5
-- CSS3 / css
-- Angular Material
+- CSS3
 - RxJS
 - WebSocket (temps réel)
 
@@ -50,10 +49,10 @@ Le backend représente la logique métier et le traitement des données de l’a
 
 Il sera développé avec **Spring Boot** afin de bénéficier :
 
-- d’une architecture robuste ;
-- d’une bonne organisation des couches applicatives ;
-- d’une sécurité avancée ;
-- d’une forte maintenabilité.
+- d’une architecture robuste 
+- d’une bonne organisation des couches applicatives 
+- d’une sécurité avancée 
+- d’une forte maintenabilité
 
 Le backend exposera une API REST utilisée par le frontend Angular.
 
@@ -81,8 +80,8 @@ Le backend sera organisé selon une architecture en couches.
 
 | Couche | Rôle |
 | --- | --- |
-| Controller | Gestion des requêtes HTTP |
-| Service | Logique métier |
+| Controllers | Gestion des requêtes HTTP |
+| Services | Logique métier |
 | Repository | Accès base de données |
 | Entity | Modèles de données |
 | DTO | Transfert sécurisé des données |
@@ -96,12 +95,13 @@ Le backend sera organisé selon une architecture en couches.
 
 L’application utilisera une base de données relationnelle **PostgreSQL** permettant de stocker :
 
-- les utilisateurs ;
-- les rôles ;
-- les messages ;
-- les tâches ;
-- les actualités ;
-- les notifications.
+- les utilisateurs 
+- les rôles 
+- les messages 
+- les conversations 
+- les tâches 
+- les actualités 
+- les notifications
 
 ---
 
@@ -109,11 +109,11 @@ L’application utilisera une base de données relationnelle **PostgreSQL** perm
 
 La sécurité de l’application reposera sur :
 
-- l’authentification JWT ;
-- la gestion des rôles et permissions ;
-- le chiffrement des mots de passe ;
-- la sécurisation des routes API ;
-- la validation des données côté backend.
+- l’authentification JWT 
+- la gestion des rôles et permissions 
+- le chiffrement des mots de passe 
+- la sécurisation des routes API 
+- la validation des données côté backend
 
 ---
 
@@ -121,9 +121,9 @@ La sécurité de l’application reposera sur :
 
 Le projet pourra être conteneurisé avec **Docker** afin de simplifier :
 
-- le déploiement ;
-- la portabilité ;
-- la mise en production.
+- le déploiement 
+- la portabilité 
+- la mise en production
 
 ---
 
@@ -131,6 +131,6 @@ Le projet pourra être conteneurisé avec **Docker** afin de simplifier :
 
 Le système de messagerie utilisera **WebSocket** afin de permettre :
 
-- l’envoi instantané des messages ;
-- les notifications temps réel ;
-- une meilleure expérience utilisateur.
+- l’envoi instantané des messages 
+- les notifications temps réel 
+- une meilleure expérience utilisateur

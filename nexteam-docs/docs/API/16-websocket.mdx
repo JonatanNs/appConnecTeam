@@ -1,0 +1,60 @@
+# WebSocket
+
+Afin de permettre la communication en temps réel, l'application utilise WebSocket avec le protocole STOMP (Simple Text Oriented Messaging Protocol).
+
+Contrairement aux requêtes HTTP classiques, WebSocket permet une communication bidirectionnelle permanente entre le client et le serveur sans devoir recharger la page.
+
+Cette technologie est utilisée dans NexTeam pour :
+
+- la messagerie instantanée,
+- l'indicateur "en train d'écrire",
+- les notifications en temps réel,
+- la mise à jour dynamique de certaines informations (statut de conversation, présence).
+
+---
+
+## 🔹Authentification
+
+La connexion WebSocket est sécurisée par JWT : le token est validé lors du handshake via un intercepteur dédié (`JwtHandshakeInterceptor`). Une connexion sans token valide ou expiré est refusée.
+
+---
+
+## 🔹Points d'accès
+
+| Destination | Sens | Usage |
+|---|---|---|
+| `/ws` | Handshake | Point d'entrée de connexion WebSocket |
+| `/app/conversations/{id}/send` | Client → Serveur | Envoi d'un message |
+| `/app/conversations/{id}/typing` | Client → Serveur | Signal "en train d'écrire" |
+| `/app/conversations/{id}/join` | Client → Serveur | Rejoindre une conversation |
+| `/app/conversations/{id}/leave` | Client → Serveur | Quitter une conversation |
+| `/topic/conversations/{id}` | Serveur → Client | Diffusion des nouveaux messages |
+| `/topic/conversations/{id}/typing` | Serveur → Client | Diffusion de l'état "en train d'écrire" |
+| `/user/queue/notifications` | Serveur → Client | Notifications personnelles (par utilisateur) |
+
+---
+
+## 🔹Broadcast vs messages ciblés
+
+- `/topic/**` : diffusion à tous les abonnés d'une conversation (broadcast).
+- `/user/queue/**` : message destiné uniquement à un utilisateur précis (ex: ses notifications personnelles), via `SimpMessagingTemplate.convertAndSendToUser(...)`.
+
+---
+
+### Exemple : envoi d'un message
+
+Le client publie sur `/app/conversations/{conversationId}/send` :
+
+```json
+{
+  "content": "Bonjour à tous !"
+}
+```
+
+Le serveur diffuse ensuite le message enrichi à tous les participants sur `/topic/conversations/{conversationId}`.
+
+---
+
+## 🔹CORS
+
+Les origines autorisées à établir une connexion WebSocket sont définies séparément du CORS HTTP classique, via `setAllowedOriginPatterns(...)` dans la configuration `WebSocketConfig`.

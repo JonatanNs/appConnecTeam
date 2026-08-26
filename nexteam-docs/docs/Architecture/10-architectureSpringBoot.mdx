@@ -10,6 +10,7 @@
 | PostgreSQL Driver | Connexion PostgreSQL |
 | Validation | Validation des données (`@Valid`) |
 | Lombok | Réduction du boilerplate Java |
+| MapStruct | Génération automatique des mappers entre entités et DTOs |
 | WebSocket | Communication temps réel |
 | SpringDoc OpenAPI | Documentation Swagger/OpenAPI |
 | Java Mail Sender | Emails et notifications |
@@ -21,6 +22,7 @@
 | Dépendance | Utilité |
 | --- | --- |
 | Spring Security | JWT, rôles, permissions |
+| JJWT (ou équivalent) | Génération et validation des tokens JWT |
 | Validation | Validation sécurisée des entrées |
 
 ---
@@ -33,15 +35,65 @@
 
 ### URL Swagger
 
-```
 http://localhost:8080/swagger-ui/index.html
+
+---
+
+# Organisation du code : architecture par fonctionnalités (feature-based)
+
+Le backend est organisé par fonctionnalité métier (*feature*) plutôt que par couche technique. Chaque module (ex: `Messaging`, `Users`, `Notifications`) regroupe ses propres entités, DTOs, mappers, repositories, services et controllers.
+
+Cette organisation permet :
+
+- une meilleure lisibilité et navigation dans le code ;
+- un couplage plus faible entre les fonctionnalités ;
+- une évolution plus simple du projet (ajout, modification ou suppression d'une fonctionnalité sans impacter les autres) ;
+- une meilleure séparation des responsabilités, chaque module étant autonome.
+
+```
+└── java
+    └── com
+        └── nexteam
+            ├── NexTeamApplication.java
+            ├── advice
+            ├── common
+            ├── config
+            ├── exceptions
+            ├── security
+            ├── websocket
+            └── features
+                ├── users
+                ├── messanging
 ```
 
 ---
 
-# Dépendances DevOps / Infrastructure
+# Gestion du problème N+1
 
-## À ajouter plus tard
+Le problème N+1 est un piège classique avec JPA/Hibernate : il survient lorsqu'une requête initiale charge une liste d'entités, puis qu'une requête supplémentaire est exécutée pour chaque entité afin de charger ses relations, entraînant un nombre de requêtes SQL proportionnel à la taille de la liste.
+
+Afin d'éviter ce problème de performance, plusieurs bonnes pratiques sont appliquées :
+
+- utilisation de `FetchType.LAZY` par défaut sur les relations, pour ne charger les données associées que lorsque c'est nécessaire ;
+- utilisation de `@EntityGraph` sur les repositories afin de charger explicitement et en une seule requête les relations nécessaires selon le contexte d'utilisation ;
+- utilisation de DTOs projetés via MapStruct, plutôt que de charger des entités complètes avec toutes leurs relations.
+
+Cette approche permet de garantir de bonnes performances, même lorsque le volume de données augmente.
+
+``` Java
+public interface UserRepository extends JpaRepository<User, Long> {
+    @EntityGraph(attributePaths = {"roles", "address"})
+    Optional<User> findByEmail(String email);
+
+    @EntityGraph(attributePaths = {"roles", "address"})
+    Optional<User> findByPublicId(UUID publicId);
+
+    ...
+}
+```
+---
+
+# Dépendances DevOps / Infrastructure
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -52,7 +104,7 @@ http://localhost:8080/swagger-ui/index.html
 
 ---
 
-# Dépendances tests (plus tard)
+# Dépendances tests 
 
 | Dépendance | Utilité |
 | --- | --- |

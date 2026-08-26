@@ -29,7 +29,7 @@
     </div>
 
     <!-- Pagination du haut -->
-    @if (response.data.totalPages > 1) {
+    @if (response.data.totalElements > 12) {
       <div class="mb-6">
         <app-paginate
           [totalPages]="response.data.totalPages"
@@ -47,7 +47,7 @@
     <app-table-list-user [users]="response" (userAction)="onUserAction($event)" />
 
     <!-- Pagination du bas -->
-    @if (response.data.totalPages > 1) {
+    @if (response.data.totalElements > 12) {
       <div class="mt-6">
         <app-paginate
           [totalPages]="response.data.totalPages"

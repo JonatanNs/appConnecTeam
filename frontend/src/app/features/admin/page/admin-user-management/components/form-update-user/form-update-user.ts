@@ -53,9 +53,9 @@ export class FormUpdateUser {
         next: (user) => {
 
           this.userForm.patchValue({
-            firstname: user.data.firstname,
-            lastname: user.data.lastname,
-            email: user.data.email
+            firstname: user.data.firstname.trim(),
+            lastname: user.data.lastname.trim(),
+            email: user.data.email.trim()
           });
 
         },

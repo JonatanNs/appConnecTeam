@@ -1,4 +1,13 @@
-import { Component, inject, computed, signal, debounced, resource } from '@angular/core';
+import {
+  Component,
+  inject,
+  computed,
+  signal,
+  debounced,
+  resource,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import {switchMap, of, map, combineLatest, firstValueFrom, scan} from 'rxjs';
 import { ConversationService } from '../../../../services/conversation/conversation-service';
@@ -20,19 +29,27 @@ import {INotification} from '../../../../../notifications/interfaces/notificatio
 @Component({
   selector: 'app-list-conversation',
   imports: [
-    DatePipe, RouterLink, FaIconComponent,
-    FormCreateConversation, ReactiveFormsModule,
+    DatePipe,
+    RouterLink,
+    FaIconComponent,
+    FormCreateConversation,
+    ReactiveFormsModule,
     FormsModule,
   ],
   templateUrl: './list-conversation.html',
   styleUrl: './list-conversation.css',
 })
 export class ListConversation {
-
   private conversationService = inject(ConversationService);
   private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
   private defaultPageable = { size: 20, page: 0 };
+
+  @ViewChild(FormCreateConversation) createConversationForm!: FormCreateConversation;
+
+  openNewConversationModal(): void {
+    this.createConversationForm.show();
+  }
 
   protected currentUserId = computed(() => this.authService.currentUser()?.publicId);
 
@@ -41,16 +58,14 @@ export class ListConversation {
   refreshTrigger = signal(0);
 
   conversations = toSignal(
-    combineLatest([
-      toObservable(this.currentUserId),
-      toObservable(this.refreshTrigger)])
-      .pipe(
-        switchMap(([publicId]) =>
-          publicId ? this.conversationService
-                        .getConversationByUserId(publicId, this.defaultPageable)
-                        .pipe(map((response) => response.data.content))
-                   : of([] as IConversation[]),
-        ),
+    combineLatest([toObservable(this.currentUserId), toObservable(this.refreshTrigger)]).pipe(
+      switchMap(([publicId]) =>
+        publicId
+          ? this.conversationService
+              .getConversationByUserId(publicId, this.defaultPageable)
+              .pipe(map((response) => response.data.content))
+          : of([] as IConversation[]),
+      ),
     ),
     { initialValue: [] as IConversation[] },
   );
@@ -61,7 +76,6 @@ export class ListConversation {
 
   query = signal('');
   debouncedQuery = debounced(this.query, 300);
-
 
   unreadConversationIds = signal<Set<string>>(new Set());
 
@@ -132,7 +146,7 @@ export class ListConversation {
       next: () => {
         this.refresh();
       },
-      error: (err) =>  err.error.message,
+      error: (err) => err.error.message,
     });
   }
 

@@ -1,4 +1,4 @@
-export interface ICurrentUser{
+export interface ICurrentUser {
   publicId: string;
   firstname: string;
   lastname: string;

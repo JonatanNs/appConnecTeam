@@ -8,7 +8,6 @@ import { AuthService } from '../../../auth/service/auth-service';
 import { DatePipe } from '@angular/common';
 import { scan } from 'rxjs';
 import { IMessageSend } from '../../interfaces/message.interface';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ConversationService } from '../../services/conversation/conversation-service';
 import { IConversation } from '../../interfaces/conversation.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -16,10 +15,11 @@ import { faArrowLeft, faPenToSquare, faTimes, faUsers } from '@fortawesome/free-
 import { IUser } from '../../../../shared/interfaces/user.interface';
 import { UserService } from '../../../../core/services/user/user-service';
 import {NotificationService} from '../../../notifications/services/notification/notification-service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-conversation-page',
-  imports: [FormsModule, DatePipe, FaIconComponent],
+  imports: [FormsModule, DatePipe, FaIconComponent, RouterLink],
   templateUrl: './conversation-page.html',
   styleUrl: './conversation-page.css',
 })

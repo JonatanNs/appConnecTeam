@@ -1,6 +1,5 @@
 <section
   class="drawer drawer-end relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-gray-50 font-sans text-nxt-dark">
-
   <!-- ====================================================== -->
   <!-- CONTENU DE LA CONVERSATION -->
   <!-- ====================================================== -->
@@ -13,9 +12,11 @@
       <div class="flex min-w-0 items-center gap-2 sm:gap-3">
 
         <!-- Bouton retour mobile -->
-        <button class="-ml-1 shrink-0 p-1 text-lg text-gray-500 transition-colors hover:text-nxt-primary md:hidden"
-                aria-label="Retour"
-                type="button">
+        <button
+          routerLink="/messageries"
+          class="-ml-1 shrink-0 p-1 text-lg text-gray-500 transition-colors hover:text-nxt-primary lg:hidden"
+          aria-label="Retour"
+          type="button">
           <fa-icon [icon]="faArrowLeft"></fa-icon>
         </button>
 

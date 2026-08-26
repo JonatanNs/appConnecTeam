@@ -23,7 +23,7 @@ export class AuthService {
           publicId: response.data.publicId,
           email: response.data.email,
           firstname: response.data.firstname,
-          lastname: response.data.lastname,
+          lastname: response.data.lastname
         });
         this.wsService.connect();
       }),

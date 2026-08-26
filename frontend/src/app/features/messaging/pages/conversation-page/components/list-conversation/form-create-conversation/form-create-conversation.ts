@@ -1,4 +1,13 @@
-import {Component, computed, debounced, inject, resource, signal} from '@angular/core';
+import {
+  Component,
+  computed,
+  debounced,
+  ElementRef,
+  inject,
+  resource,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {UserService} from '../../../../../../../core/services/user/user-service';
@@ -10,10 +19,7 @@ import {AuthService} from '../../../../../../auth/service/auth-service';
 
 @Component({
   selector: 'app-form-create-conversation',
-  imports: [
-    FaIconComponent,
-    FormsModule
-  ],
+  imports: [FaIconComponent, FormsModule],
   templateUrl: './form-create-conversation.html',
   styleUrl: './form-create-conversation.css',
 })
@@ -22,6 +28,12 @@ export class FormCreateConversation {
   private userService = inject(UserService);
   private conversationService = inject(ConversationService);
   private authService = inject(AuthService);
+
+  @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
+
+  show(): void {
+    this.modal.nativeElement.showModal();
+  }
 
   selectedUsers = signal<IUser[]>([]);
   removeUser(user: IUser): void {
@@ -44,12 +56,12 @@ export class FormCreateConversation {
     loader: async ({ params: q }) => {
       if (!q || !q.trim()) return [];
       try {
-        const res = await firstValueFrom(this.userService.searchUser(q, {page: 0, size: 20}));
+        const res = await firstValueFrom(this.userService.searchUser(q, { page: 0, size: 20 }));
         return res.data.content;
       } catch (err) {
         throw err;
       }
-    }
+    },
   });
 
   searchResults = computed(() => {
@@ -59,22 +71,23 @@ export class FormCreateConversation {
     return results.filter((u) => !selectedIds.has(u.publicId) && u.publicId !== currentUserId);
   });
 
-
   conversationName = signal('');
   onCreateConversation(): void {
     const usersIds = this.selectedUsers().map((u) => u.publicId);
 
-    this.conversationService.createConversation({
-      name: this.selectedUsers().length >= 2 ? this.conversationName() : '',
-      usersIds,
-    }).subscribe({
-      next: () => {
-        this.conversationName.set('');
-        this.selectedUsers.set([]);
-        (document.getElementById('my_modal_5') as HTMLDialogElement)?.close();
-      },
-      error: (err) =>  err,
-    });
+    this.conversationService
+      .createConversation({
+        name: this.selectedUsers().length >= 2 ? this.conversationName() : '',
+        usersIds,
+      })
+      .subscribe({
+        next: () => {
+          this.conversationName.set('');
+          this.selectedUsers.set([]);
+          (document.getElementById('my_modal_5') as HTMLDialogElement)?.close();
+        },
+        error: (err) => err,
+      });
   }
 
   resetForm(): void {

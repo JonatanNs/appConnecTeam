@@ -9,7 +9,7 @@
     </div>
 
     <div class="flex shrink-0 items-center gap-1">
-      <button type="button" onclick="my_modal_5.showModal()"
+      <button type="button" (click)="openNewConversationModal()"
               class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-nxt-primary/10 hover:text-nxt-primary"
               title="Nouvelle conversation">
         <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
@@ -18,13 +18,11 @@
   </div>
 
   <!-- Nouvelle conversation -->
-  <div class="shrink-0 px-3 pt-3">
-    <button type="button" onclick="my_modal_5.showModal()"
-            class="flex w-full items-center justify-center gap-2 rounded-lg bg-nxt-primary px-3 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-nxt-primary-hover">
-      <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
-      <span>Nouvelle conversation</span>
-    </button>
-  </div>
+  <button type="button" (click)="openNewConversationModal()"
+          class="flex w-xs m-auto items-center justify-center rounded-lg bg-nxt-primary px-5 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-nxt-primary-hover">
+    <i class="fas fa-circle-plus text-sm text-emerald-300 group-hover:rotate-90 transition-transform duration-300"></i>
+    <span>Nouvelle conversation</span>
+  </button>
 
   <!-- Recherche -->
   <div class="shrink-0 px-3 py-3">

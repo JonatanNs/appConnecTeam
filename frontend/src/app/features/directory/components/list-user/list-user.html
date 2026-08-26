@@ -1,40 +1,112 @@
 @if (users(); as response) {
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-15 mt-20">
-    @for (user of response.data.content; track user.publicId) {
-      @if (user.active == true) {
-        <div
-          class="w-full bg-nxt-surface rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-6 relative">
 
-          <!-- Profile Image -->
-          <div class="flex justify-center -mt-16 mb-4">
+  <!-- VUE MOBILE : Liste compacte optimisée (gain de place maximal) -->
+  <div
+    class="flex flex-col divide-y divide-gray-100 bg-nxt-surface rounded-2xl border border-gray-200/80 shadow-sm mt-6 lg:hidden">
+    @for (user of activeUsers(); track user.publicId) {
+      <div class="flex items-center justify-between p-3.5 hover:bg-gray-50/80 transition-colors">
+
+        <!-- Avatar + Infos -->
+        <div class="flex items-center gap-3 min-w-0 pr-2">
+          <div class="relative shrink-0">
             <img
               ngSrc="https://avatars.githubusercontent.com/u/124576166?v=4"
-              alt="Photo de profil de {{ user.firstname }} {{ user.lastname }}"
-              width="128"
-              height="128"
-              class="w-32 h-32 object-cover rounded-full border-4 border-nxt-white shadow-md hover:scale-105 transform transition-transform duration-300">
+              alt="Photo de {{ user.firstname }}"
+              width="40"
+              height="40"
+              class="w-10 h-10 object-cover rounded-full border border-gray-200" />
+            @if (user.online) {
+              <span
+                class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-nxt-success border border-white rounded-full"></span>
+            } @else {
+              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-nxt-error border border-white rounded-full"></span>
+            }
           </div>
 
-          <!-- Name and Title -->
-          <article class="text-center mb-4">
-            <h2 class="text-2xl font-semibold text-nxt-dark">{{ user.firstname }} {{ user.lastname }}</h2>
-            <p class="text-nxt-dark">Creative Designer</p>
-          </article>
-
-          <!-- Description -->
-          <p class="text-center text-nxt-dark mb-6 px-4">Bio de la personne</p>
-
-          <div class="text-center">
-            <button class="btn-nxt-primary">
-              Contacter
-            </button>
+          <div class="min-w-0">
+            <h3 class="text-sm font-semibold text-nxt-dark truncate">
+              {{ user.firstname }} {{ user.lastname }}
+            </h3>
+            <p class="text-xs text-gray-500 truncate">
+              Creative Designer
+            </p>
           </div>
         </div>
-      } @else {
-        <p class="text-center text-nxt-gray">Aucun utilisateur trouvé.</p>
-      }
+
+        <!-- Actions rapides (Voir profil + Contacter) -->
+        <div class="flex items-center gap-1 shrink-0">
+          <a [routerLink]="['/profile', user.publicId]"
+             class="p-2 text-gray-400 hover:text-nxt-primary hover:bg-gray-100 rounded-lg transition-colors"
+             aria-label="Voir le profil de {{ user.firstname }}">
+            <fa-icon [icon]="faUser" class="text-base"></fa-icon>
+          </a>
+          <button type="button"
+                  class="p-2 text-nxt-primary hover:bg-nxt-primary/10 rounded-lg transition-colors"
+                  aria-label="Contacter {{ user.firstname }}">
+            <fa-icon [icon]="faEnvelope" class="text-base"></fa-icon>
+          </button>
+        </div>
+
+      </div>
+    } @empty {
+      <div class="text-center py-8 text-gray-400 text-sm">
+        Aucun utilisateur trouvé.
+      </div>
     }
   </div>
+
+  <!-- VUE DESKTOP : Grille de cartes aérées -->
+  <div class="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-16 mt-16">
+    @for (user of activeUsers(); track user.publicId) {
+      <div
+        class="group relative flex flex-col items-center bg-nxt-surface rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="relative -mt-16 mb-4">
+          <img ngSrc="https://avatars.githubusercontent.com/u/124576166?v=4"
+               alt="Photo de profil de {{ user.firstname }} {{ user.lastname }}"
+               width="112" height="112"
+               class="w-28 h-28 object-cover rounded-full border-4 border-nxt-surface shadow-md group-hover:scale-105 transition-transform duration-300" />
+
+          @if (user.online) {
+            <span
+              class="absolute bottom-1 right-1 w-4 h-4 bg-nxt-success border-2 border-nxt-surface rounded-full"></span>
+          } @else {
+            <span
+              class="absolute bottom-1 right-1 w-4 h-4 bg-nxt-error border-2 border-nxt-surface rounded-full"></span>
+          }
+        </div>
+
+        <article class="text-center w-full mb-4">
+          <h2 class="text-xl font-bold text-nxt-dark tracking-tight">
+            {{ user.firstname }} {{ user.lastname }}
+          </h2>
+          <span class="inline-block mt-1 px-3 py-1 text-xs font-medium text-nxt-primary bg-nxt-primary/10 rounded-full">
+            Creative Designer
+          </span>
+        </article>
+
+        <p class="text-sm text-gray-500 text-center line-clamp-2 mb-6 px-2 flex-1">
+          Bio de la personne ou court résumé du profil de l'utilisateur.
+        </p>
+
+        <!-- Zone d'actions : Bouton Profil (icône) + Bouton Contacter -->
+        <div class="w-full flex items-center justify-between gap-2 pt-4 border-t border-gray-100 mt-auto">
+          <a [routerLink]="['/profile', user.publicId]"
+             class="p-2.5 text-gray-500 hover:text-nxt-primary hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors flex items-center justify-center"
+             title="Voir le profil"
+             aria-label="Voir le profil de {{ user.firstname }}">
+            <fa-icon [icon]="faUser" class="text-base"></fa-icon>
+          </a>
+          <button type="button" class="flex-1 btn-nxt-primary py-2.5 text-sm font-medium rounded-xl transition-colors">
+            Contacter
+          </button>
+        </div>
+
+      </div>
+    } @empty {
+      <p class="col-span-full text-center text-nxt-gray py-12">Aucun utilisateur trouvé.</p>
+    }
+  </div>
+
 } @else {
-  <p class="text-center text-nxt-gray">Chargement...</p>
+  <p class="text-center text-nxt-gray mt-12">Chargement...</p>
 }

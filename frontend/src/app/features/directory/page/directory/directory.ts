@@ -21,7 +21,6 @@ import {IPageable} from '../../../../shared/interfaces/pageable/pageable.interfa
 export class Directory {
 
   private userService = inject(UserService);
-  private flashMessage = inject(FlashMessageService);
 
   readonly pageable = signal<IPageable>({ page: 0, size: 12 });
 

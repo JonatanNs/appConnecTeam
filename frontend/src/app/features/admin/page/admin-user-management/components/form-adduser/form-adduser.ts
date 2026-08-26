@@ -34,7 +34,7 @@ export class FormAdduser {
   constructor() {
     effect(() => {
       // @ts-ignore
-      const email = `${this.firstnameSig().toLowerCase()}.${this.lastnameSig().toLowerCase()}@nexteam.com`;
+      const email = `${this.firstnameSig().toLowerCase().trim()}.${this.lastnameSig().toLowerCase().trim()}@nexteam.com`;
       this.userForm.get('email')!.setValue(email, { emitEvent: false });
     });
   }
@@ -47,7 +47,6 @@ export class FormAdduser {
     this.userService.createUser(this.userForm.value as IUser).subscribe({
       next: (res) => {
         console.log(res);
-        this.flashService.success(res.message)
         this.router.navigate(['/admin/gestion-utilisateurs']);
       },
       error: (error) => {

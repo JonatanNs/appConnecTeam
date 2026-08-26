@@ -57,7 +57,7 @@ public class User extends AuditableEntity {
     private boolean active = true;
 
     @Column(nullable = false)
-    private boolean isOnline;
+    private boolean online;
 
     /**
      * Relation ManyToMany entre User et Role.

@@ -25,6 +25,7 @@ public class UserResponseDTO {
     private String lastname;
     private String email;
     private boolean active;
+    private boolean online;
     private Set<RoleResponseDTO> roles;
     private AddressResponseDTO address;
     private Instant createdAt;

@@ -4,6 +4,7 @@ import com.nexteam.security.jwt.JwtService;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -35,8 +36,8 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
     private final UserDetailsService userDetailsService;
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                                   WebSocketHandler wsHandler, Map<String, Object> attributes) {
+    public boolean beforeHandshake(@NonNull ServerHttpRequest request, @NonNull ServerHttpResponse response,
+                                   @NonNull WebSocketHandler wsHandler, @NonNull Map<String, Object> attributes) {
 
         if (!(request instanceof ServletServerHttpRequest servletRequest)) {
             response.setStatusCode(HttpStatus.BAD_REQUEST);
@@ -53,16 +54,22 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
 
         try {
             String username = jwtService.extractUsername(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails =
+                    userDetailsService.loadUserByUsername(username);
 
             if (!jwtService.isTokenValid(token, userDetails)) {
-                log.debug("Handshake WebSocket refusé : token invalide ou expiré pour {}", username);
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return false;
             }
 
-            attributes.put("principal", new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities()));
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+
+            attributes.put("principal", authentication);
 
             log.debug("Handshake WebSocket authentifié pour {}", username);
             return true;
@@ -75,8 +82,8 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
     }
 
     @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                               WebSocketHandler wsHandler, Exception exception) {
+    public void afterHandshake(@NonNull ServerHttpRequest request, @NonNull ServerHttpResponse response,
+                               @NonNull WebSocketHandler wsHandler, Exception exception) {
     }
 
     private String extractToken(Cookie[] cookies) {

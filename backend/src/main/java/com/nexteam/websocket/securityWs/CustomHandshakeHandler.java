@@ -1,5 +1,6 @@
 package com.nexteam.websocket.securityWs;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
@@ -17,9 +18,10 @@ import java.util.Map;
 public class CustomHandshakeHandler extends DefaultHandshakeHandler {
 
     @Override
-    protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler,
+    protected Principal determineUser(@NonNull ServerHttpRequest request, @NonNull WebSocketHandler wsHandler,
                                       Map<String, Object> attributes) {
         Object principal = attributes.get("principal");
+
         return (principal instanceof Principal) ? (Principal) principal : null;
     }
 }

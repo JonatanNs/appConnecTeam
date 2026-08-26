@@ -53,39 +53,27 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Origines autorisées — jamais "*" en production
         config.setAllowedOrigins(List.of(
-                "http://localhost:4200",      // dev
-                "https://nexteam.com",        // production
-                "http://localhost:5500", // websocket
-                "http://10.50.101.16:4200/", // --host
-                "http://169.254.190.148:4200/", // --host
-                "http://169.254.57.215:4200/" // --host
-                ));
+                "http://localhost:4200",
+                "https://nexteam.com",
+                "http://localhost:5500",
+                "http://10.50.101.16:4200/",
+                "http://169.254.190.148:4200/",
+                "http://169.254.57.215:4200/"
+        ));
 
-        // Méthodes HTTP autorisées — lister explicitement, éviter "*"
         config.setAllowedMethods(List.of(
                 "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
         ));
 
-        // Headers autorisés dans les requêtes
-        config.setAllowedHeaders(List.of(
-                "Authorization",   // le JWT token
-                "Content-Type"     // application/json
-        ));
+        config.setAllowedHeaders(List.of("Content-Type"));
 
-        // Headers exposés dans la réponse — ce que Angular peut lire
-        config.setExposedHeaders(List.of("Authorization"));
-
-        // Autorise l'envoi du header Authorization et des cookies
         config.setAllowCredentials(true);
 
-        // Durée de mise en cache de la réponse preflight (en secondes)
-        // Évite de renvoyer une preflight à chaque requête
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config); // appliqué à toutes les routes
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

@@ -39,24 +39,14 @@ public class UserService {
     private final AddressService addressService;
     private final RoleService roleService;
 
-    /**
-     *
-     * Méthode en charge de récupérer tous les utilisateurs avec pagination.
-     *
-     * @param pageable paramètres de pagination et de tri
-     * @return une page d'utilisateurs
-     */
+
     public Page<UserResponseDTO> getUsers(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         return users.map(userMapper::userToResponseDTO);
     }
 
     /**
-     * Récupère un utilisateur par son identifiant unique.
-     *
-     * @param publicId l'UUID public d'un utilisateur
-     * @return l'utilisateur trouvé
-     * @throws NotFoundException 'Utilisateur non trouvé.'
+     * @throws NotFoundException si aucun utilisateur ne correspond à cet UUID
      */
     public UserResponseDTO getUser(UUID publicId) {
 
@@ -67,11 +57,7 @@ public class UserService {
     }
 
     /**
-     * Récupère un utilisateur par son email.
-     *
-     * @param email l'email qui nous sert à trouver l'utilisateur
-     * @return l'utilisateur trouvé
-     * @throws NotFoundException 'Utilisateur non trouvé.'
+     * @throws NotFoundException si aucun utilisateur ne correspond à cet email
      */
     public UserResponseDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
@@ -87,7 +73,7 @@ public class UserService {
      * @param publicId l'UUID public d'un utilisateur
      * @param userRequestDTO les informations nécéssaire pour modifier l'utilisateur.
      * @return l'utilisateur mis à jour
-     * @throws AlreadyExistException 'L'email est déjà associé à un compte.'
+     * @throws AlreadyExistException si email est déjà associé à un compte.
      */
     public UserResponseDTO updateUser(UUID publicId, UserRequestDTO userRequestDTO) {
 
@@ -119,7 +105,7 @@ public class UserService {
      *
      * @param userRequestDTO les informations nécéssaire pour créer l'utilisateur.
      * @return l'utilisateur créé
-     * @throws AlreadyExistException 'L'email est déjà associé à un compte.'
+     * @throws AlreadyExistException si l'email est déjà associé à un compte.
      */
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
 
@@ -156,9 +142,6 @@ public class UserService {
     }
 
     /**
-     * Supprime un utilisateur par son identifiant unique.
-     *
-     * @param publicId l'UUID public d'un utilisateur
      * @throws NotFoundException 'Utilisateur non trouvé.'
      */
     @Transactional

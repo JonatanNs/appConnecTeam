@@ -1,0 +1,66 @@
+# Commencer
+
+Cette page explique comment installer et lancer NexTeam en local : backend, frontend et documentation.
+
+## Prérequis
+
+Avant de commencer, assure-toi d'avoir installé :
+
+- [Node.js](https://nodejs.org/) (v20 ou supérieur)
+- [Java](https://www.oracle.com/java/technologies/downloads/) (JDK 21 ou supérieur)
+- [PostgreSQL](https://www.postgresql.org/) (v16)
+- [Git](https://git-scm.com/)
+
+## 1. Cloner le dépôt
+
+```bash
+git clone https://github.com/JonatanNs/appNexTeam.git
+cd appNexTeam
+```
+
+## 2. Configurer les variables d'environnement
+
+Le backend nécessite un fichier `.env` pour se connecter à la base de données et sécuriser les tokens JWT.
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Renseigne tes propres valeurs pour `DB_USERNAME`, `DB_PASSWORD` et `JWT_SECRET`.
+
+> Pour en savoir plus sur la sécurité JWT, consulte la page [Sécurité](/docs/securiteAPI).
+
+## 3. Lancer le backend
+
+```bash
+./gradlew bootRun
+```
+
+L'API est accessible sur `http://localhost:8080`, et sa documentation Swagger sur `http://localhost:8080/swagger-ui/index.html`.
+
+## 4. Lancer le frontend
+
+Dans un nouveau terminal :
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+L'application est accessible sur `http://localhost:4200`.
+
+## 5. Vérifier l'installation
+
+Si tout fonctionne correctement :
+
+- Swagger affiche la liste des endpoints de l'API.
+- La page de connexion Angular s'affiche sur `http://localhost:4200`.
+
+## Aller plus loin
+
+- [Architecture technique](/docs/Architecture/architectureTechnique)
+- [Architecture Spring Boot](/docs/Architecture/architectureSpringBoot)
+- [Architecture Angular ](/docs/Architecture/architectureAngular)
+- [Websocket](/docs/API/websocket)

@@ -16,5 +16,4 @@ public class NotifRequestDTO {
     private String content;
     private Instant createdAt;
     private UUID sender;
-
 }

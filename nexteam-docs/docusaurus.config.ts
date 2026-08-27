@@ -90,6 +90,10 @@ const config: Config = {
           label: 'Cahier des charges',
           to: '/docs/cahierDesCharges',
         },
+        {
+          label: 'Commencer',
+          to: '/docs/commencer',
+        },
 
         {
           href: 'https://github.com/JonatanNs/appNexTeam',
@@ -111,6 +115,10 @@ const config: Config = {
             {
               label: 'Cahier des charges',
               to: '/docs/cahierDesCharges',
+            },
+            {
+              label: 'Commencer',
+              to: '/docs/commencer',
             },
 
 

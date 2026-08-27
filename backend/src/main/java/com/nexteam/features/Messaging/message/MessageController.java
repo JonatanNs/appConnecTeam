@@ -28,8 +28,11 @@ public class MessageController {
             @AuthenticationPrincipal UserDetails principal) {
 
         return ResponseEntity.ok().body(
-                ApiResponse.of(HttpStatus.OK.value(), "Messages récupérés avec succès.",
-                        messageService.getMessages(conversationId, before, limit, principal.getUsername()))
+                ApiResponse.of(
+                        HttpStatus.OK.value(),
+                        "Messages récupérés avec succès.",
+                        messageService.getMessages(conversationId, before, limit, principal.getUsername())
+                )
         );
     }
 }

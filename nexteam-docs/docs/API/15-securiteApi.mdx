@@ -14,7 +14,7 @@ Dans NexTeam, plusieurs mécanismes de sécurité seront mis en place afin de :
 
 ---
 
-## 🔹Authentification JWT
+## 1 - Authentification JWT
 
 L'API utilise JWT (*JSON Web Token*) pour authentifier les utilisateurs.
 
@@ -31,7 +31,7 @@ Cette solution a été choisie car elle permet :
 
 Contrairement aux sessions classiques stockées côté serveur, JWT permet au serveur de ne pas conserver l'état de connexion de chaque utilisateur, ce qui améliore les performances et l'évolutivité de l'application.
 
-### Refresh Token
+### 🔹Refresh Token
 
 Afin de limiter les risques liés au vol d'un token, le token d'accès JWT possède une durée de vie courte. Un refresh token, à durée de vie plus longue, permet de renouveler automatiquement l'accès sans redemander les identifiants à l'utilisateur.
 
@@ -43,7 +43,7 @@ Cette approche permet :
 
 ---
 
-## 🔹Autorisations et rôles
+## 2 - Autorisations et rôles
 
 Le système utilise une gestion des permissions basée sur les rôles afin de limiter les accès selon les responsabilités des utilisateurs.
 
@@ -65,7 +65,7 @@ Exemples :
 
 ---
 
-## 🔹Sécurisation des mots de passe
+## 3 - Sécurisation des mots de passe
 
 Les mots de passe des utilisateurs ne sont jamais stockés en clair dans la base de données.
 
@@ -97,7 +97,7 @@ Cette politique permet de réduire les risques :
 
 ---
 
-## 🔹Identifiants publics
+## 4 - Identifiants publics
 
 Afin d'éviter toute énumération ou déduction des ressources de l'application, chaque entité exposée via l'API possède un identifiant public (`publicId`, de type `UUID`), distinct de son identifiant technique en base de données.
 
@@ -111,7 +111,7 @@ Grâce à ce mécanisme :
 
 ---
 
-## 🔹Protection des routes API
+## 5 - Protection des routes API
 
 Les routes de l'API doivent être protégées afin d'empêcher les accès non autorisés aux ressources sensibles.
 
@@ -139,7 +139,7 @@ La sécurisation des routes sera mise en place avec Spring Security via :
 
 ---
 
-## 🔹Rate Limiting
+## 6 - Rate Limiting
 
 Afin de protéger l'API contre les attaques par déni de service (DoS) et les tentatives de brute-force, un système de limitation du nombre de requêtes (*rate limiting*) est mis en place.
 
@@ -153,7 +153,7 @@ Le rate limiting permet de :
 
 ---
 
-## 🔹Validation des données
+## 7 - Validation des données
 
 Les données envoyées à l'API seront validées avant traitement afin de garantir leur cohérence et leur sécurité.
 
@@ -182,7 +182,7 @@ Cette validation permet de se protéger contre :
 
 ---
 
-## 🔹Configuration CORS
+## 8 - Configuration CORS
 
 Le CORS (*Cross-Origin Resource Sharing*) est un mécanisme de sécurité permettant d'autoriser ou de bloquer les requêtes provenant d'un autre domaine.
 
@@ -208,7 +208,7 @@ Côté frontend Angular, les routes de navigation seront gérées via le systèm
 
 Cette protection sera mise en place grâce aux `Route Guards` d'Angular.
 
-## 🔹Protection des routes côté frontend
+## 9 - Protection des routes côté frontend
 
 En complément du contrôle backend, le frontend Angular protège certaines pages grâce aux `Route Guards`. Ces gardes empêchent l'accès à une page si l'utilisateur n'est pas authentifié ou ne possède pas le rôle requis.
 
@@ -216,7 +216,7 @@ Cette double protection (backend + frontend) garantit qu'aucune donnée sensible
 
 ---
 
-## 🔹Gestion des erreurs
+## 10 - Gestion des erreurs
 
 La gestion des erreurs permet de contrôler les problèmes rencontrés par l'application et de retourner des réponses compréhensibles au frontend.
 
@@ -245,7 +245,7 @@ Cette approche permet au frontend de gérer correctement les différents cas d'e
 
 ---
 
-## 🔹Variables d'environnement et configuration sécurisée
+## 11 - Variables d'environnement et configuration sécurisée
 
 Afin d'éviter d'exposer des informations sensibles dans le code source, certaines données de configuration seront externalisées dans des fichiers de configuration ou des variables d'environnement.
 

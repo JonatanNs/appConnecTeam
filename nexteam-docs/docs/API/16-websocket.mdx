@@ -13,13 +13,13 @@ Cette technologie est utilisée dans NexTeam pour :
 
 ---
 
-## 🔹Authentification
+## 1 - Authentification
 
 La connexion WebSocket est sécurisée par JWT : le token est validé lors du handshake via un intercepteur dédié (`JwtHandshakeInterceptor`). Une connexion sans token valide ou expiré est refusée.
 
 ---
 
-## 🔹Points d'accès
+## 2 - Points d'accès
 
 | Destination | Sens | Usage |
 |---|---|---|
@@ -34,14 +34,14 @@ La connexion WebSocket est sécurisée par JWT : le token est validé lors du ha
 
 ---
 
-## 🔹Broadcast vs messages ciblés
+## 3 - Broadcast vs messages ciblés
 
 - `/topic/**` : diffusion à tous les abonnés d'une conversation (broadcast).
 - `/user/queue/**` : message destiné uniquement à un utilisateur précis (ex: ses notifications personnelles), via `SimpMessagingTemplate.convertAndSendToUser(...)`.
 
 ---
 
-### Exemple : envoi d'un message
+### 🔹Exemple : envoi d'un message
 
 Le client publie sur `/app/conversations/{conversationId}/send` :
 
@@ -55,6 +55,6 @@ Le serveur diffuse ensuite le message enrichi à tous les participants sur `/top
 
 ---
 
-## 🔹CORS
+## 4 - CORS
 
 Les origines autorisées à établir une connexion WebSocket sont définies séparément du CORS HTTP classique, via `setAllowedOriginPatterns(...)` dans la configuration `WebSocketConfig`.

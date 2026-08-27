@@ -13,11 +13,11 @@ Les tests sont divisés en deux niveaux :
 
 ---
 
-## 1. Tests unitaires (Service Layer)
+## Tests unitaires (Service Layer)
 
-### 1.1 Utilisateurs
+### 🔹Utilisateurs
 
-#### Cas nominaux
+#### 🔹Cas nominaux
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
@@ -28,14 +28,14 @@ Les tests sont divisés en deux niveaux :
 | UT-USR-04 | Mise à jour utilisateur valide | Données mises à jour |
 | UT-USR-05 | Suppression utilisateur par l'id | Utilisateur supprimé |
 
-#### Cas limites
+#### 🔹Cas limites
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
 | UT-USR-06 | Email déjà existant à la création | AlreadyExistException |
 | UT-USR-07 | Email déjà utilisé lors de la modification | AlreadyExistException |
 
-#### Cas d’erreurs
+#### 🔹Cas d’erreurs
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
@@ -45,13 +45,13 @@ Les tests sont divisés en deux niveaux :
 | UT-USR-11 | Suppression utilisateur inexistant par l'id | NotFoundException |
 
 
-### 1.2 Authentification
+### 🔹Authentification
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
 | UT-AUTH-01 | Login valide → JWT généré |
 | UT-AUTH-02 | Mauvais mot de passe / email inexistant → Refus d'accès |
 
-### 1.3 Messageries
+### 🔹Messagerie
 | ID        | Cas de test                                       | Résultat attendu        |
 | --------- | ------------------------------------------------- | ----------------------- |
 | UT-MSG-01 | Envoi d'un message                                | Message enregistré      |
@@ -59,7 +59,7 @@ Les tests sont divisés en deux niveaux :
 | UT-MSG-03 | Suppression d'un message par un autre utilisateur | `AccessDeniedException` |
 
 
-### 1.4 Conversations 
+### 🔹Conversations 
 | ID         | Cas de test                                            | Résultat attendu        |
 | ---------- | ------------------------------------------------------ | ----------------------- |
 | UT-CONV-01 | Création d'une conversation valide                     | Conversation créée      |
@@ -71,7 +71,7 @@ Les tests sont divisés en deux niveaux :
 | UT-CONV-07 | Conversation introuvable                               | `NotFoundException`     |
 
 
-### 1.5 Notifications
+### 🔹Notifications
 | ID          | Cas de test                                               | Résultat attendu                                                       |
 | ----------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
 | UT-NOTIF-01 | Création d'une notification lors d'un nouveau message     | Notification enregistrée et poussée à l'utilisateur                    |
@@ -82,7 +82,7 @@ Les tests sont divisés en deux niveaux :
 | UT-NOTIF-06 | Comptage des notifications non lues                       | Nombre correct retourné                                                |
 
 
-### 1.6 Tâches
+### 🔹Tâches
 | ID         | Cas de test                                       | Résultat attendu        |
 | ---------- | ------------------------------------------------- | ----------------------- |
 | UT-TASK-01 | Création d'une tâche valide                       | Tâche enregistrée       |
@@ -91,7 +91,7 @@ Les tests sont divisés en deux niveaux :
 | UT-TASK-04 | Tâche introuvable                                 | `NotFoundException`     |
 
 
-### 1.7 Fichiers 
+### 🔹Fichiers 
 | ID         | Cas de test                | Résultat attendu             |
 | ---------- | -------------------------- | ---------------------------- |
 | UT-FILE-01 | Upload d'un fichier valide | Fichier stocké et enregistré |
@@ -101,16 +101,16 @@ Les tests sont divisés en deux niveaux :
 
 ---
 
-## 2. Tests d'intégration (Spring Boot)
+## Tests d'intégration (Spring Boot)
 
-### 2.2 Authentification
+### 🔹Authentification
 | ID         | Cas de test     | Résultat attendu   |
 | ---------- | --------------- | ------------------ |
 | IT-AUTH-01 | Login correct   | `200 OK` + JWT     |
 | IT-AUTH-02 | Login incorrect | `401 Unauthorized` |
 
 
-### 2.3 Messagerie
+### 🔹Messagerie
 | ID        | Cas de test                            | Résultat attendu |
 | --------- | -------------------------------------- | ---------------- |
 | IT-MSG-01 | Envoyer un message                     | `201 Created`    |
@@ -118,7 +118,7 @@ Les tests sont divisés en deux niveaux :
 | IT-MSG-03 | Suppression d'un message non autorisée | `403 Forbidden`  |
 
 
-### 2.4 WebSocket / Temps réel  
+### 🔹WebSocket / Temps réel  
 | ID       | Cas de test                                     | Résultat attendu                                      |
 | -------- | ----------------------------------------------- | ----------------------------------------------------- |
 | IT-WS-01 | Connexion WebSocket avec JWT valide             | Handshake accepté                                     |
@@ -128,7 +128,7 @@ Les tests sont divisés en deux niveaux :
 | IT-WS-05 | Join / Leave d'une conversation                 | Message système diffusé                               |
 
 
-### 2.5 Tâches
+### 🔹Tâches
 | ID         | Cas de test                        | Résultat attendu |
 | ---------- | ---------------------------------- | ---------------- |
 | IT-TASK-01 | Création d'une tâche               | `201 Created`    |
@@ -136,7 +136,7 @@ Les tests sont divisés en deux niveaux :
 | IT-TASK-03 | Accès à une tâche non autorisé     | `403 Forbidden`  |
 
 
-### 2.6 Notifications
+### 🔹Notifications
 | ID          | Cas de test                                             | Résultat attendu                                |
 | ----------- | ------------------------------------------------------- | ----------------------------------------------- |
 | IT-NOTIF-01 | Création d'une notification                             | Notification créée                              |
@@ -144,7 +144,7 @@ Les tests sont divisés en deux niveaux :
 | IT-NOTIF-03 | Marquer les notifications d'une conversation comme lues | `200 OK`, notifications concernées mises à jour |
 | IT-NOTIF-04 | Accès à une notification d'un autre utilisateur         | `403 Forbidden`                                 |
 
-### 2.7 Upload fichiers
+### 🔹Upload fichiers
 | ID       | Cas de test                          | Résultat attendu        |
 | -------- | ------------------------------------ | ----------------------- |
 | IT-UP-01 | Upload d'un fichier valide           | Fichier stocké          |
@@ -152,7 +152,7 @@ Les tests sont divisés en deux niveaux :
 | IT-UP-03 | Upload d'un fichier trop volumineux  | `413 Payload Too Large` |
 
 
-### 2.8 CORS & Sécurité 
+### 🔹CORS & Sécurité 
 | ID        | Cas de test                                 | Résultat attendu         |
 | --------- | ------------------------------------------- | ------------------------ |
 | IT-SEC-01 | Requête depuis une origine non autorisée    | Requête bloquée par CORS |
@@ -161,9 +161,8 @@ Les tests sont divisés en deux niveaux :
 | IT-SEC-04 | Dépassement de la limite de requêtes        | `429 Too Many Requests`  |
 
 
----
 
-### 3. ⚠️ Cas d’erreurs globaux
+### 🔹Cas d’erreurs globaux
 
 Ces cas doivent être testés sur l’ensemble des API.
 

@@ -1,42 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+/* ==========================================================================
+   1. VARIABLES & CHARTE NAKTA (LIGHT MODE BY DEFAULT)
+   ========================================================================== */
 :root {
-  /* Colors (light mode) */
-  --nex-primary: #6f9ff8;
+  /* Typographie */
+  --ifm-font-family-base: 'Nunito', sans-serif;
+  --ifm-heading-font-family: 'Nunito', sans-serif;
 
-  --nex-background: #f9f9f9;
-  --nex-surface: #ffffff;
-  --nex-border: #d0d0d0;
-  --nex-text: #1a1c1c;
+  /* Couleurs de marque (Design Tokens) */
+  --color-nxt-primary: #003eff;
+  --color-nxt-primary-hover: #17356c;
+  --color-nxt-secondary: #6f9ff8;
+  --color-nxt-secondary-hover: #5a8ce8;
 
-  --nex-muted: #f3f3f4;
+  --color-nxt-dark: #1a1a1a;
+  --color-nxt-surface: #ffffff;
+  --color-nxt-muted: #d0d0d0;
 
-  --nex-hero-start: #001f50;
+  --color-nxt-error: #df2323;
+  --color-nxt-success: #33ad5e;
+
+  /* Intégration dans Docusaurus */
+  --ifm-color-primary: var(--color-nxt-primary);
+  --ifm-color-primary-dark: #0038e6;
+  --ifm-color-primary-darker: #0035d9;
+  --ifm-color-primary-darkest: #002cb3;
+  --ifm-color-primary-light: #1a51ff;
+  --ifm-color-primary-lighter: #265bff;
+  --ifm-color-primary-lightest: #4d79ff;
+
+  --nex-background: #f8fafc;
+  --nex-surface: var(--color-nxt-surface);
+  --nex-border: #e2e8f0;
+  --nex-text: var(--color-nxt-dark);
+  --nex-muted: #f1f5f9;
+
+  /* Gradient Hero */
+  --nex-hero-start: #003eff;
   --nex-hero-end: #17356c;
+  --nex-hover: var(--color-nxt-primary-hover);
 
-  --nex-hover: #17356c;
+  /* Rayons de bordure */
+  --radius-nxt: 0.5rem;
+  --radius-nxt-lg: 1rem;
 }
 
-/* DARK MODE (Docusaurus) */
+/* ==========================================================================
+   2. DARK MODE (DOCUSAURUS INTEGRATION)
+   ========================================================================== */
 [data-theme='dark'] {
-  --nex-background: #121212;
-  --nex-surface: #1e1e1e;
-  --nex-border: #2c2c2c;
-  --nex-text: #eaeaea;
+  --ifm-color-primary: #4d79ff;
+  --ifm-color-primary-dark: #265bff;
+  --ifm-color-primary-darker: #1a51ff;
+  --ifm-color-primary-darkest: #003eff;
+  --ifm-color-primary-light: #7396ff;
+  --ifm-color-primary-lighter: #86a5ff;
+  --ifm-color-primary-lightest: #bfd1ff;
 
-  --nex-muted: #1a1a1a;
+  --nex-background: #0f172a;
+  --nex-surface: #1e293b;
+  --nex-border: #334155;
+  --nex-text: #f8fafc;
+  --nex-muted: #1e293b;
 
-  --nex-hero-start: #0b1220;
-  --nex-hero-end: #111b2e;
-
-  --nex-hover: #4c7dff;
+  --nex-hero-start: #0f172a;
+  --nex-hero-end: #1e293b;
+  --nex-hover: #4d79ff;
 }
 
-/* GLOBAL */
+/* ==========================================================================
+   3. STYLES GLOBAUX DE PAGE
+   ========================================================================== */
 body {
+  font-family: var(--ifm-font-family-base);
   background: var(--nex-background);
   color: var(--nex-text);
 }
 
-/* FEATURES */
+/* ==========================================================================
+   4. HERO SECTION
+   ========================================================================== */
+.hero {
+  padding: 6rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-nxt-secondary), var(--nex-hero-end));
+  border-bottom: 1px solid var(--nex-border);
+}
+
+.hero img {
+  width: 140px;
+  margin: 1.5rem auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0.5rem auto 0;
+}
+
+/* ==========================================================================
+   5. SECTIONS & LAYOUT
+   ========================================================================== */
+.section,
+.sectionAlt {
+  padding: 5rem 1.5rem;
+}
+
+.sectionAlt {
+  background: var(--nex-muted);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.sectionHeader svg {
+  color: var(--color-nxt-primary);
+  font-size: 1.6rem;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  color: var(--nex-text);
+  letter-spacing: -0.02em;
+}
+
+/* GRILLE RESPONSIVE */
+.grid,
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
 .features {
   display: flex;
   align-items: center;
@@ -49,99 +161,195 @@ body {
   width: 200px;
 }
 
-/* HERO */
-.hero {
-  padding: 6rem 0;
-  text-align: center;
-  background: linear-gradient(
-    135deg,
-    var(--nex-hero-start),
-    var(--nex-hero-end)
-  );
-}
-
-.hero img {
-  width: 140px;
-  margin: 1.5rem auto;
-}
-
-.title {
-  font-family: Nunito, sans-serif;
-  font-size: 3rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.subtitle {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1.25rem;
-}
-
-/* SECTIONS */
-.section,
-.sectionAlt {
-  padding: 5rem 0;
-}
-
-.sectionAlt {
-  background: var(--nex-muted);
-}
-
-/* HEADERS */
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 2rem;
-}
-
-.sectionHeader svg {
-  color: var(--nex-primary);
-  font-size: 1.4rem;
-}
-
-.sectionHeader h2 {
-  margin: 0;
-  font-family: Nunito, sans-serif;
-  color: var(--nex-text);
-}
-
-/* CARDS */
+/* ==========================================================================
+   6. CARTES (CARDS, TECHCARDS, FEATURECARDS)
+   ========================================================================== */
 .card,
 .techCard,
 .featureCard {
   background: var(--nex-surface);
   border: 1px solid var(--nex-border);
-  border-radius: 16px;
+  border-radius: var(--radius-nxt-lg);
   padding: 24px;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* HOVER EFFECT */
 .techCard:hover,
-.featureCard:hover {
-  border-color: var(--nex-hover);
-  transform: translateY(-2px);
+.featureCard:hover,
+.card:hover {
+  border-color: var(--color-nxt-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -10px rgba(0, 62, 255, 0.15);
 }
 
-/* ICONS */
+/* ICONES DANS LES CARTES */
 .techCard svg,
 .featureCard svg {
-  color: var(--nex-primary);
-  font-size: 1.8rem;
-  margin-bottom: 12px;
+  color: var(--color-nxt-primary);
+  font-size: 2rem;
+  margin-bottom: 14px;
 }
 
-/* TITLES */
 .featureCard h3 {
   margin-bottom: 8px;
+  font-weight: 700;
   color: var(--nex-text);
 }
 
-/* GRID */
-.grid,
-.featureGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+.featureCard p {
+  color: var(--nex-text);
+  opacity: 0.8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   7. BOUTONS (COMPATIBILITÉ DOCUSAURUS + CHARTE SITE)
+   ========================================================================== */
+.btn-nxt-primary,
+.button--primary {
+  background-color: var(--color-nxt-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: var(--radius-nxt-lg) !important;
+  font-weight: 700 !important;
+  padding: 0.65rem 1.4rem !important;
+  transition: background-color 0.2s ease, transform 0.1s ease !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none !important;
+}
+
+.btn-nxt-primary:hover,
+.button--primary:hover {
+  background-color: var(--color-nxt-primary-hover) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* Hero Banner Actions */
+.heroActions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.heroLogo {
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
+}
+
+.highlightText {
+  border-left: 4px solid var(--color-nxt-primary);
+  padding-left: 1rem;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+/* Tech Cards Info Layout */
+.techInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.techInfo span {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* Goals List */
+.goalList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.goalList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1rem;
+}
+
+.goalIcon {
+  color: var(--color-nxt-primary);
+  margin-top: 4px;
+}
+
+/* Author Profile Card */
+.authorCard {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .authorCard {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.authorAvatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 3px solid var(--color-nxt-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  shrink: 0;
+}
+
+.authorContent h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.authorRole {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-nxt-primary);
+  margin-bottom: 0.5rem;
+}
+
+.authorBio {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  opacity: 0.85;
+}
+
+.authorLinks {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.authorLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-nxt, 8px);
+  background: var(--nex-muted);
+  color: var(--nex-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.authorLinkBtn:hover {
+  background: var(--color-nxt-primary);
+  color: #ffffff;
 }

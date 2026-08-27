@@ -4,7 +4,7 @@ L’application **NexTeam** repose sur une architecture client / serveur permett
 
 ---
 
-# Frontend
+## 1 - Frontend
 
 Le frontend représente la partie visible de l’application utilisée par les employés, managers, RH et administrateurs.
 
@@ -12,22 +12,13 @@ Il sera développé avec le framework **Angular**, permettant de créer une inte
 
 Le frontend communiquera avec le backend via une API REST sécurisée.
 
-## Technologies frontend utilisées
-
-- Angular 22
-- TypeScript
-- HTML5
-- CSS3
-- RxJS
-- WebSocket (temps réel)
-
 ---
 
-## 📂 Organisation des modules frontend
+### 📂 Organisation des modules frontend
 
 L’application frontend sera découpée en plusieurs modules fonctionnels afin d’améliorer la lisibilité et la maintenabilité du code.
 
-### Modules principaux
+### 🔹Structure principale
 
 | Dossier | Description |
 | --- | --- |
@@ -43,7 +34,7 @@ L’application frontend sera découpée en plusieurs modules fonctionnels afin 
 
 ---
 
-# Backend
+## 2 - Backend
 
 Le backend représente la logique métier et le traitement des données de l’application.
 
@@ -58,25 +49,12 @@ Le backend exposera une API REST utilisée par le frontend Angular.
 
 ---
 
-## Technologies backend utilisées
 
-- Java 21
-- Spring Boot 4.1.0
-- Spring Security
-- Spring Data JPA
-- Hibernate
-- JWT Authentication
-- WebSocket
-- Gradle
-- PostgreSQL
-
----
-
-## 📂 Organisation des modules backend
+### 📂 Organisation des modules backend
 
 Le backend sera organisé selon une architecture en couches.
 
-### Structure principale
+### 🔹Structure principale
 
 | Couche | Rôle |
 | --- | --- |
@@ -89,48 +67,3 @@ Le backend sera organisé selon une architecture en couches.
 | Config | Configuration application |
 | WebSocket | Gestion communication temps réel |
 
----
-
-# Base de données
-
-L’application utilisera une base de données relationnelle **PostgreSQL** permettant de stocker :
-
-- les utilisateurs 
-- les rôles 
-- les messages 
-- les conversations 
-- les tâches 
-- les actualités 
-- les notifications
-
----
-
-# Sécurité
-
-La sécurité de l’application reposera sur :
-
-- l’authentification JWT 
-- la gestion des rôles et permissions 
-- le chiffrement des mots de passe 
-- la sécurisation des routes API 
-- la validation des données côté backend
-
----
-
-# Conteneurisation
-
-Le projet pourra être conteneurisé avec **Docker** afin de simplifier :
-
-- le déploiement 
-- la portabilité 
-- la mise en production
-
----
-
-# Communication temps réel
-
-Le système de messagerie utilisera **WebSocket** afin de permettre :
-
-- l’envoi instantané des messages 
-- les notifications temps réel 
-- une meilleure expérience utilisateur

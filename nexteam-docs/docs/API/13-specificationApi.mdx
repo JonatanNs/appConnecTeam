@@ -6,7 +6,7 @@ Cette API permet la gestion des utilisateurs, des tâches, des messages, des act
 
 ---
 
-## 🔹URL de base
+## 1 - URL de base
 
 Durant la phase de développement, l’API sera accessible localement via l’URL suivante :
 
@@ -20,7 +20,7 @@ En environnement de production, une URL différente sera utilisée afin de perme
 
 ---
 
-## 🔹Format des échanges
+## 2 - Format des échanges
 
 Les données échangées entre le frontend et le backend utilisent le format JSON (*JavaScript Object Notation*).
 
@@ -35,7 +35,7 @@ JSON est aujourd’hui le format standard utilisé dans les API REST car il faci
 
 ---
 
-## 🔹Architecture REST
+## 3 - Architecture REST
 
 L’API suit les principes de l’architecture REST (*Representational State Transfer*).
 
@@ -58,7 +58,7 @@ REST est aujourd’hui l’architecture la plus utilisée pour les applications 
 
 ---
 
-## 🔹Liste des endpoints principaux
+## 4 - Liste des endpoints principaux
 
 Un endpoint représente une route de l’API permettant d’accéder à une ressource ou d’effectuer une action spécifique.
 
@@ -71,7 +71,7 @@ Les endpoints doivent être correctement nommés afin :
 
 Les routes utilisent des noms explicites basés sur les ressources métier de l’application.
 
-### Exemple de route API
+### 🔹Exemple de route API
 
 ```http
 GET    /nomDeLaRoute
@@ -81,7 +81,7 @@ PUT    /nomDeLaRoute/{uuid}
 DELETE /nomDeLaRoute/{uuid}
 ```
 
-### Standardisation des réponses API
+### 🔹Standardisation des réponses API
 
 Afin de garantir une meilleure cohérence entre les différentes routes de l’API, toutes les réponses retourneront un format standardisé appelé `ApiResponse`.
 
@@ -97,7 +97,7 @@ Chaque réponse de l’API contiendra les mêmes champs principaux, qu’il s’
 
 ---
 
-### Structure d’une réponse API
+### 🔹Structure d’une réponse API
 
 | Champ | Description |
 | --- | --- |
@@ -108,7 +108,7 @@ Chaque réponse de l’API contiendra les mêmes champs principaux, qu’il s’
 
 ---
 
-### Exemple de réponse succès
+### 🔹Exemple de réponse succès
 
 ```json
 {
@@ -132,7 +132,7 @@ Chaque réponse de l’API contiendra les mêmes champs principaux, qu’il s’
 
 ---
 
-### Exemple de réponse erreur
+### 🔹Exemple de réponse erreur
 
 ```json
 {
@@ -145,7 +145,7 @@ Chaque réponse de l’API contiendra les mêmes champs principaux, qu’il s’
 
 ---
 
-## 🔹Pourquoi utiliser un format unique ?
+## 5 - Pourquoi utiliser un format unique ?
 
 L’utilisation d’un format de réponse unique permet au frontend de toujours savoir comment lire les données retournées par le backend.
 
@@ -160,7 +160,7 @@ Cette approche est largement utilisée dans les architectures backend modernes a
 
 L’utilisation de WebSocket permet d’améliorer l’expérience utilisateur en rendant les échanges plus rapides et interactifs.
 
-## 🔹Documentation API
+## 6 - Documentation API
 
 Afin de faciliter le développement, les tests et la maintenance de l’application, l’API REST du backend sera documentée avec **Swagger / OpenAPI**.
 
@@ -171,7 +171,7 @@ Cette documentation permettra :
 - de consulter les paramètres et réponses des API ;
 - de faciliter l’intégration entre le frontend Angular et le backend Spring Boot.
 
-### Technologies utilisées
+### 🔹Technologies utilisées
 
 - SpringDoc OpenAPI
 - Swagger UI

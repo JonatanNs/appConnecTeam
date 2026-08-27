@@ -1,6 +1,6 @@
 # Architecture Angular
 
-## Dépendances principales
+## 1 - Dépendances principales
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -15,7 +15,7 @@
 
 ---
 
-## Communication temps réel
+## 2 - Communication temps réel
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -23,7 +23,7 @@
 
 ---
 
-## Interface utilisateur
+## 3 - Interface utilisateur
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -39,7 +39,7 @@
 
 ---
 
-## Outillage de développement
+## 4 - Outillage de développement
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -51,7 +51,7 @@
 
 ---
 
-## Tests
+## 5 - Tests
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -60,7 +60,7 @@
 
 ---
 
-## Organisation du code : architecture par fonctionnalités (feature-based)
+## 6 - Organisation du code : architecture par fonctionnalités (feature-based)
 
 Le frontend est organisé par fonctionnalité métier (*feature*) plutôt que par type de fichier. Chaque module (ex: `messaging`, `notifications`, `auth`) regroupe ses propres composants, services et interfaces.
 
@@ -73,7 +73,7 @@ Cette organisation permet :
 
 ---
 
-## Réactivité avec les Signals
+## 7 - Réactivité avec les Signals
 
 L'application utilise les Signals d'Angular (`signal`, `computed`, `effect`, `toSignal`) comme mécanisme principal de gestion d'état et de réactivité, plutôt qu'une gestion manuelle avec des `Subject`/`BehaviorSubject` exposés directement dans les composants.
 
@@ -86,7 +86,7 @@ Cette approche permet :
 
 ---
 
-## Communication HTTP et temps réel
+## 8 - Communication HTTP et temps réel
 
 L'application combine deux modes de communication avec le backend :
 

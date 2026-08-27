@@ -1,6 +1,6 @@
 # Architecture Spring Boot
 
-## Dépendances principales
+## 1 - Dépendances principales
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -17,7 +17,7 @@
 
 ---
 
-# Partie sécurité
+## 2 - Partie sécurité
 
 | Dépendance | Utilité |
 | --- | --- |
@@ -27,19 +27,7 @@
 
 ---
 
-# Documentation API
-
-| Dépendance | Utilité |
-| --- | --- |
-| SpringDoc OpenAPI | Swagger UI automatique |
-
-### URL Swagger
-
-http://localhost:8080/swagger-ui/index.html
-
----
-
-# Organisation du code : architecture par fonctionnalités (feature-based)
+## 3 - Organisation du code : architecture par fonctionnalités (feature-based)
 
 Le backend est organisé par fonctionnalité métier (*feature*) plutôt que par couche technique. Chaque module (ex: `Messaging`, `Users`, `Notifications`) regroupe ses propres entités, DTOs, mappers, repositories, services et controllers.
 
@@ -68,7 +56,7 @@ Cette organisation permet :
 
 ---
 
-# Gestion du problème N+1
+## 4 - Gestion du problème N+1
 
 Le problème N+1 est un piège classique avec JPA/Hibernate : il survient lorsqu'une requête initiale charge une liste d'entités, puis qu'une requête supplémentaire est exécutée pour chaque entité afin de charger ses relations, entraînant un nombre de requêtes SQL proportionnel à la taille de la liste.
 
@@ -76,12 +64,16 @@ Afin d'éviter ce problème de performance, plusieurs bonnes pratiques sont appl
 
 - utilisation de `FetchType.LAZY` par défaut sur les relations, pour ne charger les données associées que lorsque c'est nécessaire ;
 - utilisation de `@EntityGraph` sur les repositories afin de charger explicitement et en une seule requête les relations nécessaires selon le contexte d'utilisation ;
+- configuration d'un batch fetching global via Hibernate, qui regroupe les accès aux relations restées en `LAZY` par lots plutôt que d'exécuter une requête par entité ;
 - utilisation de DTOs projetés via MapStruct, plutôt que de charger des entités complètes avec toutes leurs relations.
 
 Cette approche permet de garantir de bonnes performances, même lorsque le volume de données augmente.
 
-``` Java
+### 🔹Exemple : `@EntityGraph`
+
+```java
 public interface UserRepository extends JpaRepository<User, Long> {
+
     @EntityGraph(attributePaths = {"roles", "address"})
     Optional<User> findByEmail(String email);
 
@@ -91,23 +83,42 @@ public interface UserRepository extends JpaRepository<User, Long> {
     ...
 }
 ```
+
+`@EntityGraph` permet de préciser, requête par requête, quelles relations doivent être chargées en une seule fois via un `JOIN`, plutôt que de déclencher une requête supplémentaire à chaque accès à `user.getRoles()` ou `user.getAddress()`.
+
+### 🔹Batch fetching
+
+Pour les relations qui restent en `LAZY` sans `@EntityGraph` explicite, un batch fetching est configuré globalement afin de limiter l'impact du N+1 lorsqu'il n'est pas possible ou pertinent d'utiliser un `JOIN FETCH` :
+
+Plutôt que d'exécuter une requête SQL par entité pour charger une relation manquante, Hibernate regroupe ces accès et les résout en une seule requête `IN (...)` par lot de 20 identifiants, réduisant considérablement le nombre total de requêtes exécutées.
+
+
+```properties
+
+# Permet à Hibernate de regrouper les accès aux relations LAZY en lots,
+# via une requête WHERE id IN (...), par paquets de 20.
+spring.jpa.properties.hibernate.default_batch_fetch_size=20
+
+```
+
 ---
 
-# Dépendances DevOps / Infrastructure
-
-| Dépendance | Utilité |
-| --- | --- |
-| Docker | Conteneurisation application |
-| Flyway | Versionnement base de données |
-| Spring Boot Actuator | Monitoring application |
-| Testcontainers | Tests avec vrais conteneurs Docker |
-
----
-
-# Dépendances tests 
+## 6 - Dépendances tests 
 
 | Dépendance | Utilité |
 | --- | --- |
 | Spring Boot Starter Test | Tests unitaires |
 | Mockito | Mock des dépendances |
 | Testcontainers | Tests réalistes PostgreSQL |
+
+---
+
+## 7 - Documentation API
+
+| Dépendance | Utilité |
+| --- | --- |
+| SpringDoc OpenAPI | Swagger UI automatique |
+
+### 🔹URL Swagger
+
+http://localhost:8080/swagger-ui/index.html

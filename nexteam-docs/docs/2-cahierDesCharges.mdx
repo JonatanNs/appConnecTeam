@@ -15,7 +15,7 @@ NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la
 - Une gestion fine des rôles et permissions, adaptée à la hiérarchie de l'entreprise.
 - Une expérience employé simplifiée : carte employé numérique, fiches de paie et avantages accessibles directement depuis l'outil de communication quotidien.
 
-### Fonctionnalités principales
+### 🔹Fonctionnalités principales
 
 - Messagerie interne en temps réel
 - Gestion des tâches quotidiennes
@@ -26,7 +26,7 @@ NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la
 
 ---
 
-### Problématique
+### 🔹Problématique
 
 La plupart des entreprises utilisent aujourd'hui plusieurs outils distincts pour la communication interne, la gestion des tâches et les échanges RH (Slack, Teams, un intranet RH séparé...). Cette dispersion multiplie les coûts d'abonnement, complique l'administration, et ralentit la circulation de l'information au sein des équipes.
 
@@ -34,7 +34,7 @@ NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée,
 
 ---
 
-### Marché cible
+### 🔹Marché cible
 
 **Entreprises visées :** PME et ESN qui souhaitent réduire le nombre d'outils SaaS utilisés au quotidien et centraliser communication + RH dans une seule plateforme, notamment celles gérant un volume important de collaborateurs en alternance ou intérim, où le suivi RH et l'onboarding rapide sont critiques.
 
@@ -48,7 +48,7 @@ NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée,
 
 ## 2 - Détail des fonctionnalités principales
 
-### Authentification
+### 🔹Authentification
 
 - Connexion sécurisée par identifiants
 - Authentification par token JWT (access token + refresh token)
@@ -56,7 +56,7 @@ NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée,
 
 ---
 
-### Messagerie
+### 🔹Messagerie
 
 - Chat en temps réel via WebSocket (STOMP)
 - Conversations privées et de groupe
@@ -67,7 +67,7 @@ NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée,
 
 ---
 
-### Notifications
+### 🔹Notifications
 
 - Notifications en temps réel (nouveau message, ajout à une conversation)
 - Compteur de notifications non lues
@@ -75,7 +75,7 @@ NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée,
 
 ---
 
-### Gestion des tâches
+### 🔹Gestion des tâches
 
 - Création de projet
 - Création et attribution de tâches
@@ -84,14 +84,14 @@ NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée,
 
 ---
 
-### Actualités entreprise
+### 🔹Actualités entreprise
 
 - Publication d'actualités par l'entreprise
 - Espace centralisé de communication interne
 
 ---
 
-### Badge employé
+### 🔹Badge employé
 
 - Carte employé numérique
 - Accès aux fiches de paie et avantages
@@ -111,7 +111,7 @@ NexTeam répond à ce besoin avec une plateforme unique, moderne et sécurisée,
 - Gestion de projet → GitHub Projects
 
 
-### Architecture globale
+### 🔹Architecture globale
 
 ```markdown
 └── appNexTeam
@@ -140,7 +140,7 @@ La création de maquettes présente plusieurs avantages :
 
 ---
 
-### Wireframe
+### 🔹Wireframe
 
 Le wireframe représente la structure générale d'une interface sans se concentrer sur l'aspect graphique.
 
@@ -155,7 +155,7 @@ Le wireframe représente la structure générale d'une interface sans se concent
 
 ---
 
-### Mockup
+### 🔹Mockup
 
 Le mockup est une version plus avancée du wireframe intégrant l'identité visuelle du projet.
 
@@ -168,7 +168,7 @@ Le mockup est une version plus avancée du wireframe intégrant l'identité visu
 
 ![maquette-mockup.png](/img/maquettes/maquette-mockup.png)
 
-### Maquette complète
+### 🔹Maquette complète
 
 Une maquette complète regroupe l'ensemble des écrans et parcours de l'application. Elle constitue la référence principale pour les équipes de développement.
 
@@ -176,7 +176,7 @@ Une maquette complète regroupe l'ensemble des écrans et parcours de l'applicat
 
 ---
 
-### Prototype
+### 🔹Prototype
 
 Le prototype est une version interactive permettant de simuler le comportement de l'application avant son développement.
 
@@ -205,7 +205,7 @@ Développement
 
 ## 5 - Sécurité
 
-### Authentification
+### 🔹Authentification
 
 | Mesure | Ce qu'elle apporte |
 |---|---|
@@ -215,7 +215,7 @@ Développement
 | **Hash du mot de passe (BCrypt)** | Les mots de passe ne sont jamais stockés en clair en base de données, même en cas de fuite de données, ils restent illisibles. |
 | **Exigence de mot de passe fort** | Réduit le risque d'attaque par force brute ou credential stuffing en imposant une complexité minimale (longueur, majuscules, chiffres, caractères spéciaux). |
 
-### Autorisation
+### 🔹Autorisation
 
 | Mesure | Ce qu'elle apporte |
 |---|---|
@@ -223,7 +223,7 @@ Développement
 | **Spring Security** | Framework de référence pour gérer l'authentification, les autorisations et la protection des routes de l'API. |
 | **Protection des routes API** | Toutes les routes sensibles nécessitent une authentification valide et vérifient les autorisations avant de traiter la requête. |
 
-### Protection des données
+### 🔹Protection des données
 
 | Mesure | Ce qu'elle apporte |
 |---|---|
@@ -231,7 +231,7 @@ Développement
 | **Identifiant public (publicId) distinct de l'ID base de données** | Empêche de deviner ou d'énumérer les enregistrements via leur identifiant technique (protection contre les attaques par énumération d'ID, type IDOR). |
 | **Validation des formulaires** | Vérifie et filtre les données envoyées par l'utilisateur avant traitement, pour éviter les données invalides ou malveillantes. |
 
-### Protection de l'API
+### 🔹Protection de l'API
 
 | Mesure | Ce qu'elle apporte |
 |---|---|
@@ -239,7 +239,7 @@ Développement
 | **Configuration CORS** | Restreint les origines autorisées à appeler l'API, empêchant des sites tiers non approuvés d'effectuer des requêtes malveillantes depuis le navigateur d'un utilisateur. |
 | **Gestion centralisée des erreurs (ApiResponse)**|	Retourne des réponses HTTP standardisées (code status, heure, message, structure commune) pour éviter d'exposer des informations sensibles côté client tout en facilitant le débogage.|
 | **Route Guards (Angular)** |	Empêche l'accès à certaines pages côté frontend si l'utilisateur n'est pas authentifié ou n'a pas le rôle requis, en complément du contrôle backend.
-### Configuration & infrastructure
+### 🔹Configuration & infrastructure
 
 | Mesure | Ce qu'elle apporte |
 |---|---|
@@ -261,7 +261,7 @@ Développement
 
 ## 7 - Besoins fonctionnels
 
-### Use Case
+### 🔹Use Case
 
 ![useCase-nexteam.png](/img/use-case/useCase-nexteam.png)
 
@@ -349,11 +349,11 @@ Les tests sont divisés en deux niveaux :
 
 ---
 
-### Tests unitaires (Service Layer)
+## Tests unitaires (Service Layer)
 
-### 1.1 Utilisateurs
+### 🔹Utilisateurs
 
-#### Cas nominaux
+#### 🔹Cas nominaux
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
@@ -364,14 +364,14 @@ Les tests sont divisés en deux niveaux :
 | UT-USR-04 | Mise à jour utilisateur valide | Données mises à jour |
 | UT-USR-05 | Suppression utilisateur par l'id | Utilisateur supprimé |
 
-#### Cas limites
+#### 🔹Cas limites
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
 | UT-USR-06 | Email déjà existant à la création | AlreadyExistException |
 | UT-USR-07 | Email déjà utilisé lors de la modification | AlreadyExistException |
 
-#### Cas d’erreurs
+#### 🔹Cas d’erreurs
 
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
@@ -381,13 +381,13 @@ Les tests sont divisés en deux niveaux :
 | UT-USR-11 | Suppression utilisateur inexistant par l'id | NotFoundException |
 
 
-### 1.2 Authentification
+### 🔹Authentification
 | ID | Cas de test | Résultat attendu |
 |----|-------------|-----------------|
 | UT-AUTH-01 | Login valide → JWT généré |
 | UT-AUTH-02 | Mauvais mot de passe / email inexistant → Refus d'accès |
 
-### 1.3 Messagerie
+### 🔹Messagerie
 | ID        | Cas de test                                       | Résultat attendu        |
 | --------- | ------------------------------------------------- | ----------------------- |
 | UT-MSG-01 | Envoi d'un message                                | Message enregistré      |
@@ -395,7 +395,7 @@ Les tests sont divisés en deux niveaux :
 | UT-MSG-03 | Suppression d'un message par un autre utilisateur | `AccessDeniedException` |
 
 
-### 1.4 Conversations 
+### 🔹Conversations 
 | ID         | Cas de test                                            | Résultat attendu        |
 | ---------- | ------------------------------------------------------ | ----------------------- |
 | UT-CONV-01 | Création d'une conversation valide                     | Conversation créée      |
@@ -407,7 +407,7 @@ Les tests sont divisés en deux niveaux :
 | UT-CONV-07 | Conversation introuvable                               | `NotFoundException`     |
 
 
-### 1.5 Notifications
+### 🔹Notifications
 | ID          | Cas de test                                               | Résultat attendu                                                       |
 | ----------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
 | UT-NOTIF-01 | Création d'une notification lors d'un nouveau message     | Notification enregistrée et poussée à l'utilisateur                    |
@@ -418,7 +418,7 @@ Les tests sont divisés en deux niveaux :
 | UT-NOTIF-06 | Comptage des notifications non lues                       | Nombre correct retourné                                                |
 
 
-### 1.6 Tâches
+### 🔹Tâches
 | ID         | Cas de test                                       | Résultat attendu        |
 | ---------- | ------------------------------------------------- | ----------------------- |
 | UT-TASK-01 | Création d'une tâche valide                       | Tâche enregistrée       |
@@ -427,7 +427,7 @@ Les tests sont divisés en deux niveaux :
 | UT-TASK-04 | Tâche introuvable                                 | `NotFoundException`     |
 
 
-### 1.7 Fichiers 
+### 🔹Fichiers 
 | ID         | Cas de test                | Résultat attendu             |
 | ---------- | -------------------------- | ---------------------------- |
 | UT-FILE-01 | Upload d'un fichier valide | Fichier stocké et enregistré |
@@ -437,16 +437,16 @@ Les tests sont divisés en deux niveaux :
 
 ---
 
-### Tests d'intégration (Spring Boot)
+## Tests d'intégration (Spring Boot)
 
-### 2.2 Authentification
+### 🔹Authentification
 | ID         | Cas de test     | Résultat attendu   |
 | ---------- | --------------- | ------------------ |
 | IT-AUTH-01 | Login correct   | `200 OK` + JWT     |
 | IT-AUTH-02 | Login incorrect | `401 Unauthorized` |
 
 
-### 2.3 Messagerie
+### 🔹Messagerie
 | ID        | Cas de test                            | Résultat attendu |
 | --------- | -------------------------------------- | ---------------- |
 | IT-MSG-01 | Envoyer un message                     | `201 Created`    |
@@ -454,7 +454,7 @@ Les tests sont divisés en deux niveaux :
 | IT-MSG-03 | Suppression d'un message non autorisée | `403 Forbidden`  |
 
 
-### 2.4 WebSocket / Temps réel  
+### 🔹WebSocket / Temps réel  
 | ID       | Cas de test                                     | Résultat attendu                                      |
 | -------- | ----------------------------------------------- | ----------------------------------------------------- |
 | IT-WS-01 | Connexion WebSocket avec JWT valide             | Handshake accepté                                     |
@@ -464,7 +464,7 @@ Les tests sont divisés en deux niveaux :
 | IT-WS-05 | Join / Leave d'une conversation                 | Message système diffusé                               |
 
 
-### 2.5 Tâches
+### 🔹Tâches
 | ID         | Cas de test                        | Résultat attendu |
 | ---------- | ---------------------------------- | ---------------- |
 | IT-TASK-01 | Création d'une tâche               | `201 Created`    |
@@ -472,7 +472,7 @@ Les tests sont divisés en deux niveaux :
 | IT-TASK-03 | Accès à une tâche non autorisé     | `403 Forbidden`  |
 
 
-### 2.6 Notifications
+### 🔹Notifications
 | ID          | Cas de test                                             | Résultat attendu                                |
 | ----------- | ------------------------------------------------------- | ----------------------------------------------- |
 | IT-NOTIF-01 | Création d'une notification                             | Notification créée                              |
@@ -480,7 +480,7 @@ Les tests sont divisés en deux niveaux :
 | IT-NOTIF-03 | Marquer les notifications d'une conversation comme lues | `200 OK`, notifications concernées mises à jour |
 | IT-NOTIF-04 | Accès à une notification d'un autre utilisateur         | `403 Forbidden`                                 |
 
-### 2.7 Upload fichiers
+### 🔹Upload fichiers
 | ID       | Cas de test                          | Résultat attendu        |
 | -------- | ------------------------------------ | ----------------------- |
 | IT-UP-01 | Upload d'un fichier valide           | Fichier stocké          |
@@ -488,7 +488,7 @@ Les tests sont divisés en deux niveaux :
 | IT-UP-03 | Upload d'un fichier trop volumineux  | `413 Payload Too Large` |
 
 
-### 2.8 CORS & Sécurité 
+### 🔹CORS & Sécurité 
 | ID        | Cas de test                                 | Résultat attendu         |
 | --------- | ------------------------------------------- | ------------------------ |
 | IT-SEC-01 | Requête depuis une origine non autorisée    | Requête bloquée par CORS |
@@ -498,7 +498,7 @@ Les tests sont divisés en deux niveaux :
 
 
 
-### 3. ⚠️ Cas d’erreurs globaux
+### 🔹Cas d’erreurs globaux
 
 Ces cas doivent être testés sur l’ensemble des API.
 

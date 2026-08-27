@@ -8,10 +8,6 @@ package com.nexteam.exceptions;
  */
 
 public class NotFoundException extends RuntimeException {
-    /**
-     * Constructeur de l'exception 'NotFoundException'.
-     * @param message
-     */
     public NotFoundException(String message) {
         super(message);
     }

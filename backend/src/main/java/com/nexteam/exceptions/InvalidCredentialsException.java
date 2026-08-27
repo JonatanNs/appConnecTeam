@@ -1,7 +1,7 @@
 package com.nexteam.exceptions;
 
 /**
- * Class 'BadCredentialsException' en charge de
+ * Class 'InvalidCredentialsException' en charge de gérer les erreurs liées à des identifiants de connexion invalides.
  *
  * @author JonatanNs
  * @version 1.0

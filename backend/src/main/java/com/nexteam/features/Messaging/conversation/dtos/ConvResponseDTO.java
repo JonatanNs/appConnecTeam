@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Classe 'ConvResponseDTO' en charge d'exposer les informations nécessaires au client sans
+ * exposer directement l'entité 'Conversation'.
+ *
+ * @author jnsualu2026
+ * @since 2026-08-27
+ */
 @Getter
 @Setter
 @Builder

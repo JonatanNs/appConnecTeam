@@ -6,6 +6,13 @@ import lombok.*;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Classe 'AddressResponseDTO' en charge d'exposer les informations nécessaires au client sans
+ *  exposer directement l'entité 'Adresse'.
+ *
+ * @author jnsualu2026
+ * @since 2026-08-27
+ */
 @Builder
 @Getter
 @Setter

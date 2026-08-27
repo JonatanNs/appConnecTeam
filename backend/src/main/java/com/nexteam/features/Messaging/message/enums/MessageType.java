@@ -6,8 +6,7 @@ package com.nexteam.features.Messaging.message.enums;
  * SYSTEM ("untel a rejoint/quitté la conversation")
  *
  * @author JonatanNs
- * @version 1.0
- * @since 16/08/2026 16:09
+ * @since 16/08/2026
  */
 public enum MessageType {
     CHAT,

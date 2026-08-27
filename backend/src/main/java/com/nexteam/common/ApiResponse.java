@@ -17,7 +17,7 @@ public record ApiResponse<T>(int code, Instant timestamp , String message, T dat
      * @param code
      * @param message
      * @param data
-     * @return
+     * @return une ApiResponse avec le timestamp déjà initié.
      */
     public static <T> ApiResponse<T> of(int code, String message, T data) {
         return new ApiResponse<>(code, Instant.now(), message, data);

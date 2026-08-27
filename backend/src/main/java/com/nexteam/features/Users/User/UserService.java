@@ -43,7 +43,7 @@ public class UserService {
      *
      * Méthode en charge de récupérer tous les utilisateurs avec pagination.
      *
-     * @param pageable
+     * @param pageable paramètres de pagination et de tri
      * @return une page d'utilisateurs
      */
     public Page<UserResponseDTO> getUsers(Pageable pageable) {
@@ -54,8 +54,9 @@ public class UserService {
     /**
      * Récupère un utilisateur par son identifiant unique.
      *
-     * @param publicId
+     * @param publicId l'UUID public d'un utilisateur
      * @return l'utilisateur trouvé
+     * @throws NotFoundException 'Utilisateur non trouvé.'
      */
     public UserResponseDTO getUser(UUID publicId) {
 
@@ -68,8 +69,9 @@ public class UserService {
     /**
      * Récupère un utilisateur par son email.
      *
-     * @param email
+     * @param email l'email qui nous sert à trouver l'utilisateur
      * @return l'utilisateur trouvé
+     * @throws NotFoundException 'Utilisateur non trouvé.'
      */
     public UserResponseDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
@@ -82,9 +84,10 @@ public class UserService {
      * Met à jour un utilisateur existant.
      * Vérifie si l'utilisateur existe avant de procéder à la mise à jour.
      *
-     * @param publicId
-     * @param userRequestDTO
+     * @param publicId l'UUID public d'un utilisateur
+     * @param userRequestDTO les informations nécéssaire pour modifier l'utilisateur.
      * @return l'utilisateur mis à jour
+     * @throws AlreadyExistException 'L'email est déjà associé à un compte.'
      */
     public UserResponseDTO updateUser(UUID publicId, UserRequestDTO userRequestDTO) {
 
@@ -114,8 +117,9 @@ public class UserService {
      * Crée un nouvel utilisateur.
      * Vérifie si l'email est déjà associé à un compte existant.
      *
-     * @param userRequestDTO
+     * @param userRequestDTO les informations nécéssaire pour créer l'utilisateur.
      * @return l'utilisateur créé
+     * @throws AlreadyExistException 'L'email est déjà associé à un compte.'
      */
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
 
@@ -154,7 +158,8 @@ public class UserService {
     /**
      * Supprime un utilisateur par son identifiant unique.
      *
-     * @param publicId
+     * @param publicId l'UUID public d'un utilisateur
+     * @throws NotFoundException 'Utilisateur non trouvé.'
      */
     @Transactional
     public void deleteUser(UUID publicId) {
@@ -166,7 +171,8 @@ public class UserService {
      *
      * Méthode en charge d'activer un utilisateur
      *
-     * @param publicId
+     * @param publicId l'UUID public d'un utilisateur
+     * @throws NotFoundException 'Utilisateur non trouvé.'
      */
     @Transactional
     public void activateUser(UUID publicId) {
@@ -176,9 +182,9 @@ public class UserService {
     }
 
     /**
-     *
      * Méthode en charge de désactiver un utilisateur
-     * @param publicId
+     * @param publicId l'UUID public d'un utilisateur
+     * @throws NotFoundException 'Utilisateur non trouvé.'
      */
     @Transactional
     public void deactivateUser(UUID publicId) {
@@ -205,9 +211,10 @@ public class UserService {
     }
 
     /**
-     *
      * Méthode en charge de supprimer l'adresse d'un utilisateur qui elle devient null si l'id de l'adresse est trouvé.
-     * @param userPublicId
+     * @param userPublicId l'UUID public d'un utilisateur
+     * @throws NotFoundException 'Utilisateur introuvable'
+     * @throws NotFoundException 'Aucune address répertorié.'
      */
     @Transactional
     public void deleteAddress(UUID userPublicId) {
@@ -226,13 +233,31 @@ public class UserService {
         }
     }
 
-    public Page<UserResponseDTO> getUsersByRoles(String nameRole, Pageable pageable){
+    /**
+     * Récupère les utilisateurs associés à un rôle donné de manière paginée.
+     *
+     * <p>Vérifie d'abord que le rôle demandé existe, puis recherche
+     * les utilisateurs possédant ce rôle, indépendamment de la casse.</p>
+     *
+     * @param nameRole nom du rôle recherché
+     * @param pageable paramètres de pagination et de tri
+     * @return une page contenant les utilisateurs possédant le rôle spécifié
+     */
+    public Page<UserResponseDTO> getUsersByRoles(String nameRole, Pageable pageable) {
         roleService.getRoleByName(nameRole);
 
         return userRepository.findByRoles_NameIgnoreCase(nameRole, pageable)
                 .map(userMapper::userToResponseDTO);
     }
 
+    /**
+     * Méthode en charge d'ajouter un rôle à un utilisateur existant.
+     *
+     * @param userPublicId l'UUID public d'un utilisateur
+     * @param roleRequestDTO le rôle à ajouter à l'utilisateur.
+     * @return un utilisateur avec un rôle ajouté
+     * @throws NotFoundException 'Utilisateur introuvable'
+     */
     @Transactional
     public UserResponseDTO addRole(UUID userPublicId, RoleRequestDTO roleRequestDTO) {
         User user = userRepository.findByPublicId(userPublicId)

@@ -5,7 +5,8 @@ import lombok.*;
 import java.util.List;
 
 /**
- * Classe 'PageResponseDTO' en charge de
+ * Classe 'PageResponseDTO' en charge d'exposer les informations nécessaires au client sans
+ *  exposer directement tous les éléments de l'instance Page.
  *
  * @author jnsualu2026
  * @since 2026-07-27

@@ -6,6 +6,13 @@ import lombok.*;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Classe 'ConvRequestDTO' en charge de transmettre les informations nécessaires
+ * à la création ou à la modification d'une conversation.
+ *
+ * @author jnsualu2026
+ * @since 2026-08-27
+ */
 @Getter
 @Setter
 @Builder

@@ -1,184 +1,77 @@
-# NexTeam
+# <img src="nexteam-docs/static/img/logo_nexteam.png" alt="Nexteam" width="40" /> NexTeam
 
-### *L'intranet nouvelle génération qui unifie vos équipes.*
+![Angular](https://img.shields.io/badge/Angular-v22-DD0031?logo=angular&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-v4.1.0-6DB33F?logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v16-4169E1?logo=postgresql&logoColor=white)
+![WebSocket](https://img.shields.io/badge/WebSocket-STOMP%20%2F%20SockJS-black)
+![Security](https://img.shields.io/badge/Security-JWT%20%26%20BCrypt-green)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)
 
-Plateforme intranet permettant la communication et la gestion interne des employés. NexTeam répond à un besoin majeur rencontré dans de nombreuses entreprises : le manque de communication et de centralisation des échanges entre les employés, les ressources humaines, les responsables et les managers.
 
-L’application NexTeam permet de pallier cette problématique grâce à un système de messagerie intégré favorisant les échanges rapides et directs entre les différents acteurs de l’entreprise. La plateforme permet également de centraliser plusieurs outils internes au sein d’une seule application afin de simplifier l’organisation et améliorer la productivité des équipes.
+NexTeam est une plateforme intranet qui centralise la communication et la gestion RH d'une entreprise en un seul outil, là où la plupart des entreprises jonglent aujourd'hui entre plusieurs abonnements SaaS (Slack ou Teams pour la messagerie, un outil RH séparé pour les fiches de paie, un intranet distinct pour les actualités).
 
-[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge\&logo=angular\&logoColor=white)](https://angular.io/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge\&logo=springboot\&logoColor=white)](https://spring.io/projects/spring-boot)
-[![PostgreSQL](https://img.shields.io/badge/postgresql-4479A1?style=for-the-badge\&logo=postgresql\&logoColor=white)](https://www.postgresql.com/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)](https://www.docker.com/)
+Cette dispersion a un coût réel : plusieurs abonnements à gérer, des informations éparpillées entre plusieurs outils, et des équipes qui perdent du temps à chercher la bonne information au bon endroit.
 
----
+NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la communication interne et les besoins administratifs RH un positionnement que les outils de messagerie généralistes ne couvrent pas nativement.
 
-## 💡 La Problématique
-
-Dans de nombreuses entreprises, l'information est **fragmentée** :
-
-* Messages dispersés entre plusieurs outils
-* Communication interne difficile à suivre
-* Documents et informations difficiles à retrouver
-* Manque de centralisation des processus RH et opérationnels
-
-Cette dispersion réduit la productivité et complique la collaboration entre les équipes.
+ **Documentation complète : [jonatanns.github.io/appNexTeam](https://jonatanns.github.io/appNexTeam/)**
 
 ---
 
-## 🎯 La Solution : NexTeam
-
-**NexTeam** est une plateforme centralisée qui regroupe communication, gestion et informations internes dans une interface moderne, sécurisée et intuitive.
-
-L'objectif est de fournir un véritable espace de travail numérique permettant aux collaborateurs d'accéder à l'ensemble des outils essentiels depuis une seule application.
-
----
-
-## 📸 Aperçu du Dashboard
-
-![NexTeam Dashboard](nexteam-docs/static/img/maquettes/screen.png)
-
----
-
-## 🔥 Fonctionnalités Clés
-
-### 💬 Communication Instantanée
-
-* Messagerie temps réel via **WebSockets (STOMP)**
-* Fil d’actualités interne dynamique
-* Échanges rapides entre collaborateurs
-
-### 📋 Productivité & Organisation
-
-* Gestion de tâches et suivi des missions
-* Carte employé numérique
-* Centralisation des informations internes
-* Outils collaboratifs intégrés
-
-### 🛡️ Sécurité & Accès
-
-* Authentification sécurisée **JWT**
-* Hashage des mots de passe avec **BCrypt**
-* Gestion des rôles (**Admin**, **RH**, **Manager**, **Employé**)
-* Protection des accès et des ressources
-
----
-
-## 🛠️ Stack Technique
-
-| Frontend          | Backend               | Base de données & Ops |
-| ----------------- | --------------------- | --------------------- |
-| Angular 21        | Spring Boot 3         | PostgreSQL / MySQL    |
-| TypeScript        | Java 21               | JPA / Hibernate       |
-| css / RxJS       | Maven                 | Docker                |
-| WebSocket (STOMP) | Spring Security / JWT | REST API              |
-
----
-
-## 📚 Documentation Technique
-
-Le projet dispose d'une documentation complète réalisée avec **Docusaurus**.
-
-Cette documentation regroupe :
-
-* L'architecture du projet
-* Les choix techniques
-* Les conventions de développement
-* La documentation API
-* Les guides d'installation
-* Les bonnes pratiques utilisées dans le projet
-
-### Lancer la documentation
+## 📁 Structure du dépôt
 
 ```bash
-cd documentation
-npm install
-npm run start
-```
-
-La documentation sera accessible à l'adresse :
-
-```text
-http://localhost:3000
+/backend       → API REST + WebSocket (Spring Boot)
+/frontend      → Application web (Angular)
+/nexteam-docs  → Documentation technique (Docusaurus)
 ```
 
 ---
 
-## ⚙️ Installation Rapide
+## Installation
 
-### 1. Prérequis
-
-* Node.js
-* Angular CLI
-* Java 21 (JDK)
-* PostgreSQL
-* Docker (optionnel)
-
-### 2. Lancer le Backend
+### Backend
 
 ```bash
 cd backend
-./mvnw spring-boot:run
+./gradlew bootRun
+```
+→ http://localhost:8080 (Swagger : `/swagger-ui/index.html`)
+
+## Configuration
+
+Avant de lancer le backend, crée un fichier `.env` à la racine de `/backend` à partir du modèle fourni :
+
+```bash
+cd backend
+cp .env.example .env
 ```
 
-### 3. Lancer le Frontend
+Renseigne ensuite tes propres valeurs pour `DB_USERNAME`, `DB_PASSWORD` et `JWT_SECRET`.
+
+> ⚠️ Le fichier `.env` ne doit jamais être commité il est déjà exclu via `.gitignore`.
+
+### Frontend
 
 ```bash
 cd frontend
 npm install
-ng serve
+npm start
 ```
+→ http://localhost:4200
 
-### 🌐 Accès à l'application
+### Documentation
 
-```text
-http://localhost:4200
+```bash
+cd nexteam-docs
+npm install
+npm start
 ```
+→ http://localhost:3000
 
 ---
 
-## 📖 Pourquoi ce projet ?
+## Auteur
 
-NexTeam est conçu avec une approche **Product-First** et orientée entreprise.
-
-### Objectifs
-
-* Réduire la fragmentation des outils internes
-* Améliorer la communication en temps réel
-* Centraliser les informations de l'entreprise
-* Expérimenter une architecture moderne Angular + Spring Boot
-* Mettre en œuvre des bonnes pratiques de développement Full Stack
-* Concevoir une documentation technique complète et maintenable
-
----
-
-## 🚀 Roadmap
-
-* [ ] Gestion avancée des notifications
-* [ ] Calendrier collaboratif
-* [ ] Gestion documentaire
-* [ ] Tableau de bord RH
-* [ ] Déploiement Cloud
-
----
-
-## License
-
-NexTeam is licensed under the NexTeam Non-Commercial License.
-
-The source code may be viewed, studied, and used for personal,
-educational, and other non-commercial purposes.
-
-Commercial use requires prior written permission from the copyright holder.
-
-See the [LICENSE](LICENSE) file for the full terms.
-
----
-
-## 👨‍💻 Auteur
-
-**JonatanNS**
-
-Développeur Full Stack Java / Angular
-
-Projet réalisé dans une démarche d'apprentissage avancé du développement d'applications d'entreprise modernes.
+**Jonatan Ns** | Développeur Full Stack | Java · Spring Boot · Angular · Python · IA & Automatisation
+GitHub : https://github.com/JonatanNs/appNexTeam

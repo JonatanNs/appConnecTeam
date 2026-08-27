@@ -73,5 +73,5 @@ npm start
 
 ## Auteur
 
-**Jonatan Ns** — Développeur Full Stack | Java · Spring Boot · Angular · Python · IA & Automatisation
+**Jonatan Ns** | Développeur Full Stack | Java · Spring Boot · Angular · Python · IA & Automatisation
 GitHub : https://github.com/JonatanNs/appNexTeam

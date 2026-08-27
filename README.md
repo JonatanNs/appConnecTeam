@@ -12,9 +12,9 @@ NexTeam est une plateforme intranet qui centralise la communication et la gestio
 
 Cette dispersion a un coût réel : plusieurs abonnements à gérer, des informations éparpillées entre plusieurs outils, et des équipes qui perdent du temps à chercher la bonne information au bon endroit.
 
-NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la communication interne et les besoins administratifs RH — un positionnement que les outils de messagerie généralistes ne couvrent pas nativement.
+NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la communication interne et les besoins administratifs RH un positionnement que les outils de messagerie généralistes ne couvrent pas nativement.
 
-📖 **Documentation complète : [jonatanns.github.io/appNexTeam](https://jonatanns.github.io/appNexTeam/)**
+ **Documentation complète : [jonatanns.github.io/appNexTeam](https://jonatanns.github.io/appNexTeam/)**
 
 ---
 
@@ -28,7 +28,7 @@ NexTeam répond à ce besoin avec une plateforme unique qui couvre à la fois la
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Backend
 
@@ -38,7 +38,7 @@ cd backend
 ```
 → http://localhost:8080 (Swagger : `/swagger-ui/index.html`)
 
-## ⚙️ Configuration
+## Configuration
 
 Avant de lancer le backend, crée un fichier `.env` à la racine de `/backend` à partir du modèle fourni :
 
@@ -71,7 +71,7 @@ npm start
 
 ---
 
-## 📌 Auteur
+## Auteur
 
-**Jonatan Ns** — Développeur Full Stack (Angular / Spring Boot)
+**Jonatan Ns** — Développeur Full Stack | Java · Spring Boot · Angular · Python · IA & Automatisation
 GitHub : https://github.com/JonatanNs/appNexTeam

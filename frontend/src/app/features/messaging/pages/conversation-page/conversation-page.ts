@@ -16,10 +16,20 @@ import { IUser } from '../../../../shared/interfaces/user.interface';
 import { UserService } from '../../../../core/services/user/user-service';
 import {NotificationService} from '../../../notifications/services/notification/notification-service';
 import { Router, RouterLink } from '@angular/router';
+import { UpdateConversation } from './components/update-conversation/update-conversation';
+import { SidePanel } from './components/side-panel/side-panel';
+import { HeaderConversation } from './components/header-conversation/header-conversation';
 
 @Component({
   selector: 'app-conversation-page',
-  imports: [FormsModule, DatePipe, FaIconComponent, RouterLink],
+  imports: [
+    FormsModule,
+    DatePipe,
+    FaIconComponent,
+    UpdateConversation,
+    SidePanel,
+    HeaderConversation,
+  ],
   templateUrl: './conversation-page.html',
   styleUrl: './conversation-page.css',
 })
@@ -29,18 +39,25 @@ export class ConversationPage {
   private messageService = inject(MessageService);
   private notificationService = inject(NotificationService);
   private authService = inject(AuthService);
-  private userService = inject(UserService);
   private conversationService = inject(ConversationService);
   private typingTrigger$ = new Subject<void>();
   private typingTimeout?: ReturnType<typeof setTimeout>;
+  private isNearBottom = true; // tracké via le scroll
 
-  isGroup = computed(() => (this.conversation()?.users?.length ?? 0) > 2);
+  @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
+
+  private hasMoreHistory = signal(true);
+  private isLoadingMore = signal(false);
+
+  draft = signal('');
+  messages = signal<IMessageSend[]>([]);
+  newMessageCount = signal(0);
+  typingUser = signal<string | null>(null);
+  conversationRefreshTrigger = signal(0);
 
   conversationId = input.required<string>();
-  draft = signal('');
-  typingUser = signal<string | null>(null);
 
-  conversationRefreshTrigger = signal(0);
+  isGroup = computed(() => (this.conversation()?.users?.length ?? 0) > 2);
 
   conversation = toSignal(
     combineLatest([
@@ -62,36 +79,6 @@ export class ConversationPage {
     { initialValue: null as IConversation | null },
   );
 
-  messages = toSignal(
-    toObservable(this.conversationId).pipe(
-      switchMap((id) => {
-        return this.messageService.getMessageHistory(id).pipe(
-          catchError((err) => {
-            if (err.status === 403 || err.status === 404) {
-              this.router.navigate(['/messageries']);
-            }
-            return of([] as IMessageSend[]);
-          }),
-          switchMap((history) =>
-            merge(
-              of(history),
-              this.messageService
-                .subscribeToConversation(id)
-                .pipe(
-                  scan((acc: IMessageSend[], message: IMessageSend) => [...acc, message], history),
-                ),
-            ).pipe(
-              catchError((err) => {
-                return of(history);
-              }),
-            ),
-          ),
-        );
-      }),
-    ),
-    { initialValue: [] as IMessageSend[] },
-  );
-
   constructor() {
     this.conversationService.onConversationUpdated.subscribe(() => {
       this.conversationRefreshTrigger.update((n) => n + 1);
@@ -106,7 +93,7 @@ export class ConversationPage {
       });
 
     // Envoi de l'événement typing (debounce pour ne pas spammer le websocket)
-    this.typingTrigger$.pipe(debounceTime(300)).subscribe(() => {
+    this.typingTrigger$.pipe(debounceTime(500)).subscribe(() => {
       this.typing();
     });
 
@@ -114,12 +101,6 @@ export class ConversationPage {
       const id = this.conversationId();
       if (!id) return;
       this.notificationService.markConversationAsRead(id).subscribe();
-    });
-
-    // Scroll auto vers le bas à chaque nouveau message
-    effect(() => {
-      this.messages();
-      setTimeout(() => this.scrollToBottom(), 50);
     });
 
     // Join / leave de la conversation
@@ -140,7 +121,7 @@ export class ConversationPage {
         this.typingUser.set(event.userName ?? "Quelqu'un");
 
         clearTimeout(this.typingTimeout);
-        this.typingTimeout = setTimeout(() => this.typingUser.set(null), 2000);
+        this.typingTimeout = setTimeout(() => this.typingUser.set(null), 1000);
       });
 
       onCleanup(() => {
@@ -149,12 +130,86 @@ export class ConversationPage {
       });
     });
 
-    effect(() => {
-      const conv = this.conversation();
-      if (conv) {
-        this.editName.set(conv.name);
-      }
+    // Chargement initial + flux temps réel, à chaque changement de conversationId
+    effect((onCleanup) => {
+      const id = this.conversationId();
+      if (!id) return;
+
+      this.messages.set([]);
+      this.hasMoreHistory.set(true);
+      this.newMessageCount.set(0);
+
+      const sub = this.messageService
+        .getMessageHistory(id)
+        .pipe(
+          catchError((err) => {
+            if (err.status === 403 || err.status === 404) {
+              this.router.navigate(['/messageries']);
+            }
+            return of([] as IMessageSend[]);
+          }),
+          switchMap((history) => {
+            this.messages.set(history);
+            setTimeout(() => this.scrollToBottom(), 50); // scroll initial uniquement
+            return this.messageService.subscribeToConversation(id);
+          }),
+        )
+        .subscribe((message) => {
+          this.messages.update((list) => [...list, message]);
+
+          if (this.isNearBottom) {
+            // L'utilisateur est déjà en bas → on scrolle avec lui
+            setTimeout(() => this.scrollToBottom(), 50);
+          } else {
+            // L'utilisateur lit plus haut → juste incrémenter le compteur
+            this.newMessageCount.update((n) => n + 1);
+          }
+        });
+
+      onCleanup(() => sub.unsubscribe());
     });
+  }
+
+  loadMoreMessages(): void {
+    const id = this.conversationId();
+    const currentMessages = this.messages();
+    if (!id || this.isLoadingMore() || !this.hasMoreHistory() || currentMessages.length === 0)
+      return;
+
+    const oldestMessage = currentMessages[0];
+    this.isLoadingMore.set(true);
+
+    this.messageService.getMessageHistory(id, oldestMessage.createdAt, 20).subscribe({
+      next: (olderMessages) => {
+        if (olderMessages.length === 0) {
+          this.hasMoreHistory.set(false);
+        } else {
+          this.messages.update((list) => [...olderMessages, ...list]);
+        }
+        this.isLoadingMore.set(false);
+      },
+      error: () => this.isLoadingMore.set(false),
+    });
+  }
+
+  onScroll(event: Event): void {
+    const el = event.target as HTMLElement;
+
+    if (el.scrollTop < 100) {
+      this.loadMoreMessages();
+    }
+
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    this.isNearBottom = distanceFromBottom < 100;
+
+    if (this.isNearBottom) {
+      this.newMessageCount.set(0); // il vient de rejoindre le bas, on efface le badge
+    }
+  }
+
+  scrollToBottomManually(): void {
+    this.scrollToBottom();
+    this.newMessageCount.set(0);
   }
 
   onTyping(): void {
@@ -190,8 +245,6 @@ export class ConversationPage {
     }
   }
 
-  @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
-
   private scrollToBottom(): void {
     if (this.messagesContainer) {
       this.messagesContainer.nativeElement.scrollTop =
@@ -199,73 +252,5 @@ export class ConversationPage {
     }
   }
 
-  editTab = signal<'rename' | 'participants'>('rename');
-  editName = signal('');
-
-  selectedNewUsers = signal<IUser[]>([]);
-  addUserQuery = signal('');
-  debouncedAddUserQuery = debounced(this.addUserQuery, 300);
-
-  addUserSearchResource = resource({
-    params: () => this.debouncedAddUserQuery.value(),
-    loader: async ({ params: q }) => {
-      if (!q || !q.trim()) return [];
-      const res = await firstValueFrom(this.userService.searchUser(q, { page: 0, size: 20 }));
-      return res.data.content;
-    },
-  });
-
-  addUserResults = computed(() => {
-    const results = this.addUserSearchResource.value() ?? [];
-    const existingIds = new Set(this.conversation()?.users?.map((u) => u.publicId) ?? []);
-    const selectedIds = new Set(this.selectedNewUsers().map((u) => u.publicId));
-    const currentUserId = this.authService.currentUser()?.publicId;
-    return results.filter(
-      (u) =>
-        !existingIds.has(u.publicId) &&
-        !selectedIds.has(u.publicId) &&
-        u.publicId !== currentUserId,
-    );
-  });
-
-  selectNewUser(user: IUser): void {
-    this.selectedNewUsers.update((users) => [...users, user]);
-    this.addUserQuery.set('');
-  }
-
-  removeNewUser(user: IUser): void {
-    this.selectedNewUsers.update((users) => users.filter((u) => u.publicId !== user.publicId));
-  }
-
-  onRenameConversation(): void {
-    const conversationId = this.conversationId();
-    const name = this.editName().trim();
-    if (!name) return;
-
-    this.conversationService.updateConversation(conversationId, { name, usersIds: [] }).subscribe({
-      next: () => {
-        (document.getElementById('edit_conversation_modal') as HTMLDialogElement)?.close();
-      },
-      error: (err) => err,
-    });
-  }
-
-  onAddParticipants(): void {
-    const conversationId = this.conversationId();
-    const usersIds = this.selectedNewUsers().map((u) => u.publicId);
-
-    this.conversationService.updateConversation(conversationId, { name: '', usersIds }).subscribe({
-      next: () => {
-        this.selectedNewUsers.set([]);
-        this.addUserQuery.set('');
-        (document.getElementById('edit_conversation_modal') as HTMLDialogElement)?.close();
-      },
-      error: (err) => err,
-    });
-  }
-
-  protected readonly faPenToSquare = faPenToSquare;
   protected readonly faArrowLeft = faArrowLeft;
-  protected readonly faTimes = faTimes;
-  protected readonly faUsers = faUsers;
 }

@@ -23,7 +23,7 @@ export class FormLogin {
 
   errorMessage = signal<string>("");
 
-  login = signal({ email: 'john.doe@nexteam.com', password: 'Password123' });
+  login = signal({ email: '@nexteam.com', password: 'Password123' });
 
   loginForm = form(this.login, schema((path) =>{
     required(path.email , { message : 'Le mail est requis' });

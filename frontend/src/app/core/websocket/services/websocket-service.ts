@@ -5,6 +5,7 @@ import { INotification } from '../../../features/notifications/interfaces/notifi
 import {ENVIRONMENT} from '../../../environments/environement';
 import { IMessageSend } from '../../../features/messaging/interfaces/message.interface';
 import { ITyping } from '../../../features/messaging/interfaces/typing.interface';
+import { IPresenceEvent } from '../../../shared/interfaces/presence-event.interface';
 
 @Service()
 export class WebSocketService {
@@ -40,6 +41,10 @@ export class WebSocketService {
     this.client?.deactivate();
     this.client = null;
     this.connected$.next(false);
+  }
+
+  subscribeToPresence(): Observable<IPresenceEvent> {
+    return this.createTopicObservable<IPresenceEvent>('/topic/presence');
   }
 
   get onAuthFailure(): Observable<string> {

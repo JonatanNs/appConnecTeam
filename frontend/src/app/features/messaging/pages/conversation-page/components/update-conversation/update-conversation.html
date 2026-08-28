@@ -1,0 +1,137 @@
+<dialog id="edit_conversation_modal" class="modal modal-bottom sm:modal-middle">
+
+  <div class="modal-box rounded-nxt-lg border border-nxt-muted bg-nxt-surface">
+
+    <h3 class="text-xl text-gray-900">
+      Modifier la conversation
+    </h3>
+
+    <!-- Onglets -->
+    <div class="mt-4 flex gap-1 border-b border-gray-200">
+      <!-- Renommer -->
+      <button (click)="editTab.set('rename')"
+              class="px-3 py-2 text-sm font-medium transition-colors"
+              [class.text-nxt-primary]="editTab() === 'rename'"
+              [class.border-b-2]="editTab() === 'rename'"
+              [class.border-nxt-primary]="editTab() === 'rename'"
+              [class.text-gray-500]="editTab() !== 'rename'">
+        Renommer
+      </button>
+
+      <!-- Ajouter participants -->
+      @if (isGroup()) {
+        <button (click)="editTab.set('participants')"
+                class="px-3 py-2 text-sm font-medium transition-colors"
+                [class.text-nxt-primary]="editTab() === 'participants'"
+                [class.border-b-2]="editTab() === 'participants'"
+                [class.border-nxt-primary]="editTab() === 'participants'"
+                [class.text-gray-500]="editTab() !== 'participants'">
+          Ajouter des participants
+        </button>
+      }
+    </div>
+
+    <!-- ====================================================== -->
+    <!-- FORMULAIRE RENOMMER -->
+    <!-- ====================================================== -->
+
+    @if (editTab() === 'rename') {
+      <form class="mt-5">
+        <label for="edit-name" class="mb-2 block text-sm font-semibold text-nxt-dark">
+          Nom de la conversation
+        </label>
+
+        <input type="text" id="edit-name"
+               [ngModel]="editName()"
+               (ngModelChange)="editName.set($event)"
+               name="edit-name"
+               placeholder="Nom de la conversation"
+               class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+      </form>
+
+      <div class="modal-action">
+        <form method="dialog" class="flex gap-2">
+          <button class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100">
+            Annuler
+          </button>
+
+          <button [disabled]="!editName().trim()" (click)="onRenameConversation()"
+                  class="btn-nxt-primary disabled:cursor-not-allowed disabled:opacity-50">
+            Enregistrer
+          </button>
+        </form>
+      </div>
+    }
+
+    <!-- ====================================================== -->
+    <!-- FORMULAIRE AJOUT PARTICIPANTS -->
+    <!-- ====================================================== -->
+
+    @if (editTab() === 'participants') {
+      <form class="mt-5">
+        <label class="mb-2 block text-sm font-semibold text-nxt-dark">
+          Nouveaux participants
+        </label>
+
+        <!-- Utilisateurs sélectionnés -->
+        @if (selectedNewUsers().length > 0) {
+          <div class="mb-2 flex flex-wrap gap-2">
+            @for (user of selectedNewUsers(); track user.publicId) {
+              <span class="flex items-center gap-1.5 rounded-full bg-nxt-primary/10 px-3 py-1 text-xs font-medium text-nxt-primary">
+                {{ user.firstname }} {{ user.lastname }}
+                <button (click)="removeNewUser(user)" class="text-nxt-primary/70 hover:text-nxt-primary">
+                  <fa-icon [icon]="faTimes" class="text-xs"></fa-icon>
+                </button>
+              </span>
+            }
+          </div>
+        }
+
+        <!-- Recherche utilisateur -->
+        <div class="relative">
+
+          <input type="text" [ngModel]="addUserQuery()" (ngModelChange)="addUserQuery.set($event)"
+                 name="add-user-search"
+                 placeholder="Rechercher un utilisateur..."
+                 class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-nxt-dark placeholder-gray-400 outline-none transition-all focus:border-nxt-primary focus:bg-nxt-surface focus:ring-2 focus:ring-nxt-primary/20">
+
+          @if (addUserResults().length > 0) {
+
+            <div class="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-200 bg-nxt-surface shadow-lg">
+              @for (user of addUserResults(); track user.publicId) {
+                <button type="button" (click)="selectNewUser(user)"
+                        class="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-nxt-dark transition-colors hover:bg-gray-50">
+
+                  <span class="font-medium">             {{ user.firstname }} {{ user.lastname }} </span>
+                  <span class="text-xs text-gray-400"> {{ user.email }}                         </span>
+
+                </button>
+              }
+            </div>
+
+          }
+
+        </div>
+
+      </form>
+
+      <div class="modal-action">
+
+        <form method="dialog" class="flex gap-2">
+
+          <button class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100">
+            Annuler
+          </button>
+
+          <button [disabled]="selectedNewUsers().length === 0" (click)="onAddParticipants()"
+                   class="btn-nxt-primary disabled:cursor-not-allowed disabled:opacity-50">
+            Ajouter
+          </button>
+
+        </form>
+
+      </div>
+    }
+  </div>
+
+</dialog>

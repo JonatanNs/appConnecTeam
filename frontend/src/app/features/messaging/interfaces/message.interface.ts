@@ -3,7 +3,7 @@ export interface IMessageSend {
   senderPublicId: string;
   senderName : string
   content: string;
-  createdAt: Date;
+  createdAt: string;
   type : "CHAT" | "SYSTEM";
 
 }

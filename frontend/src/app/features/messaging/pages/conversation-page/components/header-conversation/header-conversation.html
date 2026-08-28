@@ -1,0 +1,77 @@
+@if ( conversation()) {
+  <!-- En-tête de la conversation -->
+  <div class="z-10 flex shrink-0 items-center justify-between border-b border-gray-200 bg-nxt-surface px-3 py-2.5 shadow-xs sm:px-4 md:px-6 md:py-3">
+
+    <!-- Info Groupe & Navigation -->
+    <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+
+      <!-- Bouton retour mobile -->
+      <button
+        routerLink="/messageries"
+        class="-ml-1 shrink-0 p-1 text-lg text-gray-500 transition-colors hover:text-nxt-primary lg:hidden"
+        aria-label="Retour"
+        type="button">
+        <fa-icon [icon]="faArrowLeft"></fa-icon>
+      </button>
+
+      <!-- Avatar -->
+      <div class="relative shrink-0">
+        <div class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-nxt-primary/20 bg-nxt-primary/10 text-sm font-bold text-nxt-primary shadow-xs sm:h-10 sm:w-10">
+
+          <img class="h-full w-full object-cover"
+               [src]="'https://ui-avatars.com/api/?name=' + (conversation()?.name ?? '?')"
+               [alt]="conversation()?.name">
+        </div>
+
+        @if (isGroup()) {
+          <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-nxt-primary text-[9px] font-bold text-white">
+              {{ conversation()?.users?.length }}
+            </span>
+        }
+      </div>
+
+      <!-- Titre & Sous-titre -->
+      <div class="min-w-0 flex-1">
+
+        <h3 class="truncate text-sm font-bold leading-tight text-gray-900">
+          {{ conversation()?.name ?? 'Conversation' }}
+        </h3>
+
+        @if (isGroup()) {
+          <p class="truncate text-[11px] font-medium text-gray-500">
+            {{ conversation()?.users?.length }} membres
+          </p>
+        } @else {
+          <p class="truncate text-[11px] font-medium text-gray-400">
+            Conversation privée
+          </p>
+        }
+
+      </div>
+    </div>
+
+    <!-- ====================================================== -->
+    <!-- ACTIONS -->
+    <!-- ====================================================== -->
+    <div class="flex shrink-0 items-center gap-1 sm:gap-1.5 md:gap-2">
+
+      <!-- Modifier -->
+      <button onclick="edit_conversation_modal.showModal()"
+              class="hidden items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-all hover:border-nxt-primary/30 hover:bg-nxt-primary/10 hover:text-nxt-primary sm:flex">
+        <fa-icon [icon]="faPenToSquare" class="text-xs text-nxt-primary"></fa-icon>
+        <span>Modifier</span>
+      </button>
+
+      <!-- Participants -->
+      <label for="conversation-drawer"
+             class="hidden cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200/80 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-700 transition-all hover:border-nxt-primary/30 hover:bg-nxt-primary/10 hover:text-nxt-primary sm:flex">
+        <fa-icon [icon]="faUsers" class="text-xs text-nxt-primary"></fa-icon>
+        <span>Participants</span>
+      </label>
+
+      <!-- Séparateur -->
+      <div class="mx-1 hidden h-4 w-px bg-gray-200 sm:block"></div>
+
+    </div>
+  </div>
+}

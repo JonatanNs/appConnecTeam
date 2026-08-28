@@ -1,0 +1,56 @@
+
+<input id="conversation-drawer" type="checkbox" class="drawer-toggle" />
+
+<div class="drawer-side absolute inset-0 z-20 overflow-hidden">
+
+  <label for="conversation-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+
+  <div class="min-h-full w-80 bg-nxt-surface p-4 shadow-xl">
+    <!-- Header -->
+    <div class="mb-5 flex items-center justify-between">
+      <div>
+        <h2 class="text-lg font-bold text-gray-900">
+          Participants
+        </h2>
+        <p class="text-xs text-gray-400">
+          {{ conversation()?.users?.length ?? 0 }} membres
+        </p>
+      </div>
+      <!-- Fermer -->
+      <label for="conversation-drawer" class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </label>
+    </div>
+    <!-- Liste des participants -->
+    <div class="space-y-1">
+      @for (user of conversation()?.users; track user.publicId) {
+        <div class="flex items-center gap-3 rounded-lg p-2.5 transition-colors hover:bg-gray-50">
+          <!-- Avatar -->
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-nxt-primary/10 text-xs font-bold text-nxt-primary">
+            <img class="h-full w-full object-cover"
+                 [src]="'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname"
+                 [alt]="user.firstname + ' ' + user.lastname">
+          </div>
+          <!-- Informations -->
+          <div class="min-w-0 flex-1">
+
+            <p class="truncate text-sm font-medium text-gray-900">
+              {{ user.firstname }} {{ user.lastname }}
+            </p>
+
+            <p class="truncate text-xs text-gray-400">
+              {{ user.email }}
+            </p>
+
+          </div>
+
+        </div>
+
+      } @empty {
+        <p class="py-8 text-center text-sm text-gray-400">
+          Aucun participant.
+        </p>
+      }
+    </div>
+  </div>
+</div>

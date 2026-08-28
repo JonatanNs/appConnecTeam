@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Signal, signal } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Router, RouterLink } from '@angular/router';
 import {
-  faArrowRight, faChevronDown,
+  faChevronDown,
   faCircleQuestion,
   faGear,
   faRightFromBracket, faShieldHalved,
@@ -10,6 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { AuthService } from '../../../../../../features/auth/service/auth-service';
+import { ICurrentUser } from '../../../../../../shared/interfaces/current-user.interface';
 
 @Component({
   selector: 'app-user-profil',
@@ -25,8 +26,11 @@ export class UserProfil {
   protected readonly faCircleQuestion = faCircleQuestion;
   protected readonly faChevronDown = faChevronDown;
 
-  private authService =  inject(AuthService);
-  private router =  inject(Router);
+  private authService = inject(AuthService);
+
+  currentUser: Signal<ICurrentUser | null> = this.authService.currentUser;
+
+  private router = inject(Router);
 
   isProfileMenuOpen = signal(false);
 
@@ -37,8 +41,13 @@ export class UserProfil {
     this.isProfileMenuOpen.set(false);
   }
 
+  toggleProfileMenu(): void {
+    this.isProfileMenuOpen.update((open) => !open);
+  }
+
+
   logout(): void {
-    this.authService.logout()
+    this.authService.logout();
     this.router.navigate(['/']);
   }
 }

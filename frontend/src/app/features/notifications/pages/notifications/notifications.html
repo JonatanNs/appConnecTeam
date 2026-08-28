@@ -1,82 +1,103 @@
-<div class="min-h-full w-full bg-gray-50 py-6 px-4 sm:px-6 lg:px-8 font-sans text-nxt-dark">
+<div class="min-h-full w-full bg-slate-50/50 py-6 px-4 sm:px-6 lg:px-8 font-sans text-nxt-dark">
   <div class="mx-auto max-w-4xl space-y-4">
 
     <!-- En-tête et Filtres -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-nxt-surface p-4 rounded-2xl border border-gray-200/80 shadow-xs">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/80 shadow-2xs">
       <div>
-        <h1 class="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+        <h1 class="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2.5">
           <span>Notifications</span>
           @if (unreadCount() > 0) {
-            <span class="inline-flex items-center justify-center rounded-full bg-nxt-primary/10 px-2.5 py-0.5 text-xs font-bold text-nxt-primary">
+            <span
+              class="inline-flex items-center justify-center rounded-full bg-nxt-primary/10 px-2.5 py-0.5 text-xs font-bold text-nxt-primary">
               {{ unreadCount() }} nouvelle{{ unreadCount() > 1 ? 's' : '' }}
             </span>
           }
         </h1>
-        <p class="text-xs text-gray-500 mt-0.5">Restez informé de l'activité sur votre réseau</p>
+        <p class="text-xs text-gray-500 mt-1">Restez informé des dernières activités sur votre réseau</p>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button (click)="setFilter('all')"
-                class="px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
-                [class.bg-nxt-primary]="filter() === 'all'"
-                [class.text-white]="filter() === 'all'"
-                [class.shadow-xs]="filter() === 'all'"
-                [class.text-gray-600]="filter() !== 'all'"
-                [class.hover:bg-gray-100]="filter() !== 'all'">
-          Toutes
-        </button>
-        <button (click)="setFilter('unread')"
-                class="px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
-                [class.bg-nxt-primary]="filter() === 'unread'"
-                [class.text-white]="filter() === 'unread'"
-                [class.shadow-xs]="filter() === 'unread'"
-                [class.text-gray-600]="filter() !== 'unread'"
-                [class.hover:bg-gray-100]="filter() !== 'unread'">
-          Non lues
-        </button>
+      <!-- Actions & Filtres -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <div class="inline-flex rounded-xl bg-gray-100 p-1">
+          <button type="button"
+                  (click)="setFilter('all')"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer"
+                  [class.bg-white]="filter() === 'all'"
+                  [class.text-nxt-primary]="filter() === 'all'"
+                  [class.shadow-2xs]="filter() === 'all'"
+                  [class.text-gray-600]="filter() !== 'all'"
+                  [class.hover:text-gray-900]="filter() !== 'all'">
+            Toutes
+          </button>
+          <button type="button"
+                  (click)="setFilter('unread')"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer"
+                  [class.bg-white]="filter() === 'unread'"
+                  [class.text-nxt-primary]="filter() === 'unread'"
+                  [class.shadow-2xs]="filter() === 'unread'"
+                  [class.text-gray-600]="filter() !== 'unread'"
+                  [class.hover:text-gray-900]="filter() !== 'unread'">
+            Non lues
+          </button>
+        </div>
+
         @if (unreadCount() > 0) {
-          <button (click)="markAllAsRead()" class="px-3 py-1.5 rounded-full text-xs font-medium text-nxt-primary hover:bg-nxt-primary/10 transition-colors">
-            Tout marquer comme lu
+          <button type="button"
+                  (click)="markAllAsRead()"
+                  class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-nxt-primary hover:bg-nxt-primary/10 transition-colors cursor-pointer">
+            <fa-icon [icon]="faCheckDouble" class="text-xs"></fa-icon>
+            <span>Tout marquer comme lu</span>
           </button>
         }
       </div>
     </div>
 
     <!-- Liste des Notifications -->
-    <ul class="list bg-nxt-surface rounded-2xl border border-gray-200/80 shadow-xs overflow-hidden divide-y divide-gray-100">
+    <ul class="bg-white rounded-2xl border border-gray-200/80 shadow-2xs overflow-hidden divide-y divide-gray-100">
 
       @for (notif of displayedNotifications(); track notif.publicId) {
         <li (click)="markAsRead(notif)"
-            class="list-row relative flex items-start gap-3.5 p-4 hover:bg-gray-50/80 transition-colors cursor-pointer"
-            [class.bg-nxt-primary]="!notif.read">
+            class="group relative flex items-center justify-between gap-4 p-4 transition-all cursor-pointer"
+            [class.bg-blue-50\="/60"]="!notif.read"
+          [class.hover:bg-gray-50]="notif.read"
+          [class.hover:bg-blue-50\="/80"]="!notif.read">
 
+          <!-- Puce de notification non lue -->
         @if (!notif.read) {
-          <span class="absolute left-2 top-1/2 -translate-y-1/2 w-2 h-2 bg-nxt-primary rounded-full"></span>
+          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-nxt-primary"></span>
         }
 
-        <div class="relative shrink-0" [class.ml-2]="!notif.read">
-          <div class="w-11 h-11 rounded-full bg-nxt-primary/10 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary">
-            <fa-icon [icon]="iconFor(notif.type)" class="text-lg"></fa-icon>
+        <div class="flex items-center gap-3.5 min-w-0 flex-1" [class.pl-2]="!notif.read">
+          <!-- Icône selon le type -->
+          <div class="relative shrink-0">
+            <div
+              class="h-10 w-10 rounded-2xl bg-gradient-to-tr from-nxt-primary/10 to-blue-50 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary shadow-2xs">
+              <fa-icon [icon]="iconFor(notif.type)" class="text-base"></fa-icon>
+            </div>
+          </div>
+
+          <!-- Contenu -->
+          <div class="min-w-0 flex-1">
+            <p class="text-xs sm:text-sm text-gray-800 leading-relaxed" [class.font-medium]="!notif.read">
+              {{ notif.content }}
+            </p>
+            <span class="mt-1 block text-[10px] font-medium" [class.text-nxt-primary]="!notif.read"
+                  [class.text-gray-400]="notif.read">
+                {{ notif.createdAt | date: 'dd/MM/yyyy à HH:mm' }}
+              </span>
           </div>
         </div>
 
-        <div class="flex-1 min-w-0">
-          <div class="text-sm text-gray-900 leading-snug">
-            {{ notif.content }}
-          </div>
-        </div>
-
-        <div class="flex flex-col items-end gap-2 shrink-0">
-            <span class="text-[11px] font-medium" [class.text-nxt-primary]="!notif.read" [class.text-gray-400]="notif.read">
-              {{ notif.createdAt | date: 'short' }}
-            </span>
-          <button class="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors" title="Options" (click)="$event.stopPropagation()">
-            <fa-icon [icon]="faEllipsisVertical" class="text-sm"></fa-icon>
-          </button>
-        </div>
+        <!-- Action contextuelle au survol -->
+        </li>
       } @empty {
-        <li class="p-10 text-center text-sm text-gray-400">
-          Aucune notification.
+        <li class="flex flex-col items-center justify-center p-12 text-center">
+          <div class="h-12 w-12 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-400 mb-3">
+            <fa-icon [icon]="faBellSlash" class="text-xl"></fa-icon>
+          </div>
+          <p class="text-xs font-bold text-gray-700">Aucune notification</p>
+          <p class="text-[11px] text-gray-400 mt-0.5">Vous n'avez aucune notification à afficher pour le moment.</p>
         </li>
       }
 

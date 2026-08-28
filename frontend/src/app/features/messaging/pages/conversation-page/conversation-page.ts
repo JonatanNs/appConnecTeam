@@ -11,7 +11,15 @@ import { IMessageSend } from '../../interfaces/message.interface';
 import { ConversationService } from '../../services/conversation/conversation-service';
 import { IConversation } from '../../interfaces/conversation.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft, faPenToSquare, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowDown,
+  faArrowLeft,
+  faComments,
+  faPaperPlane,
+  faPenToSquare,
+  faTimes,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
 import { IUser } from '../../../../shared/interfaces/user.interface';
 import { UserService } from '../../../../core/services/user/user-service';
 import {NotificationService} from '../../../notifications/services/notification/notification-service';
@@ -253,4 +261,7 @@ export class ConversationPage {
   }
 
   protected readonly faArrowLeft = faArrowLeft;
+  protected readonly faPaperPlane = faPaperPlane;
+  protected readonly faArrowDown = faArrowDown;
+  protected readonly faComments = faComments;
 }

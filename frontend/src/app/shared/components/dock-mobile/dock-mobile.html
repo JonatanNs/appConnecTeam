@@ -1,0 +1,39 @@
+<div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-sm">
+  <nav class="relative flex items-center justify-between bg-slate-900/90 backdrop-blur-2xl border border-white/10 rounded-full px-3 py-2 shadow-2xl shadow-slate-950/40 text-white">
+
+    <!-- 1. Calendrier -->
+    <button type="button" class="flex flex-col items-center justify-center gap-1 w-12 text-slate-400 hover:text-white transition-colors">
+      <fa-icon [icon]="faCalendarDays" class="text-base"></fa-icon>
+      <span class="text-[9px] font-medium tracking-tight">Agenda</span>
+    </button>
+
+    <!-- 2. Contacts -->
+    <button type="button" class="flex flex-col items-center justify-center gap-1 w-12 text-slate-400 hover:text-white transition-colors">
+      <fa-icon [icon]="faAddressBook" class="text-base"></fa-icon>
+      <span class="text-[9px] font-medium tracking-tight">Contacts</span>
+    </button>
+
+    <!-- 3. CARTE EMPLOYÉ (Central mis en avant) -->
+    <div class="relative -top-6">
+      <button
+        type="button"
+        class="group flex items-center justify-center w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-500 text-white rounded-full shadow-lg shadow-indigo-500/30 ring-4 ring-slate-950 hover:scale-105 active:scale-95 transition-all duration-200"
+        title="Voir ma carte employé">
+        <fa-icon [icon]="faIdCard" class="text-xl group-hover:rotate-6 transition-transform"></fa-icon>
+      </button>
+    </div>
+
+    <!-- 4. Documents -->
+    <button type="button" class="flex flex-col items-center justify-center gap-1 w-12 text-slate-400 hover:text-white transition-colors">
+      <fa-icon [icon]="faFileLines" class="text-base"></fa-icon>
+      <span class="text-[9px] font-medium tracking-tight">Docs</span>
+    </button>
+
+    <!-- 5. Tâches -->
+    <button type="button" class="flex flex-col items-center justify-center gap-1 w-12 text-slate-400 hover:text-white transition-colors">
+      <fa-icon [icon]="faListCheck" class="text-base"></fa-icon>
+      <span class="text-[9px] font-medium tracking-tight">Tâches</span>
+    </button>
+
+  </nav>
+</div>

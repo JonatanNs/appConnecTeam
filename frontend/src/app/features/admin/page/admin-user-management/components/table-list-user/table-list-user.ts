@@ -1,29 +1,25 @@
-import {
-  Component,
-  ElementRef,
-  input,
-  output,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, inject, input, output, ViewChild } from '@angular/core';
 import {NgClass, NgOptimizedImage} from '@angular/common';
 import {IUser} from '../../../../../../shared/interfaces/user.interface';
 import {RouterLink} from '@angular/router';
 import {IApiResponse} from '../../../../../../shared/interfaces/api-response.interface';
 import {IPage} from '../../../../../../shared/interfaces/pageable/page.interface';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { AuthService } from '../../../../../auth/service/auth-service';
 
 @Component({
   selector: 'app-table-list-user',
-  imports: [
-    NgOptimizedImage,
-    RouterLink,
-    NgClass
-  ],
+  imports: [NgOptimizedImage, RouterLink, NgClass],
   templateUrl: './table-list-user.html',
   styleUrl: './table-list-user.css',
 })
 export class TableListUser {
+  private authService = inject(AuthService);
 
   users = input.required<IApiResponse<IPage<IUser>>>();
+
+  currentUser = this.authService.currentUser;
 
   userAction = output<{
     action: 'activate' | 'deactivate';
@@ -51,12 +47,11 @@ export class TableListUser {
     }
 
     this.userAction.emit({
-      action: this.selectedUser.active
-        ? 'deactivate'
-        : 'activate',
-      publicId: this.selectedUser.publicId
+      action: this.selectedUser.active ? 'deactivate' : 'activate',
+      publicId: this.selectedUser.publicId,
     });
 
     this.closeUserModal();
   }
+
 }

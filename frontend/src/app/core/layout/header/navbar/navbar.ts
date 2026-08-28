@@ -1,12 +1,22 @@
 import {Component, inject} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faCalendar,
   faChevronRight,
   faCircleQuestion,
-  faGear, faMagnifyingGlass, faRightFromBracket, faShieldHalved,
-  faUser, faXmark, faBars
+  faGear,
+  faMagnifyingGlass,
+  faRightFromBracket,
+  faShieldHalved,
+  faUser,
+  faXmark,
+  faBars,
+  faHouse,
+  faNewspaper,
+  faComments,
+  faAddressBook,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { UserProfil } from './components/user-profil/user-profil';
 import { UserNotif } from './components/user-notif/user-notif';
@@ -39,4 +49,9 @@ export class Navbar {
     this.router.navigate(['/']);
   }
 
+  protected readonly faHouse = faHouse;
+  protected readonly faNewspaper = faNewspaper;
+  protected readonly faComments = faComments;
+  protected readonly faAddressBook = faAddressBook;
+  protected readonly faUsers = faUsers;
 }

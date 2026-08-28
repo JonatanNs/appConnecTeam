@@ -3,7 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ENVIRONMENT } from '../../../../environments/environement';
 import { IPageable } from '../../../../shared/interfaces/pageable/pageable.interface';
-import { catchError, map, merge, Observable, of, scan, Subject, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  map,
+  merge,
+  Observable,
+  of,
+  scan,
+  startWith,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { IApiResponse } from '../../../../shared/interfaces/api-response.interface';
 import { IPage } from '../../../../shared/interfaces/pageable/page.interface';
 import { INotification } from '../../interfaces/notification.interface';
@@ -44,13 +55,18 @@ export class NotificationService {
   );
 
   private events$ = merge(
-    this.wsService.subscribeToNotifications().pipe(
-      map((notification): NotificationEvent => ({ kind: 'new', notification })),
+    this.wsService
+      .subscribeToNotifications()
+      .pipe(map((notification): NotificationEvent => ({ kind: 'new', notification }))),
+    this.onNotificationRead.pipe(
+      map((publicId): NotificationEvent => ({ kind: 'read', publicId })),
     ),
-    this.onNotificationRead.pipe(map((publicId): NotificationEvent => ({ kind: 'read', publicId }))),
     this.onAllNotificationsRead.pipe(map((): NotificationEvent => ({ kind: 'read-all' }))),
     this.onConversationNotificationsRead$.pipe(
-      map((conversationPublicId): NotificationEvent => ({ kind: 'read-conversation', conversationPublicId })),
+      map((conversationPublicId): NotificationEvent => ({
+        kind: 'read-conversation',
+        conversationPublicId,
+      })),
     ),
   );
 
@@ -62,16 +78,20 @@ export class NotificationService {
             switch (event.kind) {
               case 'new':
                 return [event.notification, ...acc];
+
               case 'read':
                 return acc.map((n) => (n.publicId === event.publicId ? { ...n, read: true } : n));
+
               case 'read-all':
                 return acc.map((n) => ({ ...n, read: true }));
+
               case 'read-conversation':
                 return acc.map((n) =>
                   n.conversationPublicId === event.conversationPublicId ? { ...n, read: true } : n,
                 );
             }
           }, history),
+          startWith(history),
         ),
       ),
     ),
@@ -108,7 +128,10 @@ export class NotificationService {
 
   markConversationAsRead(conversationPublicId: string): Observable<IApiResponse<void>> {
     return this.http
-      .patch<IApiResponse<void>>(`${this.baseUrl}/notifications/conversation/${conversationPublicId}/read`, null)
+      .patch<IApiResponse<void>>(
+        `${this.baseUrl}/notifications/conversation/${conversationPublicId}/read`,
+        null,
+      )
       .pipe(tap(() => this.conversationNotificationsRead$.next(conversationPublicId)));
   }
 }

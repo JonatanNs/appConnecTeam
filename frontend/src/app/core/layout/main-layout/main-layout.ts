@@ -7,10 +7,11 @@ import {FlashMessage} from '../../../shared/components/flash-message/flash-messa
 import {
   ListConversation
 } from '../../../features/messaging/pages/conversation-page/components/list-conversation/list-conversation';
+import { DockMobile } from '../../../shared/components/dock-mobile/dock-mobile';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, Header, Footer, Sidebar, FlashMessage, ListConversation],
+  imports: [RouterOutlet, Header, Footer, Sidebar, FlashMessage, ListConversation, DockMobile],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })

@@ -6,7 +6,7 @@ import {IUser} from '../../../../shared/interfaces/user.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { RouterLink } from '@angular/router';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCommentDots, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../../auth/service/auth-service';
 
 @Component({
@@ -29,4 +29,6 @@ export class ListUser {
 
   protected readonly faEnvelope = faEnvelope;
   protected readonly faUser = faUser;
+  protected readonly faPhone = faPhone;
+  protected readonly faCommentDots = faCommentDots;
 }

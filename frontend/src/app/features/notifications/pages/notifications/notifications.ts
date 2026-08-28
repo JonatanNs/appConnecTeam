@@ -2,14 +2,17 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { NotificationService } from '../../services/notification/notification-service';
 import { INotification } from '../../interfaces/notification.interface';
 import { DatePipe } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
   faUserPlus,
   faThumbsUp,
   faComment,
   faBriefcase,
   faEllipsisVertical,
+  faBellSlash,
+  faTrash,
+  faCheckDouble,
 } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 type NotificationFilter = 'all' | 'unread';
 
@@ -63,4 +66,8 @@ export class Notifications {
   markAllAsRead(): void {
     this.notificationService.markAllAsRead().subscribe();
   }
+
+  protected readonly faBellSlash = faBellSlash;
+  protected readonly faTrash = faTrash;
+  protected readonly faCheckDouble = faCheckDouble;
 }

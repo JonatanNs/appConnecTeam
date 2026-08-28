@@ -1,7 +1,8 @@
 <app-header />
 
-<main class="flex h-[calc(100vh-64px)] overflow-hidden">
+<main class="flex h-[calc(100vh-64px-64px)] lg:h-[calc(100vh-64px)] overflow-hidden">
   <app-flash-message />
+
   <aside class="hidden lg:block lg:h-full shrink-0">
     @if (currentRoute.startsWith('/messageries')) {
       <app-list-conversation></app-list-conversation>
@@ -10,10 +11,15 @@
     }
   </aside>
 
-  <section class="flex-1 overflow-y-auto bg-nxt-surface rounded-tl-xl border-t border-l border-gray-300/70 shadow-sm mt-1 ml-1">
+  <section class="flex-1 overflow-y-auto bg-nxt-surface rounded-tl-xl border-t border-l border-gray-300/70 shadow-sm mt-1 ml-1 pb-16 lg:pb-0">
     <router-outlet />
   </section>
 
 </main>
+
+<!-- Dock mobile (Affiché uniquement sous le breakpoint lg) -->
+<div class="block lg:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white border-t border-gray-200 shadow-lg">
+  <app-dock-mobile />
+</div>
 
 <app-footer />

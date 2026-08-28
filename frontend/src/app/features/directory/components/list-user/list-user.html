@@ -1,49 +1,76 @@
 @if (users(); as response) {
 
-  <!-- VUE MOBILE : Liste compacte optimisée (gain de place maximal) -->
-  <div
-    class="flex flex-col divide-y divide-gray-100 bg-nxt-surface rounded-2xl border border-gray-200/80 shadow-sm mt-6 lg:hidden">
+  <!-- ================= VUE MOBILE (Cartes horizontales style maquette) ================= -->
+  <div class="block lg:hidden space-y-4 mt-6">
     @for (user of activeUsers(); track user.publicId) {
-      <div class="flex items-center justify-between p-3.5 hover:bg-gray-50/80 transition-colors">
+      <div class="bg-nxt-surface border border-gray-200/80 rounded-2xl p-4 shadow-sm">
 
-        <!-- Avatar + Infos -->
-        <div class="flex items-center gap-3 min-w-0 pr-2">
-          <div class="relative shrink-0">
-            <img
-              ngSrc="https://avatars.githubusercontent.com/u/124576166?v=4"
-              alt="Photo de {{ user.firstname }}"
-              width="40"
-              height="40"
-              class="w-10 h-10 object-cover rounded-full border border-gray-200" />
-            @if (user.online || user.publicId === currentUser()?.publicId) {
-              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-nxt-success border border-white rounded-full"></span>
-            } @else {
-              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-nxt-error border border-white rounded-full"></span>
-            }
+        <!-- Part supérieure : Avatar + Infos + Badge -->
+        <div class="flex items-start justify-between gap-3">
+
+          <div class="flex items-center gap-3.5 min-w-0">
+            <!-- Avatar avec pastille de statut -->
+            <div class="relative shrink-0">
+              <img
+                ngSrc="https://avatars.githubusercontent.com/u/124576166?v=4"
+                alt="Photo de {{ user.firstname }}"
+                width="60"
+                height="60"
+                class="w-14 h-14 object-cover rounded-full border border-gray-100" />
+              @if (user.online || user.publicId === currentUser()?.publicId) {
+                <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+              } @else {
+                <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-rose-500 border-2 border-white rounded-full"></span>
+              }
+            </div>
+
+            <!-- Nom, Métier & Équipe -->
+            <div class="min-w-0">
+              <h3 class="text-base font-bold text-gray-900 truncate">
+                {{ user.firstname }} {{ user.lastname }}
+              </h3>
+              <p class="text-xs text-gray-600 font-medium truncate mt-0.5">
+                Product Designer Senior
+              </p>
+              <p class="text-xs text-gray-400 font-normal truncate mt-0.5">
+                Équipe Design
+              </p>
+            </div>
           </div>
 
-          <div class="min-w-0">
-            <h3 class="text-sm font-semibold text-nxt-dark truncate">
-              {{ user.firstname }} {{ user.lastname }}
-            </h3>
-            <p class="text-xs text-gray-500 truncate">
-              Creative Designer
-            </p>
-          </div>
+          <!-- Badge rôle (ex: Manager) -->
+          <span class="shrink-0 px-2.5 py-1 text-[10px] font-bold tracking-wider text-white bg-slate-900 rounded-md uppercase">
+            Manager
+          </span>
+
         </div>
 
-        <!-- Actions rapides (Voir profil + Contacter) -->
-        <div class="flex items-center gap-1 shrink-0">
-          <a [routerLink]="['/profile', user.publicId]"
-             class="p-2 text-gray-400 hover:text-nxt-primary hover:bg-gray-100 rounded-lg transition-colors"
-             aria-label="Voir le profil de {{ user.firstname }}">
-            <fa-icon [icon]="faUser" class="text-base"></fa-icon>
-          </a>
-          <button type="button"
-                  class="p-2 text-nxt-primary hover:bg-nxt-primary/10 rounded-lg transition-colors"
-                  aria-label="Contacter {{ user.firstname }}">
-            <fa-icon [icon]="faEnvelope" class="text-base"></fa-icon>
+        <!-- Ligne de séparation -->
+        <hr class="my-3.5 border-gray-100" />
+
+        <!-- Actions : Message / Appeler / Email -->
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-gray-100/80 hover:bg-gray-200/80 text-gray-700 text-xs font-semibold rounded-xl transition-colors">
+            <fa-icon [icon]="faCommentDots" class="text-sm text-gray-500"></fa-icon>
+            Message
           </button>
+
+          <button
+            type="button"
+            class="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 bg-gray-100/80 hover:bg-gray-200/80 text-gray-700 text-xs font-semibold rounded-xl transition-colors">
+            <fa-icon [icon]="faPhone" class="text-sm text-gray-500"></fa-icon>
+            Appeler
+          </button>
+
+          <a
+            [routerLink]="['/profile', user.publicId]"
+            class="p-2 bg-gray-100/80 hover:bg-gray-200/80 text-gray-600 rounded-xl transition-colors shrink-0 flex items-center justify-center"
+            title="Voir le profil"
+            aria-label="Voir le profil de {{ user.firstname }}">
+            <fa-icon [icon]="faEnvelope" class="text-sm text-gray-500"></fa-icon>
+          </a>
         </div>
 
       </div>
@@ -54,7 +81,7 @@
     }
   </div>
 
-  <!-- VUE DESKTOP : Grille de cartes aérées -->
+  <!-- ================= VUE DESKTOP : Grille initiale ================= -->
   <div class="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-16 mt-16">
     @for (user of activeUsers(); track user.publicId) {
       <div
@@ -87,7 +114,7 @@
           Bio de la personne ou court résumé du profil de l'utilisateur.
         </p>
 
-        <!-- Zone d'actions : Bouton Profil (icône) + Bouton Contacter -->
+        <!-- Zone d'actions -->
         <div class="w-full flex items-center justify-between gap-2 pt-4 border-t border-gray-100 mt-auto">
           <a [routerLink]="['/profile', user.publicId]"
              class="p-2.5 text-gray-500 hover:text-nxt-primary hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors flex items-center justify-center"

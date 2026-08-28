@@ -1,4 +1,4 @@
-package com.nexteam.websocket.messagingWs.messageWs.dtosWs;
+package com.nexteam.websocket.dtosWs;
 
 import lombok.*;
 

@@ -15,9 +15,8 @@
               width="40"
               height="40"
               class="w-10 h-10 object-cover rounded-full border border-gray-200" />
-            @if (user.online) {
-              <span
-                class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-nxt-success border border-white rounded-full"></span>
+            @if (user.online || user.publicId === currentUser()?.publicId) {
+              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-nxt-success border border-white rounded-full"></span>
             } @else {
               <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-nxt-error border border-white rounded-full"></span>
             }

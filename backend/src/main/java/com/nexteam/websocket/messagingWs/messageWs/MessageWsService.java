@@ -13,7 +13,7 @@ import com.nexteam.features.Messaging.notification.NotificationService;
 import com.nexteam.features.Users.User.User;
 import com.nexteam.features.Users.User.UserRepository;
 import com.nexteam.websocket.messagingWs.conversationWs.ConversationPresenceService;
-import com.nexteam.websocket.messagingWs.messageWs.dtosWs.TypingEventDTO;
+import com.nexteam.websocket.dtosWs.TypingEventDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;

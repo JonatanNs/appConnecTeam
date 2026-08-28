@@ -9,13 +9,7 @@ import org.springframework.stereotype.Controller;
 import java.security.Principal;
 import java.util.UUID;
 
-/**
- * Class 'ConversationWsController' en charge de
- *
- * @author JonatanNs
- * @version 1.0
- * @since 16/08/2026 22:47
- */
+
 @Controller
 @RequiredArgsConstructor
 public class ConversationWsController {

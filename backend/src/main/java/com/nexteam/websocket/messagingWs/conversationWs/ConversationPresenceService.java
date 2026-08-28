@@ -7,13 +7,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-/**
- * Class 'ConversationPresenceService' en charge de
- *
- * @author JonatanNs
- * @version 1.0
- * @since 17/08/2026 22:34
- */
 @Service
 public class ConversationPresenceService {
 

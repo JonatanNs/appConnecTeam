@@ -2,7 +2,7 @@ package com.nexteam.websocket.messagingWs.messageWs;
 
 import com.nexteam.features.Messaging.message.dtos.MessageRequestDTO;
 import com.nexteam.features.Messaging.message.dtos.MessageResponseDTO;
-import com.nexteam.websocket.messagingWs.messageWs.dtosWs.TypingEventDTO;
+import com.nexteam.websocket.dtosWs.TypingEventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

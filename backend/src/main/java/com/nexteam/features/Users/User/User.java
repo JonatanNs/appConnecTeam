@@ -2,9 +2,9 @@ package com.nexteam.features.Users.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nexteam.common.AuditableEntity;
+import com.nexteam.features.Messaging.message.Message;
 import com.nexteam.features.Users.Address.Address;
 import com.nexteam.features.Users.Role.Role;
-import com.nexteam.features.Messaging.message.Message;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -70,6 +70,7 @@ public class User extends AuditableEntity {
         joinColumns = @JoinColumn(name = "person_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
 
     /**
@@ -82,8 +83,10 @@ public class User extends AuditableEntity {
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private List<Message> messages = new ArrayList<>();
 
+    @Transient
     private String fullName = firstname + " " + lastname;
 }
 

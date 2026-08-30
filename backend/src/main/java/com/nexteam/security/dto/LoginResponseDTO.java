@@ -1,6 +1,7 @@
 package com.nexteam.security.dto;
 
 import lombok.*;
+
 import java.util.UUID;
 
 /**
@@ -17,8 +18,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LoginResponseDTO {
     private String token;
+    private String refreshToken;
     private UUID publicId;
     private String email;
     private String firstname;
     private String lastname;
+    private Boolean online;
+
 }

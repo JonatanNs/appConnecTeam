@@ -3,6 +3,7 @@ package com.nexteam.advice;
 import com.nexteam.common.ApiResponse;
 import com.nexteam.exceptions.AlreadyExistException;
 import com.nexteam.exceptions.InvalidCredentialsException;
+import com.nexteam.exceptions.InvalidTokenException;
 import com.nexteam.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,5 +80,11 @@ public class GlobalRestController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "Une erreur interne est survenue.", null));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ApiResponse<?>> handleInvalideToken(InvalidTokenException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.of(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null));
     }
 }

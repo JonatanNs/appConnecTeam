@@ -12,6 +12,7 @@ import { AuthService } from './features/auth/service/auth-service';
 import { credentialsInterceptor } from './core/interceptors/credentialsInterceptor';
 import {flashMessageInterceptor} from './core/interceptors/flashMessageInterceptor';
 import {errorInterceptor} from './core/interceptors/errorInterceptor';
+import {refreshTokenInterceptor} from './core/interceptors/refreshTokenInterceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
         credentialsInterceptor,
         flashMessageInterceptor,
         errorInterceptor,
+        refreshTokenInterceptor
       ])
     ),
     provideRouter(routes, withComponentInputBinding()),

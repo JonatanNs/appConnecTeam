@@ -7,6 +7,7 @@ import com.nexteam.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -84,8 +85,17 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/login").permitAll()
-                        .anyRequest().permitAll())
+                        // Routes publiques (pas d'authentification requise)
+                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh", "/api/v1/auth/logout").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll() // handshake WebSocket, sécurisé séparément par JwtHandshakeInterceptor
+
+                        // Routes réservées à un rôle précis
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/news").hasAnyRole("ADMIN", "RH")
+
+                        // Tout le reste nécessite d'être authentifié, peu importe le rôle
+                        .anyRequest().authenticated())
                 // accessDeniedHandler → quand un utilisateur connecté tente d’accéder à une ressource pour laquelle il n’a pas le droit.
                 .exceptionHandling(e -> e
                         .accessDeniedHandler(accessDeniedHandler)
@@ -93,6 +103,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint))
                 // Configure la gestion de session.
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
                 // Add JWT filter before the Spring Security filter that handles form authentication
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 

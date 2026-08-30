@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class ConversationController {
     @GetMapping("/{publicId}")
     public ResponseEntity<ApiResponse<ConvResponseDTO>> getConvByPublicId(
             @PathVariable UUID publicId, @AuthenticationPrincipal UserDetails principal) {
+        requireAuthenticated(principal);
         conversationService.assertParticipant(publicId, principal.getUsername());
         UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         return ResponseEntity.ok().body(
@@ -51,6 +53,7 @@ public class ConversationController {
             @RequestParam("word") String word,
             Pageable pageable,
             @AuthenticationPrincipal UserDetails principal) {
+        requireAuthenticated(principal);
         UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         return ResponseEntity.ok().body(
                 ApiResponse.of(
@@ -68,6 +71,7 @@ public class ConversationController {
             @PathVariable UUID userPublicId,
             Pageable pageable,
             @AuthenticationPrincipal UserDetails principal) {
+        requireAuthenticated(principal);
 
         UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         if (!requester.getPublicId().equals(userPublicId)) {
@@ -83,6 +87,7 @@ public class ConversationController {
     @PostMapping
     public ResponseEntity<ApiResponse<ConvResponseDTO>> createConversation(
             @Valid @RequestBody ConvRequestDTO requestDTO, @AuthenticationPrincipal UserDetails principal) {
+        requireAuthenticated(principal);
         return ResponseEntity.ok().body(
                 ApiResponse.of(HttpStatus.OK.value(), "Conversation créée avec succès.",
                         conversationService.createConversation(requestDTO, principal.getUsername()))
@@ -94,6 +99,7 @@ public class ConversationController {
             @PathVariable UUID publicId,
             @Valid @RequestBody ConvRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetails principal) {
+        requireAuthenticated(principal);
         conversationService.assertOwner(publicId, principal.getUsername());
         UserResponseDTO requester = userService.getUserByEmail(principal.getUsername());
         return ResponseEntity.ok().body(
@@ -105,6 +111,7 @@ public class ConversationController {
     @DeleteMapping("/{publicId}")
     public ResponseEntity<ApiResponse<Void>> deleteConversation(
             @PathVariable UUID publicId, @AuthenticationPrincipal UserDetails principal) {
+        requireAuthenticated(principal);
         conversationService.assertOwner(publicId, principal.getUsername());
         conversationService.deleteConversation(publicId);
         return ResponseEntity.ok().body(
@@ -116,11 +123,17 @@ public class ConversationController {
     public ResponseEntity<ApiResponse<Void>> leaveConversation(
             @PathVariable UUID publicId,
             @AuthenticationPrincipal UserDetails principal) {
-
+        requireAuthenticated(principal);
         conversationService.leaveConversation(publicId, principal.getUsername());
 
         return ResponseEntity.ok().body(
                 ApiResponse.of(HttpStatus.OK.value(), "Vous avez quitté la conversation.", null)
         );
+    }
+
+    private void requireAuthenticated(UserDetails principal) {
+        if (principal == null) {
+            throw new AuthenticationCredentialsNotFoundException("Non authentifié.");
+        }
     }
 }

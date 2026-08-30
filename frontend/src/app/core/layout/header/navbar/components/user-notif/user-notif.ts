@@ -26,16 +26,15 @@ import { INotification } from '../../../../../../features/notifications/interfac
   styleUrl: './user-notif.css',
 })
 export class UserNotif {
-  // Icônes exposées pour le template
   protected readonly faBell = faBellRegular;
   protected readonly faCheckDouble = faCheckDouble;
 
   private readonly notificationService = inject(NotificationService);
 
-  // Signal d'état du menu
+  private closeMenuTimeout?: ReturnType<typeof setTimeout>;
+
   isNotificationMenuOpen = signal(false);
 
-  // Données des notifications
   notifications = this.notificationService.notifications;
   unreadCount = computed(() => this.notifications().filter((n) => !n.read).length);
 
@@ -48,9 +47,22 @@ export class UserNotif {
 
   /**
    * Ferme le menu lorsque la souris quitte le composant
+   * après un court délai.
    */
   closeNotificationMenu(): void {
-    this.isNotificationMenuOpen.set(false);
+    this.closeMenuTimeout = setTimeout(() => {
+      this.isNotificationMenuOpen.set(false);
+    }, 250);
+  }
+
+  /**
+   * Annule la fermeture programmée du menu.
+   */
+  cancelCloseNotificationMenu(): void {
+    if (this.closeMenuTimeout) {
+      clearTimeout(this.closeMenuTimeout);
+      this.closeMenuTimeout = undefined;
+    }
   }
 
   markAsRead(notif: INotification): void {

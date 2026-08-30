@@ -6,6 +6,7 @@ import com.nexteam.features.Users.User.dtos.UserResponseDTO;
 import com.nexteam.security.dto.LoginRequestDTO;
 import com.nexteam.security.dto.LoginResponseDTO;
 import com.nexteam.security.jwt.JwtService;
+import com.nexteam.security.refreshToken.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -27,23 +28,13 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final TokenService tokenService;
     private final JwtService jwtService;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponseDTO>> login(@Valid @RequestBody LoginRequestDTO loginRequest) {
         LoginResponseDTO response = authService.login(loginRequest);
-
-        ResponseCookie cookie = ResponseCookie.from("access_token", response.getToken())
-                .httpOnly(true)
-                .secure(false)          // false en dev HTTP, true en prod HTTPS
-                .sameSite("Lax")        // Lax suffit si tes requêtes sont bien du même "site" au sens large (localhost)
-                .path("/")
-                .maxAge(Duration.ofMillis(jwtService.getExpirationMs()))
-                .build();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(ApiResponse.of(HttpStatus.OK.value(), "Connexion réussie.", response));
+        return buildAuthResponse(response, "Connexion réussie.");
     }
 
     @GetMapping("/me")
@@ -59,18 +50,63 @@ public class AuthController {
         );
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<LoginResponseDTO>> refresh(
+            @CookieValue(name = "refresh_token", required = false) String refreshToken) {
+
+        if (refreshToken == null) {
+            throw new AuthenticationCredentialsNotFoundException("Refresh token manquant.");
+        }
+
+        LoginResponseDTO response = authService.refresh(refreshToken);
+        return buildAuthResponse(response, "Token renouvelé.");
+    }
+
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Void>> logout() {
-        ResponseCookie expiredCookie = ResponseCookie.from("access_token", "")
-                .httpOnly(true)
-                .secure(false)
-                .sameSite("Lax")
-                .path("/")
-                .maxAge(0)
-                .build();
+    public ResponseEntity<ApiResponse<Void>> logout(
+            @CookieValue(name = "refresh_token", required = false) String refreshToken) {
+
+        if (refreshToken != null) {
+            tokenService.revokeToken(refreshToken);
+        }
+
+        ResponseCookie expiredAccessCookie = buildCookie("access_token", "", "/", 0);
+        ResponseCookie expiredRefreshCookie = buildCookie("refresh_token", "", "/api/v1/auth", 0);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, expiredCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, expiredAccessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, expiredRefreshCookie.toString())
                 .body(ApiResponse.of(HttpStatus.OK.value(), "Déconnexion réussie.", null));
+    }
+
+    /**
+     * Construit la réponse commune à login/refresh : pose les cookies access_token
+     * et refresh_token, puis retire le refresh token du body avant de le retourner.
+     */
+    private ResponseEntity<ApiResponse<LoginResponseDTO>> buildAuthResponse(LoginResponseDTO response, String message) {
+        ResponseCookie accessCookie = buildCookie(
+                "access_token", response.getToken(), "/", jwtService.getExpirationMs() / 1000
+        );
+
+        ResponseCookie refreshCookie = buildCookie(
+                "refresh_token", response.getRefreshToken(), "/api/v1/auth", Duration.ofDays(7).toSeconds()
+        );
+
+        response.setRefreshToken(null);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body(ApiResponse.of(HttpStatus.OK.value(), message, response));
+    }
+
+    private ResponseCookie buildCookie(String name, String value, String path, long maxAgeSeconds) {
+        return ResponseCookie.from(name, value)
+                .httpOnly(true)
+                .secure(false) // true en prod HTTPS
+                .sameSite("Lax")
+                .path(path)
+                .maxAge(maxAgeSeconds)
+                .build();
     }
 }

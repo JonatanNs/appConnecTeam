@@ -8,6 +8,7 @@ import {
   ListConversation
 } from '../../../features/messaging/pages/conversation-page/components/list-conversation/list-conversation';
 import { DockMobile } from '../../../shared/components/dock-mobile/dock-mobile';
+import {AuthService} from '../../../features/auth/service/auth-service';
 
 @Component({
   selector: 'app-main-layout',

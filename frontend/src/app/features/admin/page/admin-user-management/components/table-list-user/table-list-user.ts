@@ -4,9 +4,7 @@ import {IUser} from '../../../../../../shared/interfaces/user.interface';
 import {RouterLink} from '@angular/router';
 import {IApiResponse} from '../../../../../../shared/interfaces/api-response.interface';
 import {IPage} from '../../../../../../shared/interfaces/pageable/page.interface';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
-import { AuthService } from '../../../../../auth/service/auth-service';
+import { AuthService } from '../../../../../auth/service/auth.service';
 
 @Component({
   selector: 'app-table-list-user',

@@ -1,10 +1,10 @@
-import {Component, effect, inject, signal, Signal} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
-import {UserService} from '../../../../../../core/services/user/user-service';
+import {UserService} from '../../../../../../core/services/user/user.service';
 import {IUser} from '../../../../../../shared/interfaces/user.interface';
 import {toSignal} from '@angular/core/rxjs-interop';
-import {FlashMessageService} from '../../../../../../core/services/flashMessage/flash-message-service';
+import {FlashMessageService} from '../../../../../../core/services/flashMessage/flash-message.service';
 
 @Component({
   selector: 'app-form-adduser',

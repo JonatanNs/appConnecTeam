@@ -1,28 +1,17 @@
-import {Component, computed, debounced, effect, ElementRef, inject, input, resource, signal, ViewChild,} from '@angular/core';
+import {Component, computed, effect, ElementRef, inject, input, signal, ViewChild} from '@angular/core';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import {catchError, combineLatest, debounceTime, firstValueFrom, map, merge, of, Subject, switchMap,} from 'rxjs';
+import { catchError, combineLatest, debounceTime, map, of, Subject, switchMap} from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { WebSocketService } from '../../../../core/websocket/services/websocket-service';
-import { MessageService } from '../../services/message/message-service';
-import { AuthService } from '../../../auth/service/auth-service';
+import { WebsocketService } from '../../../../core/websocket/services/websocket.service';
+import { MessageService } from '../../services/message/message.service';
+import { AuthService } from '../../../auth/service/auth.service';
 import { DatePipe } from '@angular/common';
-import { scan } from 'rxjs';
 import { IMessageSend } from '../../interfaces/message.interface';
-import { ConversationService } from '../../services/conversation/conversation-service';
+import { ConversationService } from '../../services/conversation/conversation.service';
 import { IConversation } from '../../interfaces/conversation.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import {
-  faArrowDown,
-  faArrowLeft,
-  faComments,
-  faPaperPlane,
-  faPenToSquare,
-  faTimes,
-  faUsers,
-} from '@fortawesome/free-solid-svg-icons';
-import { IUser } from '../../../../shared/interfaces/user.interface';
-import { UserService } from '../../../../core/services/user/user-service';
-import {NotificationService} from '../../../notifications/services/notification/notification-service';
+import { faArrowDown, faArrowLeft, faComments, faPaperPlane} from '@fortawesome/free-solid-svg-icons';
+import {NotificationService} from '../../../notifications/services/notification/notification.service';
 import { Router, RouterLink } from '@angular/router';
 import { UpdateConversation } from './components/update-conversation/update-conversation';
 import { SidePanel } from './components/side-panel/side-panel';
@@ -43,7 +32,7 @@ import { HeaderConversation } from './components/header-conversation/header-conv
 })
 export class ConversationPage {
   private router = inject(Router);
-  private wsService = inject(WebSocketService);
+  private wsService = inject(WebsocketService);
   private messageService = inject(MessageService);
   private notificationService = inject(NotificationService);
   private authService = inject(AuthService);

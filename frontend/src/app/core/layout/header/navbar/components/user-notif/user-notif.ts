@@ -1,27 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent, IconDefinition } from '@fortawesome/angular-fontawesome';
 import { faBell as faBellRegular } from '@fortawesome/free-regular-svg-icons';
-import {
-  faAt,
-  faBell as faBellSolid,
-  faCalendar,
-  faCheckDouble,
-  faCircleExclamation,
-  faComment,
-  faHeart,
-  faUser,
-  faUserPlus,
-} from '@fortawesome/free-solid-svg-icons';
-
-import { NotificationService } from '../../../../../../features/notifications/services/notification/notification-service';
+import { faAt, faBell as faBellSolid, faCheckDouble, faCircleExclamation, faComment, faHeart, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { NotificationService } from '../../../../../../features/notifications/services/notification/notification.service';
 import { INotification } from '../../../../../../features/notifications/interfaces/notification.interface';
 
 @Component({
   selector: 'app-user-notif',
   standalone: true,
-  imports: [FaIconComponent, RouterLink, DatePipe],
+  imports: [FaIconComponent, RouterLink, DatePipe, NgClass],
   templateUrl: './user-notif.html',
   styleUrl: './user-notif.css',
 })

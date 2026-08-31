@@ -1,7 +1,7 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError, BehaviorSubject, filter, take } from 'rxjs';
-import { AuthService } from '../../features/auth/service/auth-service';
+import { AuthService } from '../../features/auth/service/auth.service';
 
 let isRefreshing = false;
 const refreshComplete$ = new BehaviorSubject<boolean>(true);

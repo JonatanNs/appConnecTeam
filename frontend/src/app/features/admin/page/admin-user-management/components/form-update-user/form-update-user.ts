@@ -1,9 +1,9 @@
 import {Component, inject, signal} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {UserService} from '../../../../../../core/services/user/user-service';
+import {UserService} from '../../../../../../core/services/user/user.service';
 import {IUser} from '../../../../../../shared/interfaces/user.interface';
-import {FlashMessageService} from '../../../../../../core/services/flashMessage/flash-message-service';
+import {FlashMessageService} from '../../../../../../core/services/flashMessage/flash-message.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -59,7 +59,7 @@ export class FormUpdateUser {
           });
 
         },
-        error: (err) => {
+        error: () => {
           this.errorSig.set(
             "Impossible de charger l'utilisateur."
           );

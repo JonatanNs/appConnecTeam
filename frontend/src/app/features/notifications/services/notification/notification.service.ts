@@ -1,7 +1,7 @@
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ENVIRONMENT } from '../../../../environments/environement';
+import { ENVIRONMENT } from '../../../../../environments/environment';
 import { IPageable } from '../../../../shared/interfaces/pageable/pageable.interface';
 import {
   catchError,
@@ -18,7 +18,7 @@ import {
 import { IApiResponse } from '../../../../shared/interfaces/api-response.interface';
 import { IPage } from '../../../../shared/interfaces/pageable/page.interface';
 import { INotification } from '../../interfaces/notification.interface';
-import { WebSocketService } from '../../../../core/websocket/services/websocket-service';
+import { WebsocketService } from '../../../../core/websocket/services/websocket.service';
 
 type NotificationEvent =
   | { kind: 'new'; notification: INotification }
@@ -29,7 +29,7 @@ type NotificationEvent =
 @Service()
 export class NotificationService {
   private http = inject(HttpClient);
-  private wsService = inject(WebSocketService);
+  private wsService = inject(WebsocketService);
   private baseUrl = ENVIRONMENT.apiUrl;
 
   private defaultPageable = { page: 0, size: 20 };
@@ -49,7 +49,7 @@ export class NotificationService {
   private history$ = this.getMyNotifications(this.defaultPageable).pipe(
     map((res) => res.data.content),
     catchError((err) => {
-      console.error('Erreur chargement notifications', err);
+      console.error('Erreur chargement notification', err);
       return of([] as INotification[]);
     }),
   );

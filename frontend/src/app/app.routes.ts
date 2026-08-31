@@ -5,7 +5,7 @@ import {ADMIN_ROUTES} from './features/admin/admin.routes';
 import {LoginPage} from './features/auth/page/login-page/login-page';
 import { MESSAGING_ROUTES } from './features/messaging/messaging.route';
 import { NEWS_ROUTES } from './features/news/news.route';
-import { AuthGuard } from './core/guards/authGuard';
+import { AuthGuard } from './core/guards/auth-guard';
 import { NOTIFICATIONS_ROUTES } from './features/notifications/notification.route';
 
 export const routes: Routes = [
@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: 'actualites', component: MainLayout, canActivate :[AuthGuard],  children: NEWS_ROUTES },
   { path: 'mes-notifications', component: MainLayout, canActivate :[AuthGuard],  children: NOTIFICATIONS_ROUTES },
   { path: '', redirectTo: 'auth/connexion', pathMatch: 'full' },
-  // { path: '**', component: NotFoundPage }, // à ajouter si tu n'as pas encore de catch-all
+  // { path: '**', component: NotFoundPage }, // à ajouter si pas de catch-all
 ];
 
 

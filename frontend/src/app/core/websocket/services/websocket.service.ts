@@ -1,14 +1,14 @@
 import {  Service } from '@angular/core';
-import { Client, IMessage, IMessage as StompMessage, StompSubscription } from '@stomp/stompjs';
+import { Client, IMessage as StompMessage, StompSubscription } from '@stomp/stompjs';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { INotification } from '../../../features/notifications/interfaces/notification.interface';
-import {ENVIRONMENT} from '../../../environments/environement';
+import {ENVIRONMENT} from '../../../../environments/environment';
 import { IMessageSend } from '../../../features/messaging/interfaces/message.interface';
 import { ITyping } from '../../../features/messaging/interfaces/typing.interface';
 import { IPresenceEvent } from '../../../shared/interfaces/presence-event.interface';
 
 @Service()
-export class WebSocketService {
+export class WebsocketService {
   private client: Client | null = null;
 
   private connected$ = new BehaviorSubject<boolean>(false);
@@ -56,7 +56,7 @@ export class WebSocketService {
   }
 
   subscribeToNotifications(): Observable<INotification> {
-    return this.createTopicObservable<INotification>('/user/queue/notifications');
+    return this.createTopicObservable<INotification>('/user/queue/notification');
   }
 
   subscribeToConversation(conversationId: string): Observable<IMessageSend> {

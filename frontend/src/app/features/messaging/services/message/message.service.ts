@@ -1,14 +1,14 @@
 import {inject, Service} from '@angular/core';
-import {WebSocketService} from '../../../../core/websocket/services/websocket-service';
+import {WebsocketService} from '../../../../core/websocket/services/websocket.service';
 import { IMessageSend } from '../../interfaces/message.interface';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IApiResponse } from '../../../../shared/interfaces/api-response.interface';
-import { ENVIRONMENT } from '../../../../environments/environement';
+import { ENVIRONMENT } from '../../../../../environments/environment';
 
 @Service()
 export class MessageService {
-  private wsService = inject(WebSocketService);
+  private wsService = inject(WebsocketService);
   private http = inject(HttpClient);
   private baseUrl = ENVIRONMENT.apiUrl;
 

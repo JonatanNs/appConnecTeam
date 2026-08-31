@@ -1,21 +1,12 @@
-import {
-  Component,
-  computed,
-  debounced,
-  ElementRef,
-  inject,
-  resource,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import {Component, computed, debounced, ElementRef, inject, resource, signal, ViewChild,} from '@angular/core';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
-import {UserService} from '../../../../../../../core/services/user/user-service';
+import {UserService} from '../../../../../../../core/services/user/user.service';
 import {firstValueFrom} from 'rxjs';
 import {FormsModule} from '@angular/forms';
 import {IUser} from '../../../../../../../shared/interfaces/user.interface';
-import {ConversationService} from '../../../../../services/conversation/conversation-service';
-import {AuthService} from '../../../../../../auth/service/auth-service';
+import {ConversationService} from '../../../../../services/conversation/conversation.service';
+import {AuthService} from '../../../../../../auth/service/auth.service';
 
 @Component({
   selector: 'app-form-create-conversation',
@@ -50,8 +41,7 @@ export class FormCreateConversation {
 
   searchResource = resource({
     params: () => {
-      const q = this.debouncedQuery.value();
-      return q;
+      return this.debouncedQuery.value();
     },
     loader: async ({ params: q }) => {
       if (!q || !q.trim()) return [];

@@ -46,16 +46,19 @@
           }
         </div>
 
-        <!-- Liste scrollable des notifications -->
+        <!-- Liste scrollable des notification -->
         <div class="max-h-[360px] divide-y divide-gray-100/80 overflow-y-auto no-scrollbar">
 
           @for (notif of notifications(); track notif.publicId) {
             <a [routerLink]="notif.conversationPublicId ? '/messageries' : null"
                (click)="markAsRead(notif)"
                class="group relative flex items-start gap-3 px-4 py-3 transition-colors cursor-pointer"
-               [class.bg-blue-50\="/50"]="!notif.read"
-              [class.hover:bg-gray-50]="notif.read"
-              [class.hover:bg-blue-50\="/80"]="!notif.read">
+               [ngClass]="{
+                'class.bg-blue-50/50': !notif.read,
+                'class.hover:bg-gray-50' : notif.read,
+                'class.hover:bg-blue-50/80' : !notif.read
+               }"
+            >
 
               <!-- Icône dynamique via la méthode iconFor() -->
             <div class="shrink-0 mt-0.5">

@@ -1,6 +1,6 @@
 import {HttpInterceptorFn} from '@angular/common/http';
 import {inject} from '@angular/core';
-import {FlashMessageService} from '../services/flashMessage/flash-message-service';
+import {FlashMessageService} from '../services/flashMessage/flash-message.service';
 import {catchError, throwError} from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {

@@ -59,37 +59,38 @@
       @for (notif of displayedNotifications(); track notif.publicId) {
         <li (click)="markAsRead(notif)"
             class="group relative flex items-center justify-between gap-4 p-4 transition-all cursor-pointer"
-            [class.bg-blue-50\="/60"]="!notif.read"
-          [class.hover:bg-gray-50]="notif.read"
-          [class.hover:bg-blue-50\="/80"]="!notif.read">
+            [ngClass]="{
+              'bg-blue-50/60': !notif.read,
+              'hover:bg-gray-50': notif.read,
+              'hover:bg-blue-50/80': !notif.read }">
 
           <!-- Puce de notification non lue -->
-        @if (!notif.read) {
-          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-nxt-primary"></span>
-        }
+          @if (!notif.read) {
+            <span class="absolute left-2.5 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-nxt-primary"></span>
+          }
 
-        <div class="flex items-center gap-3.5 min-w-0 flex-1" [class.pl-2]="!notif.read">
-          <!-- Icône selon le type -->
-          <div class="relative shrink-0">
-            <div
-              class="h-10 w-10 rounded-2xl bg-gradient-to-tr from-nxt-primary/10 to-blue-50 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary shadow-2xs">
-              <fa-icon [icon]="iconFor(notif.type)" class="text-base"></fa-icon>
+          <div class="flex items-center gap-3.5 min-w-0 flex-1" [class.pl-2]="!notif.read">
+            <!-- Icône selon le type -->
+            <div class="relative shrink-0">
+              <div
+                class="h-10 w-10 rounded-2xl bg-gradient-to-tr from-nxt-primary/10 to-blue-50 border border-nxt-primary/20 flex items-center justify-center text-nxt-primary shadow-2xs">
+                <fa-icon [icon]="iconFor(notif.type)" class="text-base"></fa-icon>
+              </div>
+            </div>
+
+            <!-- Contenu -->
+            <div class="min-w-0 flex-1">
+              <p class="text-xs sm:text-sm text-gray-800 leading-relaxed" [class.font-medium]="!notif.read">
+                {{ notif.content }}
+              </p>
+              <span class="mt-1 block text-[10px] font-medium" [class.text-nxt-primary]="!notif.read"
+                    [class.text-gray-400]="notif.read">
+                {{ notif.createdAt | date: 'dd/MM/yyyy à HH:mm' }}
+              </span>
             </div>
           </div>
 
-          <!-- Contenu -->
-          <div class="min-w-0 flex-1">
-            <p class="text-xs sm:text-sm text-gray-800 leading-relaxed" [class.font-medium]="!notif.read">
-              {{ notif.content }}
-            </p>
-            <span class="mt-1 block text-[10px] font-medium" [class.text-nxt-primary]="!notif.read"
-                  [class.text-gray-400]="notif.read">
-                {{ notif.createdAt | date: 'dd/MM/yyyy à HH:mm' }}
-              </span>
-          </div>
-        </div>
-
-        <!-- Action contextuelle au survol -->
+          <!-- Action contextuelle au survol -->
         </li>
       } @empty {
         <li class="flex flex-col items-center justify-center p-12 text-center">

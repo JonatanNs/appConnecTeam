@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { NotificationService } from '../../services/notification/notification-service';
+import { NotificationService } from '../../services/notification/notification.service';
 import { INotification } from '../../interfaces/notification.interface';
-import { DatePipe } from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {
   faUserPlus,
   faThumbsUp,
@@ -17,8 +17,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 type NotificationFilter = 'all' | 'unread';
 
 @Component({
-  selector: 'app-notifications',
-  imports: [DatePipe, FaIconComponent],
+  selector: 'app-notification',
+  imports: [DatePipe, FaIconComponent, NgClass],
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })

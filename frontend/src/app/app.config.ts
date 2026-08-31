@@ -8,15 +8,14 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { firstValueFrom, catchError, of } from 'rxjs';
 import { routes } from './app.routes';
-import { AuthService } from './features/auth/service/auth-service';
-import { credentialsInterceptor } from './core/interceptors/credentialsInterceptor';
-import {flashMessageInterceptor} from './core/interceptors/flashMessageInterceptor';
-import {errorInterceptor} from './core/interceptors/errorInterceptor';
-import {refreshTokenInterceptor} from './core/interceptors/refreshTokenInterceptor';
+import { AuthService } from './features/auth/service/auth.service';
+import { credentialsInterceptor } from './core/interceptors/credentials.interceptor';
+import {flashMessageInterceptor} from './core/interceptors/flash-message.interceptor';
+import {errorInterceptor} from './core/interceptors/error.interceptor';
+import {refreshTokenInterceptor} from './core/interceptors/refresh-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // app.config.ts
     provideHttpClient(
       withInterceptors([
         credentialsInterceptor,

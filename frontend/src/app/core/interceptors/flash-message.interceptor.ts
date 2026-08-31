@@ -1,6 +1,6 @@
 import {HttpEventType, HttpInterceptorFn} from '@angular/common/http';
 import {tap} from 'rxjs';
-import {FlashMessageService} from '../services/flashMessage/flash-message-service';
+import {FlashMessageService} from '../services/flashMessage/flash-message.service';
 import {inject} from '@angular/core';
 
 export const flashMessageInterceptor: HttpInterceptorFn = (req, next) => {

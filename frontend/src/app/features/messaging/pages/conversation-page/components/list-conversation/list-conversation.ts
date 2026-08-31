@@ -1,30 +1,18 @@
-import {
-  Component,
-  inject,
-  computed,
-  signal,
-  debounced,
-  resource,
-  ElementRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, computed, signal, debounced, resource, ViewChild } from '@angular/core';
 import { toSignal, toObservable } from '@angular/core/rxjs-interop';
-import {switchMap, of, map, combineLatest, firstValueFrom, scan} from 'rxjs';
-import { ConversationService } from '../../../../services/conversation/conversation-service';
-import { AuthService } from '../../../../../auth/service/auth-service';
+import { switchMap, of, map, combineLatest, firstValueFrom } from 'rxjs';
+import { ConversationService } from '../../../../services/conversation/conversation.service';
+import { AuthService } from '../../../../../auth/service/auth.service';
 import { IConversation } from '../../../../interfaces/conversation.interface';
 import { IMessageSend } from '../../../../interfaces/message.interface';
 import { DatePipe } from '@angular/common';
-import {  RouterLink } from '@angular/router';
-import {
-  faPlus, faEllipsisVertical, faMagnifyingGlass, faThumbtack,
-  faTrash, faComments, faCommentSlash, faArrowRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons';
+import { RouterLink } from '@angular/router';
+import { faPlus, faEllipsisVertical, faMagnifyingGlass, faThumbtack, faTrash, faComments, faCommentSlash, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormCreateConversation } from './form-create-conversation/form-create-conversation';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {NotificationService} from '../../../../../notifications/services/notification/notification-service';
-import {INotification} from '../../../../../notifications/interfaces/notification.interface';
+import { NotificationService } from '../../../../../notifications/services/notification/notification.service';
+import { INotification } from '../../../../../notifications/interfaces/notification.interface';
 
 @Component({
   selector: 'app-list-conversation',

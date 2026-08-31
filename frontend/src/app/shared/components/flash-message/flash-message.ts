@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {FlashMessageService} from '../../../core/services/flashMessage/flash-message-service';
+import {FlashMessageService} from '../../../core/services/flashMessage/flash-message.service';
 import {
   faCircleCheck,
   faCircleInfo,

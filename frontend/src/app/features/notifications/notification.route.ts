@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
-import { NewsPage } from '../news/pages/news-page/news-page';
-import { Notifications } from './pages/notifications/notifications';
+import { Notifications } from './pages/notification/notifications';
 
 export const NOTIFICATIONS_ROUTES: Routes = [
-  { path: '', component: Notifications, title: 'Mes notifications' }
+  { path: '', component: Notifications, title: 'Mes notification' }
 ];

@@ -1,8 +1,8 @@
 import {Component, inject, signal} from '@angular/core';
 import {ReactiveFormsModule} from "@angular/forms";
 import {email, form, FormField, FormRoot, required, schema} from '@angular/forms/signals';
-import {AuthService} from '../../../../service/auth-service';
-import {FlashMessageService} from '../../../../../../core/services/flashMessage/flash-message-service';
+import {AuthService} from '../../../../service/auth.service';
+import {FlashMessageService} from '../../../../../../core/services/flashMessage/flash-message.service';
 import {Router} from '@angular/router';
 
 @Component({

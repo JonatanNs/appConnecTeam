@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ENVIRONMENT } from '../../../../environments/environement';
+import { ENVIRONMENT } from '../../../../../environments/environment';
 import { Observable, Subject, tap } from 'rxjs';
 import { IApiResponse } from '../../../../shared/interfaces/api-response.interface';
 import { IConversation } from '../../interfaces/conversation.interface';

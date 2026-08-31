@@ -10,9 +10,9 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { ConversationService } from '../../../../services/conversation/conversation-service';
-import { UserService } from '../../../../../../core/services/user/user-service';
-import { AuthService } from '../../../../../auth/service/auth-service';
+import { ConversationService } from '../../../../services/conversation/conversation.service';
+import { UserService } from '../../../../../../core/services/user/user.service';
+import { AuthService } from '../../../../../auth/service/auth.service';
 import { IConversation } from '../../../../interfaces/conversation.interface';
 import { IUser } from '../../../../../../shared/interfaces/user.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';

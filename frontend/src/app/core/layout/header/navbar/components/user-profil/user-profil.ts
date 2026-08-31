@@ -1,15 +1,8 @@
 import { Component, inject, Signal, signal } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Router, RouterLink } from '@angular/router';
-import {
-  faChevronDown,
-  faCircleQuestion,
-  faGear,
-  faRightFromBracket, faShieldHalved,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
-import { faBell } from '@fortawesome/free-regular-svg-icons';
-import { AuthService } from '../../../../../../features/auth/service/auth-service';
+import { faChevronDown, faCircleQuestion, faGear, faRightFromBracket, faShieldHalved, faUser } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../../../../../../features/auth/service/auth.service';
 import { ICurrentUser } from '../../../../../../shared/interfaces/current-user.interface';
 
 @Component({
@@ -19,19 +12,11 @@ import { ICurrentUser } from '../../../../../../shared/interfaces/current-user.i
   styleUrl: './user-profil.css',
 })
 export class UserProfil {
-  protected readonly faRightFromBracket = faRightFromBracket;
-  protected readonly faUser = faUser;
-  protected readonly faGear = faGear;
-  protected readonly faShieldHalved = faShieldHalved;
-  protected readonly faCircleQuestion = faCircleQuestion;
-  protected readonly faChevronDown = faChevronDown;
 
   private authService = inject(AuthService);
-
-  currentUser: Signal<ICurrentUser | null> = this.authService.currentUser;
-
   private router = inject(Router);
 
+  currentUser: Signal<ICurrentUser | null> = this.authService.currentUser;
   isProfileMenuOpen = signal(false);
 
   openProfileMenu(): void {
@@ -45,9 +30,15 @@ export class UserProfil {
     this.isProfileMenuOpen.update((open) => !open);
   }
 
-
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+
+  protected readonly faRightFromBracket = faRightFromBracket;
+  protected readonly faUser = faUser;
+  protected readonly faGear = faGear;
+  protected readonly faShieldHalved = faShieldHalved;
+  protected readonly faCircleQuestion = faCircleQuestion;
+  protected readonly faChevronDown = faChevronDown;
 }

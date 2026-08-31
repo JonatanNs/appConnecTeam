@@ -1,17 +1,13 @@
-import {Component, inject, signal} from '@angular/core';
-import {FlashMessageService} from '../../../../core/services/flashMessage/flash-message-service';
-import {UserService} from '../../../../core/services/user/user-service';
-import {toObservable, toSignal} from '@angular/core/rxjs-interop';
-import {catchError, combineLatest, of, switchMap} from 'rxjs';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {RouterLink} from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { FlashMessageService } from '../../../../core/services/flashMessage/flash-message.service';
+import { UserService } from '../../../../core/services/user/user.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { catchError, combineLatest, of, switchMap } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IPageable } from '../../../../shared/interfaces/pageable/pageable.interface';
-import { DatePipe } from '@angular/common';
-import {
-  faPlus,
-  faArrowLeft,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { SearchFilter } from '../../../../shared/components/search-filter/search-filter';
 import { Paginate } from '../../../../shared/components/paginate/paginate';
 import { TableListUser } from './components/table-list-user/table-list-user';

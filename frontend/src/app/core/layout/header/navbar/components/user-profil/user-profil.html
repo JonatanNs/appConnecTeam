@@ -29,7 +29,8 @@
           </div>
           <div class="overflow-hidden">
             <p class="text-sm font-semibold text-gray-900 truncate">Mon compte</p>
-            <p class="text-xs text-gray-500 truncate">Utilisateur Nexteam</p>
+
+            <p class="text-xs text-gray-500 truncate">{{ currentUser()?.firstname }} {{ currentUser()?.lastname }}</p>
           </div>
         </div>
 

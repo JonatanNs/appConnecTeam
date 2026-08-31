@@ -19,10 +19,10 @@ import java.util.UUID;
 public class LoginResponseDTO {
     private String token;
     private String refreshToken;
+    private long tokenExpiresIn;
     private UUID publicId;
     private String email;
     private String firstname;
     private String lastname;
     private Boolean online;
-
 }

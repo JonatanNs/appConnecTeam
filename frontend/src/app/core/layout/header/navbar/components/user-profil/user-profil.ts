@@ -31,8 +31,9 @@ export class UserProfil {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/']);
+    });
   }
 
   protected readonly faRightFromBracket = faRightFromBracket;

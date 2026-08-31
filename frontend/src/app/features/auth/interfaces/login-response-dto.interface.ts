@@ -1,9 +1,10 @@
 export interface ILoginResponseDTO{
-  id: number;
+  publicId: string;
   firstname: string;
   lastname: string;
   email: string;
   online: boolean;
   token : string;
   refreshToken : string;
+  tokenExpiresIn: number;
 }

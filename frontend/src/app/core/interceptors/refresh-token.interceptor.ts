@@ -33,7 +33,7 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
           catchError((refreshError) => {
             isRefreshing = false;
             refreshComplete$.next(true);
-            authService.logout(); // refresh échoué → vraie déconnexion
+            authService.logout().subscribe(); // refresh échoué → vraie déconnexion
             return throwError(() => refreshError);
           }),
         );

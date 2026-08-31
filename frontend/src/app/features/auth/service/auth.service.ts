@@ -14,15 +14,13 @@ export class AuthService {
   private wsService = inject(WebsocketService);
   private baseUrl = ENVIRONMENT.apiUrl;
 
-  private readonly ACCESS_TOKEN_LIFETIME_MS = 900000; // 15 minutes
-
   private refreshTimer?: ReturnType<typeof setTimeout>;
 
   private _currentUser = signal<ICurrentUser | null>(null);
   readonly currentUser = this._currentUser.asReadonly();
 
   showLogin(formLogin: ILoginRequestDTO): Observable<IApiResponse<ICurrentUser>> {
-    return this.http.post<IApiResponse<ICurrentUser>>(`${this.baseUrl}/auth/login`, formLogin).pipe(
+    return this.http.post<IApiResponse<ILoginResponseDTO>>(`${this.baseUrl}/auth/login`, formLogin).pipe(
       tap((response) => {
         this._currentUser.set({
           publicId: response.data.publicId,
@@ -32,9 +30,9 @@ export class AuthService {
           online: response.data.online,
         });
         this.wsService.connect();
-        this.scheduleProactiveRefresh(this.ACCESS_TOKEN_LIFETIME_MS);
+        this.scheduleProactiveRefresh(response.data.tokenExpiresIn);
       }),
-    );
+    ) as unknown as Observable<IApiResponse<ICurrentUser>>;
   }
 
   logout(): Observable<IApiResponse<void>> {
@@ -45,19 +43,19 @@ export class AuthService {
   }
 
   fetchCurrentUser(): Observable<IApiResponse<ICurrentUser>> {
-    return this.http.get<IApiResponse<ICurrentUser>>(`${this.baseUrl}/auth/me`).pipe(
+    return this.http.get<IApiResponse<ILoginResponseDTO>>(`${this.baseUrl}/auth/me`).pipe(
       tap((response) => {
         this._currentUser.set(response.data);
         this.wsService.connect();
-        this.scheduleProactiveRefresh(this.ACCESS_TOKEN_LIFETIME_MS);
+        this.scheduleProactiveRefresh(response.data.tokenExpiresIn);
       }),
     );
   }
 
   refreshToken(): Observable<IApiResponse<ILoginResponseDTO>> {
     return this.http.post<IApiResponse<ILoginResponseDTO>>(`${this.baseUrl}/auth/refresh`, null).pipe(
-      tap(() => {
-        this.scheduleProactiveRefresh(this.ACCESS_TOKEN_LIFETIME_MS);
+      tap((response) => {
+        this.scheduleProactiveRefresh(response.data.tokenExpiresIn);
       }),
     );
   }

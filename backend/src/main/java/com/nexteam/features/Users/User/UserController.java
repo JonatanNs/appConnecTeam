@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -86,12 +87,13 @@ public class UserController {
      * @param user l'objet utilisateur à créer (validé)
      * @return une réponse contenant l'utilisateur créé
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@Valid @RequestBody UserRequestDTO user) {
         return ResponseEntity.ok().body(
                 ApiResponse.of(
                         HttpStatus.OK.value(),
-                        "Utilisateur crée avec succès.",
+                        "Utilisateur créé avec succès.",
                         userService.createUser(user)
                 )
         );

@@ -13,7 +13,7 @@ import { ICurrentUser } from '../../../../../../shared/interfaces/current-user.i
 })
 export class UserProfil {
 
-  private authService = inject(AuthService);
+  protected authService = inject(AuthService);
   private router = inject(Router);
 
   currentUser: Signal<ICurrentUser | null> = this.authService.currentUser;

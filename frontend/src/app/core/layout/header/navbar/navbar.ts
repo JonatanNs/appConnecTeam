@@ -15,7 +15,7 @@ import { AuthService } from '../../../../features/auth/service/auth.service';
 })
 export class Navbar {
 
-  private authService = inject(AuthService);
+  protected authService = inject(AuthService);
   private router = inject(Router);
 
   public isMobileMenuOpen = false;

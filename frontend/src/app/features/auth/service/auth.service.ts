@@ -19,6 +19,10 @@ export class AuthService {
   private _currentUser = signal<ICurrentUser | null>(null);
   readonly currentUser = this._currentUser.asReadonly();
 
+  hasRole(roleName: string): boolean {
+    return this._currentUser()?.roles?.some((r) => r.name === roleName) ?? false;
+  }
+
   showLogin(formLogin: ILoginRequestDTO): Observable<IApiResponse<ICurrentUser>> {
     return this.http.post<IApiResponse<ILoginResponseDTO>>(`${this.baseUrl}/auth/login`, formLogin).pipe(
       tap((response) => {
@@ -28,6 +32,7 @@ export class AuthService {
           firstname: response.data.firstname,
           lastname: response.data.lastname,
           online: response.data.online,
+          roles: response.data.roles
         });
         this.wsService.connect();
         this.scheduleProactiveRefresh(response.data.tokenExpiresIn);

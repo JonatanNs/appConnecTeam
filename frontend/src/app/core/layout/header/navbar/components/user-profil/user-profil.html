@@ -20,11 +20,13 @@
   @if (isProfileMenuOpen()) {
     <div class="absolute right-0 z-50 w-64 pt-2">
       <!-- Conteneur principal avec ombre portée soignée -->
-      <div class="overflow-hidden origin-top-right bg-nxt-surface rounded-2xl shadow-xl border border-gray-200/80 backdrop-blur-md">
+      <div
+        class="overflow-hidden origin-top-right bg-nxt-surface rounded-2xl shadow-xl border border-gray-200/80 backdrop-blur-md">
 
         <!-- En-tête du profil (Rappel utilisateur) -->
         <div class="px-4 py-3.5 bg-gray-50/50 border-b border-gray-100 flex items-center space-x-3">
-          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-nxt-primary/15 text-nxt-primary font-bold">
+          <div
+            class="flex items-center justify-center w-10 h-10 rounded-full bg-nxt-primary/15 text-nxt-primary font-bold">
             <fa-icon [icon]="faUser" class="text-sm"></fa-icon>
           </div>
           <div class="overflow-hidden">
@@ -42,14 +44,14 @@
             </span>
             Voir mon profil
           </a>
-
-          <a routerLink="/admin">
+          @if (authService.hasRole('ROLE_ADMIN')) {
+            <a routerLink="/admin">
             <span>
               <fa-icon [icon]="faShieldHalved" class="text-xs"></fa-icon>
             </span>
-            Administration
-          </a>
-
+              Administration
+            </a>
+          }
           <a routerLink="/parametres">
             <span>
               <fa-icon [icon]="faGear" class="text-xs"></fa-icon>

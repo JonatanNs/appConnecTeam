@@ -79,7 +79,9 @@
   <a routerLink="/messageries" routerLinkActive="bg-gray-100 text-nxt-primary font-semibold" class="link-nxt">Messageries</a>
   <a routerLink="/annuaires" routerLinkActive="bg-gray-100 text-nxt-primary font-semibold" class="link-nxt">Annuaires</a>
   <a routerLink="/rh" routerLinkActive="bg-gray-100 text-nxt-primary font-semibold" class="link-nxt">RH</a>
-  <a routerLink="/admin" routerLinkActive="bg-gray-100 text-nxt-primary font-semibold" class="link-nxt">Administration</a>
+  @if (authService.hasRole('ROLE_ADMIN')) {
+    <a routerLink="/admin" routerLinkActive="bg-gray-100 text-nxt-primary font-semibold" class="link-nxt">Administration</a>
+  }
 </nav>
 
 <!-- Actions de droite (Recherche + Notifs + Profil - Toujours à droite) -->

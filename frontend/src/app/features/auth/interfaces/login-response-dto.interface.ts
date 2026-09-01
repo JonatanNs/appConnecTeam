@@ -1,3 +1,5 @@
+import {IRole} from '../../../shared/interfaces/role.interface';
+
 export interface ILoginResponseDTO{
   publicId: string;
   firstname: string;
@@ -7,4 +9,5 @@ export interface ILoginResponseDTO{
   token : string;
   refreshToken : string;
   tokenExpiresIn: number;
+  roles : IRole[];
 }

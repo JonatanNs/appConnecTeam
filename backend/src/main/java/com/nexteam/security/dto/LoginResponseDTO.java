@@ -1,7 +1,9 @@
 package com.nexteam.security.dto;
 
+import com.nexteam.features.Users.Role.dtos.RoleResponseDTO;
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -25,4 +27,5 @@ public class LoginResponseDTO {
     private String firstname;
     private String lastname;
     private Boolean online;
+    private Set<RoleResponseDTO> roles;
 }

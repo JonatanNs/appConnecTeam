@@ -21,5 +21,4 @@ public class RoleResponseDTO {
     private UUID publicId;
     private String name;
     private Instant createdAt;
-    private Instant updatedAt;
 }

@@ -18,7 +18,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
+@Builder
 @Entity
 public class Role extends AuditableEntity {
 

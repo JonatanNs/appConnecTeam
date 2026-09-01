@@ -93,6 +93,7 @@ public class AuthController {
         );
 
         response.setRefreshToken(null);
+        response.setToken(null); // idem : déjà dans le cookie HttpOnly, inutile de l'exposer aussi dans le body
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
@@ -109,4 +110,6 @@ public class AuthController {
                 .maxAge(maxAgeSeconds)
                 .build();
     }
+
+
 }

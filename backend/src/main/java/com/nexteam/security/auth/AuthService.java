@@ -1,6 +1,8 @@
 package com.nexteam.security.auth;
 
 import com.nexteam.exceptions.InvalidCredentialsException;
+import com.nexteam.features.Users.Role.dtos.RoleResponseDTO;
+import com.nexteam.features.Users.Role.dtos.mapper.RoleMapper;
 import com.nexteam.features.Users.User.User;
 import com.nexteam.features.Users.User.UserRepository;
 import com.nexteam.security.UserPrincipalService;
@@ -17,6 +19,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +31,8 @@ public class AuthService {
     private final TokenService tokenService;
     private final UserRepository userRepository;
     private final UserPrincipalService userPrincipalService;
+    private final RoleMapper roleMapper;
+
 
     public LoginResponseDTO login(LoginRequestDTO loginRequest) {
         try {
@@ -38,6 +45,10 @@ public class AuthService {
             String token = jwtService.generateToken(userDetails);
             Token refreshToken = tokenService.createToken(user);
 
+            Set<RoleResponseDTO> roles = user.getRoles().stream()
+                    .map(roleMapper::roleToResponseDTO)
+                    .collect(Collectors.toSet());
+
             return LoginResponseDTO.builder()
                     .token(token)
                     .refreshToken(refreshToken.getRefreshToken())
@@ -47,6 +58,7 @@ public class AuthService {
                     .email(user.getEmail())
                     .firstname(user.getFirstname())
                     .lastname(user.getLastname())
+                    .roles(roles)
                     .build();
 
         } catch (BadCredentialsException ex) {
@@ -63,6 +75,10 @@ public class AuthService {
         UserDetails userDetails = userPrincipalService.loadUserByUsername(user.getEmail());
         String newAccessToken = jwtService.generateToken(userDetails);
 
+        Set<RoleResponseDTO> roles = user.getRoles().stream()
+                .map(roleMapper::roleToResponseDTO)
+                .collect(Collectors.toSet());
+
         return LoginResponseDTO.builder()
                 .token(newAccessToken)
                 .refreshToken(newToken.getRefreshToken())
@@ -72,6 +88,7 @@ public class AuthService {
                 .email(user.getEmail())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
+                .roles(roles)
                 .build();
     }
 }

@@ -106,6 +106,7 @@ public class UserController {
      * @param user l'objet utilisateur avec les données mises à jour (validé)
      * @return une réponse contenant l'utilisateur modifié
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PutMapping("/{publicId}")
     public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(
             @PathVariable UUID publicId,
@@ -126,6 +127,7 @@ public class UserController {
      * @param publicId l'UUID de l'utilisateur à supprimer
      * @return une réponse de confirmation de suppression
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{publicId}")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable UUID publicId) {
         userService.deleteUser(publicId);
@@ -138,6 +140,7 @@ public class UserController {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PutMapping("/deactivate/{publicId}")
     public ResponseEntity<ApiResponse<Void>> deactivateUser(@PathVariable UUID publicId) {
         userService.deactivateUser(publicId);
@@ -150,6 +153,7 @@ public class UserController {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     @PutMapping("/activate/{publicId}")
     public ResponseEntity<ApiResponse<Void>> activateUser(@PathVariable UUID publicId) {
         userService.activateUser(publicId);
@@ -199,7 +203,7 @@ public class UserController {
         );
     }
 
-    // Pour admin
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/role")
     public ResponseEntity<ApiResponse<PageResponseDTO<UserResponseDTO>>> getUsersByRole(
             @RequestParam String name,
@@ -213,6 +217,7 @@ public class UserController {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{userPublicId}/role")
     public ResponseEntity<ApiResponse<UserResponseDTO>> addRoleUser(
            @PathVariable UUID userPublicId,
